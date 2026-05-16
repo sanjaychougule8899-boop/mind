@@ -8,1507 +8,1989 @@
   <!-- Google Fonts: Sora & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Material Symbols Outlined (for minor UI icons) -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
-
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            bg: 'var(--bg)',
-            surface: {
-              dim: 'var(--surface-dim)',
-              DEFAULT: 'var(--surface)',
-              high: 'var(--surface-high)',
-              highest: 'var(--surface-highest)'
-            },
-            on: {
-              surface: 'var(--on-surface)',
-              'surface-var': 'var(--on-surface-var)'
-            },
-            primary: {
-              DEFAULT: 'var(--primary)',
-              dk: 'var(--primary-dk)'
-            },
-            tertiary: {
-              DEFAULT: 'var(--tertiary)',
-              dk: 'var(--tertiary-dk)'
-            },
-            outline: 'var(--outline)'
-          },
-          fontFamily: {
-            sora: ['Sora', 'sans-serif'],
-            inter: ['Inter', 'sans-serif']
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Three.js & GLTFLoader -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 
   <style>
     :root {
-      --bg:               #0a0600;
-      --surface-dim:      #131411;
-      --surface:          #1c1c19;
-      --surface-high:     #252522;
-      --surface-highest:  #2f2f2b;
-      --on-surface:       #e5e2dd;
-      --on-surface-var:   #c4a882;
-      --primary:          #ffb693;
-      --primary-dk:       #dc743e;
-      --tertiary:         #ffba3f;
-      --tertiary-dk:      #c18500;
-      --outline:          #56433a;
-      --glass-bg:         rgba(28, 28, 25, 0.75);
-      --glass-border:     rgba(255, 186, 63, 0.12);
-      --glow-amber:       rgba(255, 186, 63, 0.35);
-      --glow-terra:       rgba(220, 116, 62, 0.30);
+      --bg:          #080604;
+      --surface:     #111009;
+      --surface-2:   #1a1814;
+      --surface-3:   #252220;
+      --surface-4:   #2e2b28;
+      --on-bg:       #f0ede8;
+      --on-muted:    #b5a898;
+      --primary:     #ff9a5c;       /* terracotta orange */
+      --primary-dk:  #c45e1e;
+      --amber:       #ffb930;       /* golden amber */
+      --amber-dk:    #c48a00;
+      --coffee:      #6b3a1f;       /* deep coffee brown */
+      --cream:       #f5e6c8;       /* cream/milk color */
+      --glass-bg:    rgba(26,24,20,0.7);
+      --glass-border:rgba(255,185,48,0.12);
+      --glow-amber:  0 0 40px rgba(255,185,48,0.3);
+      --glow-terra:  0 0 40px rgba(255,154,92,0.25);
     }
 
-    * {
-      box-sizing: border-box;
-    }
-
+    * { margin:0; padding:0; box-sizing:border-box; }
+    html { scroll-behavior:smooth; scroll-padding-top:80px; }
     body {
-      background-color: var(--bg);
-      color: var(--on-surface);
+      background: var(--bg);
+      color: var(--on-bg);
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
-      margin: 0;
-      padding: 0;
     }
 
-    html {
-      scroll-behavior: smooth;
-      scroll-padding-top: 80px;
-    }
-
-    h1, h2, h3, h4, h5, h6, .font-sora {
-      font-family: 'Sora', sans-serif;
-    }
-
-    /* Glassmorphism */
     .glass {
       background: var(--glass-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--glass-border);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.04);
     }
 
-    /* Buttons */
     .btn-primary {
-      background: linear-gradient(135deg, #ffb693 0%, #dc743e 100%);
-      color: #3b1800;
+      background: linear-gradient(135deg, #ffb930 0%, #ff6b1a 100%);
+      color: #1a0a00;
       font-family: 'Inter', sans-serif;
       font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 0.04em;
       border: none;
-      border-radius: 50px;
-      padding: 14px 28px;
+      border-radius: 100px;
+      padding: 14px 32px;
       cursor: pointer;
-      transition: box-shadow 0.2s, transform 0.15s;
-      letter-spacing: 0.02em;
+      transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::after {
+      content:'';
+      position:absolute; inset:0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 60%);
+      border-radius:inherit;
     }
     .btn-primary:hover {
-      box-shadow: 0 0 24px rgba(255,186,63,0.50), 0 4px 16px rgba(220,116,62,0.35);
-      transform: translateY(-1px);
+      transform: translateY(-2px);
+      box-shadow: 0 0 30px rgba(255,185,48,0.5), 0 8px 24px rgba(196,94,30,0.4);
     }
     .btn-primary:active { transform: scale(0.97); }
 
-    .btn-secondary {
+    .btn-ghost {
       background: transparent;
       color: var(--primary);
-      border: 1px solid rgba(255,182,147,0.35);
-      border-radius: 50px;
-      padding: 10px 22px;
+      border: 1px solid rgba(255,154,92,0.3);
+      border-radius: 100px;
+      padding: 13px 28px;
       font-family: 'Inter', sans-serif;
       font-weight: 600;
+      font-size: 14px;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .btn-secondary:hover {
-      background: rgba(255,182,147,0.08);
+    .btn-ghost:hover {
+      background: rgba(255,154,92,0.08);
       border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(255,154,92,0.15);
     }
 
-    /* Menu Tabs */
-    .tab-group {
-      display: inline-flex;
-      gap: 8px;
-      background: rgba(28,28,25,0.6);
-      border: 1px solid rgba(86,67,58,0.3);
-      border-radius: 50px;
-      padding: 6px;
-      overflow-x: auto;
-      max-width: 100%;
+    /* ─── SECTION 1: NAV ─── */
+    #main-nav {
+      position: fixed; top:0; left:0; right:0; z-index:900;
+      background: rgba(8,6,4,0.85);
+      backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(107,58,31,0.2);
+      transition: all 0.3s;
     }
-    .tab-group::-webkit-scrollbar { display: none; }
-    .tab {
-      padding: 10px 22px;
-      border-radius: 50px;
-      border: none;
-      background: transparent;
-      color: #c4a882;
-      font-family: 'Inter'; font-weight: 500;
-      cursor: pointer;
+    .nav-inner {
+      max-width: 1280px; margin:0 auto;
+      display: flex; align-items:center; gap:32px;
+      padding: 0 24px; height: 72px;
+    }
+    .nav-logo {
+      font-family: 'Sora', sans-serif;
+      font-weight: 900; font-size: 22px;
+      color: var(--amber);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      text-shadow: 0 0 20px rgba(255,185,48,0.5);
+      flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; gap: 8px; flex:1; justify-content:center;
+    }
+    .nav-link {
+      color: var(--on-muted); text-decoration:none;
+      font-size:14px; font-weight:500;
+      padding: 8px 16px; border-radius:8px;
+      border-bottom: 2px solid transparent;
       transition: all 0.2s;
-      white-space: nowrap;
     }
-    .tab.active {
-      background: #2a2a27;
-      color: #ffb693;
-      box-shadow: 0 0 12px rgba(255,186,63,0.15);
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary);
+      border-bottom-color: var(--amber);
+    }
+    .nav-order { position:relative; flex-shrink:0; }
+    .cart-badge {
+      position:absolute; top:-8px; right:-8px;
+      background:#c45e1e; color:white;
+      border-radius:50%; width:20px; height:20px;
+      font-size:11px; font-weight:700;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .nav-hamburger {
+      display:none; flex-direction:column; gap:5px;
+      background:none; border:none; cursor:pointer; padding:8px;
+    }
+    .nav-hamburger span {
+      display:block; width:22px; height:2px;
+      background:var(--on-bg); border-radius:2px;
+      transition: all 0.3s;
+    }
+    .nav-mobile {
+      display:none; flex-direction:column; gap:4px;
+      padding:16px 24px 20px;
+      border-top: 1px solid rgba(107,58,31,0.15);
+    }
+    .nav-mobile.open { display:flex; }
+    .mobile-link {
+      color:var(--on-muted); text-decoration:none;
+      font-size:16px; padding:12px 8px;
+      border-bottom:1px solid rgba(255,255,255,0.05);
     }
 
-    /* Menu Cards */
-    .featured-card {
+    @media (max-width:768px) {
+      .nav-links { display:none; }
+      .nav-hamburger { display:flex; }
+      .nav-order { display:none; }
+    }
+
+    /* ─── SECTION 2: HERO ─── */
+    #hero {
+      height: 350vh; /* Tall for scroll animation */
+      position: relative;
+    }
+    #hero-sticky-wrap {
+      position: sticky; top:0;
+      height: 100vh;
+      overflow: hidden;
+    }
+    #hero-sticky {
+      height:100%;
       display: grid;
-      grid-template-columns: 1fr; /* Default mobile */
-      min-height: 260px;
-      border-radius: 20px;
-      overflow: hidden;
-      background: var(--surface-high);
-      border: 1px solid rgba(255,186,63,0.12);
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      max-width: 1280px;
+      margin:0 auto;
+      padding: 0 48px;
+      gap: 48px;
     }
-    @media (min-width: 1024px) {
-      .featured-card {
-        grid-template-columns: 40% 1fr;
-      }
+    .hero-badge {
+      display:inline-flex; align-items:center; gap:8px;
+      background: rgba(255,185,48,0.08);
+      border: 1px solid rgba(255,185,48,0.2);
+      border-radius:100px;
+      padding: 6px 16px;
+      font-size:11px; font-weight:700;
+      color:var(--amber); letter-spacing:0.12em;
+      margin-bottom:24px;
+    }
+    .hero-badge-dot {
+      width:6px;height:6px;border-radius:50%;
+      background:var(--amber);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+    .hero-h1 {
+      font-family:'Sora',sans-serif;
+      font-weight:900; font-size:clamp(48px,6vw,88px);
+      line-height:1.0; color:var(--on-bg);
+      margin-bottom:24px;
+    }
+    .hero-sub {
+      font-size:18px; color:var(--on-muted);
+      line-height:1.7; max-width:420px;
+      margin-bottom:40px;
+    }
+    .hero-btns { display:flex; gap:16px; flex-wrap:wrap; }
+
+    .hero-canvas-wrap {
+      position:relative;
+      width:100%; aspect-ratio:1/1;
+      border-radius:28px;
+      overflow:hidden;
+      background: radial-gradient(ellipse at 35% 30%, #2a1408 0%, #080604 100%);
+      border:1px solid rgba(255,185,48,0.1);
+      box-shadow: 0 0 80px rgba(255,100,0,0.08), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+    #cup-canvas { width:100%; height:100%; display:block; }
+
+    .open-now-badge {
+      position:absolute; top:20px; right:20px; z-index:10;
+      display:flex; align-items:center; gap:8px;
+      background:rgba(8,6,4,0.75);
+      backdrop-filter:blur(12px);
+      border:1px solid rgba(255,185,48,0.25);
+      border-radius:100px;
+      padding:8px 16px;
+      font-size:11px; font-weight:700;
+      color:var(--amber); letter-spacing:0.1em;
+    }
+    .open-dot {
+      width:7px;height:7px;border-radius:50%;
+      background:#4cff8a;
+      animation: pulse 2s ease-in-out infinite;
+      box-shadow:0 0 8px #4cff8a;
+    }
+    .cup-stage-label {
+      position:absolute; bottom:20px; left:50%;
+      transform:translateX(-50%);
+      background:rgba(8,6,4,0.7);
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(255,185,48,0.2);
+      border-radius:100px;
+      padding:8px 20px;
+      font-size:12px; color:var(--on-muted);
+      transition:all 0.4s;
+      white-space:nowrap;
     }
 
+    .scroll-hint {
+      display:flex; align-items:center; gap:12px;
+      margin-top:48px; color:var(--on-muted);
+      font-size:12px; letter-spacing:0.08em;
+      opacity:0.6;
+    }
+    .scroll-hint-line {
+      width:40px; height:1px;
+      background:linear-gradient(90deg, transparent, var(--amber));
+    }
+
+    @keyframes pulse {
+      0%,100%{opacity:1;transform:scale(1);}
+      50%{opacity:0.5;transform:scale(1.3);}
+    }
+
+    @keyframes fadeUp {
+      from{opacity:0;transform:translateY(32px);}
+      to{opacity:1;transform:translateY(0);}
+    }
+    .hero-badge  { animation:fadeUp 0.5s ease-out 0.1s both; }
+    .hero-h1     { animation:fadeUp 0.6s ease-out 0.25s both; }
+    .hero-sub    { animation:fadeUp 0.6s ease-out 0.4s both; }
+    .hero-btns   { animation:fadeUp 0.6s ease-out 0.55s both; }
+    .scroll-hint { animation:fadeUp 0.6s ease-out 0.8s both; }
+    .hero-canvas-wrap { animation:fadeUp 0.7s ease-out 0.3s both; }
+
+    @media(max-width:768px){
+      #hero-sticky { grid-template-columns:1fr; padding:0 20px; gap:24px; }
+      .hero-canvas-wrap { aspect-ratio:4/3; }
+    }
+
+    /* ─── SECTION 3: ABOUT ─── */
+    #about {
+      background: var(--surface);
+      position: relative;
+    }
+    .about-divider-top {
+      height: 80px;
+      background: linear-gradient(to bottom-right, var(--bg) 49.5%, var(--surface) 50%);
+    }
+    .about-banner {
+      position:relative; overflow:hidden;
+      padding: 100px 80px;
+      display:grid; grid-template-columns:1fr auto;
+      align-items:center; gap:40px;
+      max-width:1280px; margin:0 auto;
+    }
+    .about-banner-bg {
+      position:absolute; inset:0;
+      background: radial-gradient(ellipse at 80% 50%, rgba(255,185,48,0.04) 0%, transparent 60%);
+      pointer-events:none;
+    }
+    .about-overline {
+      font-size:11px; font-weight:700; letter-spacing:0.2em;
+      color:var(--amber); margin-bottom:20px;
+    }
+    .about-h2 {
+      font-family:'Sora',sans-serif;
+      font-weight:900; font-size:clamp(48px,5vw,80px);
+      line-height:1.05; color:var(--on-bg);
+      margin-bottom:28px;
+    }
+    .about-desc {
+      font-size:17px; line-height:1.75;
+      color:var(--on-muted); max-width:500px;
+    }
+    .about-big-num {
+      font-family:'Sora',sans-serif; font-weight:900;
+      font-size:clamp(80px,10vw,160px);
+      color:rgba(255,185,48,0.05);
+      line-height:1; user-select:none;
+      letter-spacing:-0.04em;
+    }
+
+    .about-grid {
+      display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+      background:rgba(255,185,48,0.08);
+      border-top: 1px solid rgba(255,185,48,0.08);
+      border-bottom: 1px solid rgba(255,185,48,0.08);
+    }
+    .about-feature-card {
+      background:var(--surface);
+      padding:48px 36px;
+      transition:background 0.3s;
+    }
+    .about-feature-card:hover { background:var(--surface-2); }
+    .about-feature-icon { font-size:28px; margin-bottom:20px; }
+    .about-feature-num {
+      font-family:'Sora',sans-serif; font-weight:900;
+      font-size:clamp(36px,4vw,56px); color:var(--amber);
+      line-height:1; margin-bottom:8px;
+    }
+    .about-feature-label {
+      font-size:11px; font-weight:700; letter-spacing:0.14em;
+      color:var(--on-muted); margin-bottom:16px; text-transform:uppercase;
+    }
+    .about-feature-desc { font-size:14px; color:rgba(181,168,152,0.7); line-height:1.6; }
+
+    .about-marquee-wrap {
+      overflow:hidden; padding:28px 0;
+      border-top:1px solid rgba(255,185,48,0.08);
+      border-bottom:1px solid rgba(255,185,48,0.08);
+      background:var(--surface-2);
+    }
+    .about-marquee {
+      display:flex; gap:48px; align-items:center;
+      white-space:nowrap;
+      animation: marquee 18s linear infinite;
+      width:max-content;
+    }
+    .about-marquee span {
+      font-family:'Sora',sans-serif; font-weight:700;
+      font-size:14px; letter-spacing:0.14em;
+      color:var(--on-muted); text-transform:uppercase;
+    }
+    .about-marquee-dot { color:var(--amber) !important; }
+    @keyframes marquee { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    .about-impact {
+      display:grid; grid-template-columns:1fr 1fr; gap:1px;
+      background:rgba(255,185,48,0.08);
+      max-width:1280px; margin:0 auto;
+    }
+    .about-impact-left, .about-impact-right {
+      background:var(--surface); padding:64px 80px;
+    }
+    .about-impact-label {
+      font-size:11px; font-weight:700; letter-spacing:0.16em;
+      color:var(--amber); margin-bottom:16px;
+    }
+    .about-impact-number {
+      font-family:'Sora',sans-serif; font-weight:900;
+      font-size:clamp(60px,7vw,96px); color:var(--on-bg);
+      line-height:1; margin-bottom:12px;
+    }
+    .about-impact-sub { font-size:16px; color:var(--on-muted); margin-bottom:24px; }
+    .about-progress-bar {
+      height:3px; background:rgba(255,255,255,0.08); border-radius:2px;
+      overflow:hidden; max-width:280px;
+    }
+    .about-progress-fill {
+      height:100%; width:0%;
+      background:linear-gradient(90deg, var(--amber), var(--primary));
+      border-radius:2px; transition:width 1.5s cubic-bezier(0.4,0,0.2,1);
+    }
+    .about-avatars { display:flex; align-items:center; gap:0; margin-top:24px; }
+    .about-avatars img {
+      width:40px; height:40px; border-radius:50%;
+      border:2px solid var(--surface);
+      margin-left:-10px; object-fit:cover;
+    }
+    .about-avatars img:first-child { margin-left:0; }
+    .avatar-more {
+      margin-left:8px; font-size:13px; font-weight:700; color:var(--on-muted);
+    }
+
+    @media(max-width:768px){
+      .about-banner { padding:60px 24px; grid-template-columns:1fr; }
+      .about-big-num { display:none; }
+      .about-grid { grid-template-columns:1fr 1fr; }
+      .about-feature-card { padding:32px 24px; }
+      .about-impact { grid-template-columns:1fr; }
+      .about-impact-left, .about-impact-right { padding:48px 24px; }
+    }
+
+    /* ─── SECTION 4: MENU ─── */
+    #menu {
+      background:var(--bg);
+      padding:120px 0;
+    }
+    .menu-inner { max-width:1280px; margin:0 auto; padding:0 48px; }
+    .menu-overline {
+      font-size:11px; font-weight:700; letter-spacing:0.18em;
+      color:var(--amber); margin-bottom:16px;
+    }
+    .menu-h2 {
+      font-family:'Sora',sans-serif; font-weight:900;
+      font-size:clamp(40px,5vw,72px); color:var(--on-bg);
+      line-height:1.05; margin-bottom:20px;
+    }
+    .menu-sub { font-size:17px; color:var(--on-muted); max-width:520px; margin-bottom:56px; }
+
+    .menu-tabs {
+      display:flex; gap:6px; flex-wrap:wrap;
+      background:rgba(26,24,20,0.6);
+      border:1px solid rgba(255,185,48,0.1);
+      border-radius:100px; padding:6px;
+      width:fit-content; margin-bottom:56px;
+    }
+    .menu-tab {
+      padding:10px 24px; border-radius:100px; border:none;
+      background:transparent; color:var(--on-muted);
+      font-family:'Inter',sans-serif; font-size:13px; font-weight:600;
+      cursor:pointer; transition:all 0.25s;
+      letter-spacing:0.02em;
+    }
+    .menu-tab:hover { color:var(--on-bg); }
+    .menu-tab.active {
+      background:var(--surface-3);
+      color:var(--primary);
+      box-shadow: 0 0 16px rgba(255,185,48,0.12), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+
+    .featured-card {
+      display:grid; grid-template-columns:45% 1fr;
+      border-radius:24px; overflow:hidden;
+      background:var(--surface-2);
+      border:1px solid rgba(255,185,48,0.1);
+      margin-bottom:24px;
+      min-height:320px;
+      transition:box-shadow 0.3s;
+    }
+    .featured-card:hover {
+      box-shadow:0 0 60px rgba(255,185,48,0.1), 0 20px 60px rgba(0,0,0,0.5);
+    }
+    .featured-photo {
+      position:relative; overflow:hidden;
+    }
+    .featured-photo img {
+      width:100%; height:100%; object-fit:cover;
+      transition:transform 0.6s cubic-bezier(0.4,0,0.2,1);
+    }
+    .featured-card:hover .featured-photo img { transform:scale(1.06); }
+    .featured-badge {
+      position:absolute; top:16px; left:16px;
+      background:var(--amber); color:#1a0a00;
+      font-size:10px; font-weight:800; letter-spacing:0.1em;
+      padding:5px 12px; border-radius:100px;
+    }
+    .featured-body {
+      padding:48px 48px;
+      display:flex; flex-direction:column; justify-content:space-between;
+    }
+    .featured-name {
+      font-family:'Sora',sans-serif; font-weight:800;
+      font-size:clamp(28px,3vw,42px); color:var(--on-bg); margin-bottom:8px;
+    }
+    .featured-price {
+      font-family:'Sora',sans-serif; font-weight:900;
+      font-size:clamp(32px,4vw,52px); color:var(--amber);
+      margin-bottom:24px;
+    }
+    .featured-desc { font-size:16px; color:var(--on-muted); line-height:1.7; flex:1; }
+    .featured-body .btn-primary { margin-top:32px; width:100%; font-size:15px; padding:16px; }
+
+    .menu-grid {
+      display:grid; grid-template-columns:repeat(3,1fr); gap:20px;
+    }
     .menu-card {
-      background: var(--surface-high);
-      border: 1px solid rgba(255,186,63,0.08);
-      border-radius: 16px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
+      border-radius:20px; overflow:hidden;
+      background:var(--surface-2);
+      border:1px solid rgba(255,185,48,0.06);
+      cursor:pointer;
+      transition:border-color 0.3s, box-shadow 0.3s;
+      transform-style:preserve-3d;
+      will-change:transform;
+      position:relative;
+    }
+    .menu-card:hover {
+      border-color:rgba(255,185,48,0.2);
+      box-shadow:
+        0 0 0 1px rgba(255,185,48,0.08),
+        0 0 40px rgba(255,185,48,0.08),
+        0 20px 40px rgba(0,0,0,0.4);
+    }
+    .menu-card::before {
+      content:''; position:absolute; inset:0; border-radius:20px; z-index:10;
+      background:linear-gradient(135deg,rgba(255,185,48,0.05),transparent 60%);
+      opacity:0; transition:opacity 0.3s; pointer-events:none;
+    }
+    .menu-card:hover::before { opacity:1; }
+
+    .menu-card-photo-wrap {
+      height:200px; overflow:hidden; position:relative;
     }
     .menu-card-photo {
-      width: 100%;
-      height: 160px;
-      object-fit: cover;
-      display: block;
+      width:100%; height:100%; object-fit:cover;
+      transition:transform 0.5s cubic-bezier(0.4,0,0.2,1);
+      display:block;
     }
-    .menu-card-body {
-      padding: 16px 18px 20px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-    }
-    .menu-card-name { font-family:'Sora'; font-weight:700; font-size:18px; color:#e5e2dd; }
-    .menu-card-price { font-family:'Sora'; font-weight:800; color:#ffba3f; }
-    .menu-card-desc { font-size:13px; color:#c4a882; margin: 8px 0 14px; flex:1; }
+    .menu-card:hover .menu-card-photo { transform:scale(1.08) translateY(-4px); }
 
-    /* Cart Sidebar & Badge */
+    .menu-card-price-tag {
+      position:absolute; top:14px; right:14px; z-index:5;
+      background:rgba(8,6,4,0.82);
+      backdrop-filter:blur(8px);
+      border:1px solid rgba(255,185,48,0.25);
+      border-radius:100px; padding:5px 12px;
+      font-family:'Sora',sans-serif; font-weight:800;
+      font-size:15px; color:var(--amber);
+      animation:floatPrice 3s ease-in-out infinite;
+    }
+    @keyframes floatPrice {
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-4px)}
+    }
+
+    .menu-card-body { padding:20px 22px 22px; position:relative; }
+    .menu-card-cat {
+      font-size:10px; font-weight:700; letter-spacing:0.14em;
+      color:var(--amber); text-transform:uppercase; margin-bottom:8px;
+      opacity:0.7;
+    }
+    .menu-card-name {
+      font-family:'Sora',sans-serif; font-weight:700;
+      font-size:18px; color:var(--on-bg); margin-bottom:8px;
+    }
+    .menu-card-desc {
+      font-size:13px; color:var(--on-muted); line-height:1.6; margin-bottom:16px;
+    }
+
+    .menu-card-add {
+      width:100%; padding:12px;
+      background:rgba(255,185,48,0.08);
+      border:1px solid rgba(255,185,48,0.15);
+      border-radius:10px;
+      color:var(--primary); font-family:'Inter',sans-serif;
+      font-weight:700; font-size:13px; cursor:pointer;
+      transform:translateY(6px); opacity:0.7;
+      transition:all 0.25s cubic-bezier(0.4,0,0.2,1);
+      letter-spacing:0.04em;
+    }
+    .menu-card:hover .menu-card-add {
+      transform:translateY(0); opacity:1;
+      background:rgba(255,185,48,0.14);
+      border-color:rgba(255,185,48,0.3);
+      box-shadow:0 0 20px rgba(255,185,48,0.1);
+    }
+    .menu-card-add:hover {
+      background:linear-gradient(135deg, #ffb930, #ff6b1a) !important;
+      color:#1a0a00 !important;
+      border-color:transparent !important;
+    }
+
+    @media(max-width:1024px){ .menu-grid{grid-template-columns:repeat(2,1fr);} }
+    @media(max-width:768px){
+      .menu-inner{padding:0 20px;}
+      .featured-card{grid-template-columns:1fr;}
+      .featured-photo{height:240px;}
+      .featured-body{padding:28px;}
+      .menu-grid{grid-template-columns:1fr;}
+    }
+
+    /* ─── SECTION 5: CART ─── */
+    .cart-overlay {
+      position:fixed; inset:0; background:rgba(0,0,0,0.6);
+      backdrop-filter:blur(4px); z-index:1000;
+      opacity:0; pointer-events:none; transition:opacity 0.3s;
+    }
+    .cart-overlay.open { opacity:1; pointer-events:auto; }
     .cart-sidebar {
-      position: fixed; right: 0; top: 0; height: 100vh;
-      width: 380px; max-width: 100vw;
-      background: rgba(15, 11, 6, 0.97);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
-      border-left: 1px solid rgba(255,186,63,0.15);
-      transform: translateX(100%);
-      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      z-index: 1000;
-      display: flex; flex-direction: column;
-      padding: 24px;
+      position:fixed; right:0; top:0; height:100vh;
+      width:400px; max-width:100vw; z-index:1001;
+      background:rgba(10,8,6,0.97);
+      backdrop-filter:blur(32px);
+      border-left:1px solid rgba(255,185,48,0.12);
+      transform:translateX(100%);
+      transition:transform 0.35s cubic-bezier(0.4,0,0.2,1);
+      display:flex; flex-direction:column;
     }
-    .cart-sidebar.open { transform: translateX(0); }
-
-    .cart-badge {
-      position: absolute; top: -6px; right: -6px;
-      background: #dc743e; color: white;
-      border-radius: 50%; width: 20px; height: 20px;
-      font-size: 11px; font-weight: 700;
-      display: flex; align-items: center; justify-content: center;
+    .cart-sidebar.open { transform:translateX(0); }
+    .cart-header {
+      display:flex; justify-content:space-between; align-items:flex-start;
+      padding:28px 28px 20px;
+      border-bottom:1px solid rgba(255,185,48,0.08);
     }
-    @keyframes badgePop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.6); }
-      100% { transform: scale(1); }
+    .cart-close {
+      background:rgba(255,255,255,0.06); border:none; color:var(--on-muted);
+      width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:14px;
+      transition:all 0.2s;
     }
-    .badge-pop {
-      animation: badgePop 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    .cart-close:hover { background:rgba(255,255,255,0.12); color:var(--on-bg); }
+    .cart-items { flex:1; overflow-y:auto; padding:16px 28px; }
+    .cart-empty { text-align:center; padding:60px 0; }
+    .cart-item {
+      display:flex; align-items:center; gap:16px;
+      padding:16px 0; border-bottom:1px solid rgba(255,255,255,0.04);
     }
-
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 4px;
+    .cart-item-img { width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0; }
+    .cart-item-name { font-weight:600;font-size:14px;margin-bottom:4px; }
+    .cart-item-price { color:var(--amber);font-family:'Sora';font-weight:700;font-size:13px; }
+    .cart-item-controls { display:flex;align-items:center;gap:8px;margin-top:8px; }
+    .cart-qty-btn {
+      width:28px;height:28px;border-radius:50%;
+      background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);
+      color:var(--on-bg);cursor:pointer;font-size:14px;line-height:1;
+      transition:all 0.2s;display:flex;align-items:center;justify-content:center;
     }
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: rgba(0,0,0,0.2);
-    }
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: rgba(255,186,63,0.3);
-      border-radius: 4px;
-    }
-
-    /* Info Chips (Find Us) */
-    .info-chip {
-      display: flex; gap: 16px; align-items: flex-start;
-      padding: 16px 18px;
-      background: rgba(28,22,14,0.7);
-      border: 1px solid rgba(255,186,63,0.12);
-      border-radius: 14px;
-      margin-bottom: 12px;
-    }
-    .info-chip-icon {
-      width: 40px; height: 40px; border-radius: 10px;
-      background: rgba(255,186,63,0.10);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .info-chip-label { font-size: 10px; letter-spacing: 0.12em; color: #c18500; font-weight: 600; }
-    .info-chip-text { font-size: 15px; color: #e5e2dd; margin-top: 2px; }
-
-    /* Animations */
-    @keyframes fadeUp {
-      from { opacity:0; transform:translateY(24px); }
-      to   { opacity:1; transform:translateY(0); }
-    }
-    .hero-label   { animation: fadeUp 0.5s ease-out 0.1s both; }
-    .hero-h1      { animation: fadeUp 0.6s ease-out 0.2s both; }
-    .hero-sub     { animation: fadeUp 0.6s ease-out 0.4s both; }
-    .hero-btns    { animation: fadeUp 0.6s ease-out 0.55s both; }
-    .hero-canvas-wrap { animation: fadeUp 0.8s ease-out 0.3s both; }
-    nav           { animation: slideDown 0.5s ease-out both; }
-
-    @keyframes slideDown {
-      from { transform: translateY(-100%); opacity:0; }
-      to   { transform: translateY(0); opacity:1; }
+    .cart-qty-btn:hover { background:rgba(255,185,48,0.15);border-color:rgba(255,185,48,0.3); }
+    .cart-qty { font-weight:700;font-size:15px;min-width:24px;text-align:center; }
+    .cart-remove { margin-left:auto;color:rgba(181,168,152,0.4);cursor:pointer;font-size:18px;transition:color 0.2s; }
+    .cart-remove:hover { color:#ff5555; }
+    .cart-footer { padding:20px 28px 32px;border-top:1px solid rgba(255,185,48,0.08); }
+    .cart-subtotal { display:flex;justify-content:space-between;align-items:center; }
+    @keyframes toastIn {
+      from{opacity:0;transform:translateX(-50%) translateY(20px);}
+      to{opacity:1;transform:translateX(-50%) translateY(0);}
     }
 
-    @keyframes pulseDot {
-      0%, 100% { opacity:1; transform:scale(1); }
-      50% { opacity:0.5; transform:scale(1.4); }
+    /* ─── SECTION 6: FIND US ─── */
+    #find-us { background:var(--surface); padding:120px 0 80px; }
+    .findus-inner {
+      max-width:1280px; margin:0 auto; padding:0 48px;
+      display:grid; grid-template-columns:1fr 1fr; gap:40px;
+      align-items:start; margin-bottom:80px;
     }
-    .open-now-dot { animation: pulseDot 1.8s ease-in-out infinite; }
+    .findus-map-wrap {
+      border-radius:24px; overflow:hidden;
+      aspect-ratio:4/3; position:relative;
+      border:1px solid rgba(255,185,48,0.1);
+    }
+    .findus-coords {
+      position:absolute; bottom:16px; left:16px; z-index:5;
+      font-size:11px; color:var(--on-muted); letter-spacing:0.05em;
+      background:rgba(8,6,4,0.7); backdrop-filter:blur(8px);
+      padding:6px 12px; border-radius:8px;
+      border:1px solid rgba(255,185,48,0.1);
+    }
+    .findus-pin-overlay {
+      position:absolute; top:50%; left:50%;
+      transform:translate(-50%,-50%);
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      z-index:6; pointer-events:none;
+    }
+    .findus-pin-card {
+      display:flex; align-items:center; gap:8px;
+      padding:8px 14px; border-radius:12px;
+      white-space:nowrap;
+    }
+    .findus-pin-dot {
+      width:12px;height:12px;border-radius:50%;
+      background:var(--amber);
+      box-shadow:0 0 12px rgba(255,185,48,0.6),0 0 24px rgba(255,185,48,0.3);
+      animation:pinPulse 2s ease-in-out infinite;
+    }
+    @keyframes pinPulse {
+      0%,100%{transform:scale(1);box-shadow:0 0 12px rgba(255,185,48,0.6);}
+      50%{transform:scale(1.3);box-shadow:0 0 24px rgba(255,185,48,0.8),0 0 40px rgba(255,185,48,0.4);}
+    }
+    .findus-h2 {
+      font-family:'Sora';font-weight:900;
+      font-size:clamp(36px,4vw,56px);color:var(--on-bg);
+      line-height:1.1;margin-bottom:20px;
+    }
+    .findus-chips { display:flex;flex-direction:column;gap:12px;margin-bottom:24px; }
+    .findus-chip {
+      display:flex;align-items:flex-start;gap:16px;
+      padding:16px 20px;border-radius:14px;
+    }
+    .findus-chip-icon {
+      font-size:20px;width:40px;height:40px;border-radius:10px;
+      background:rgba(255,185,48,0.08);display:flex;align-items:center;justify-content:center;
+      flex-shrink:0;
+    }
+    .findus-chip-label {
+      font-size:10px;font-weight:700;letter-spacing:0.14em;
+      color:var(--amber);margin-bottom:4px;
+    }
+    .findus-chip-value { font-size:14px;color:var(--on-bg);line-height:1.6; }
+    .findus-form-wrap { max-width:800px;margin:0 auto;padding:0 48px; }
+    .findus-form { border-radius:24px;padding:48px; }
+    .form-row { display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px; }
+    .form-group { display:flex;flex-direction:column;gap:8px;margin-bottom:20px; }
+    .form-label { font-size:12px;font-weight:600;letter-spacing:0.08em;color:var(--on-muted); }
+    .form-input {
+      background:rgba(8,6,4,0.6);
+      border:1px solid rgba(255,185,48,0.12);
+      border-radius:10px; padding:14px 16px;
+      color:var(--on-bg); font-family:'Inter';font-size:14px;
+      transition:all 0.2s; outline:none;
+    }
+    .form-input:focus {
+      border-color:rgba(255,185,48,0.4);
+      box-shadow:0 0 0 3px rgba(255,185,48,0.08);
+    }
+    .form-input::placeholder { color:rgba(181,168,152,0.4); }
+    .form-textarea { min-height:120px;resize:vertical; }
+    @media(max-width:768px){
+      .findus-inner{grid-template-columns:1fr;padding:0 20px;}
+      .findus-form-wrap{padding:0 20px;}
+      .findus-form{padding:28px 24px;}
+      .form-row{grid-template-columns:1fr;}
+    }
+
+    /* ─── SECTION 7: FOOTER ─── */
+    footer {
+      background:#050403;
+      border-top:1px solid rgba(255,185,48,0.08);
+      padding:60px 48px 40px;
+    }
+    .footer-inner { max-width:1280px;margin:0 auto;text-align:center; }
+    .footer-tagline { color:var(--on-muted);font-size:14px;margin-bottom:32px; }
+    .footer-links { display:flex;justify-content:center;gap:32px;flex-wrap:wrap;margin-bottom:32px; }
+    .footer-links a { color:var(--on-muted);text-decoration:none;font-size:14px;transition:color 0.2s; }
+    .footer-links a:hover { color:var(--primary); }
+    .footer-copy { font-size:12px;color:rgba(181,168,152,0.35); }
 
     /* Intersection Observer Base Class */
     .fade-in {
       opacity: 0;
-      transform: translateY(28px);
+      transform: translateY(24px);
       transition: opacity 0.55s ease, transform 0.55s ease;
     }
-
   </style>
 </head>
 <body>
 
-  <!-- Navigation -->
-  <nav class="fixed top-0 left-0 w-full z-50 transition-colors" style="background: rgba(10, 6, 0, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(86, 67, 58, 0.25);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex justify-between items-center h-20">
-        <!-- Logo -->
-        <a href="#" class="font-sora font-extrabold text-2xl tracking-wider" style="color: #c18500; text-shadow: 0 0 12px rgba(193,133,0,0.4);">
-          MINDKICK
-        </a>
-
-        <!-- Desktop Links -->
-        <div class="hidden md:flex space-x-8 items-center h-full">
-          <a href="#menu" class="nav-link h-full flex items-center font-inter font-medium transition-colors" data-section="menu" style="color: #c4a882; border-bottom: 2px solid transparent; border-top: 2px solid transparent;">Menu</a>
-          <a href="#about" class="nav-link h-full flex items-center font-inter font-medium transition-colors" data-section="about" style="color: #c4a882; border-bottom: 2px solid transparent; border-top: 2px solid transparent;">About</a>
-          <a href="#find-us" class="nav-link h-full flex items-center font-inter font-medium transition-colors" data-section="find-us" style="color: #c4a882; border-bottom: 2px solid transparent; border-top: 2px solid transparent;">Find Us</a>
-          <div class="flex items-center ml-4">
-            <button class="btn-primary rounded-full relative order-now-btn">
-              Order Now 🛒
-              <span class="cart-badge" style="display: none;">0</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- Mobile Menu Button -->
-        <div class="md:hidden flex items-center">
-          <button id="mobile-menu-btn" class="text-on-surface-var hover:text-primary transition-colors p-2" aria-label="Toggle Menu">
-            <span class="material-symbols-outlined text-3xl" id="menu-icon">menu</span>
-          </button>
-        </div>
+  <!-- NAV -->
+  <nav id="main-nav">
+    <div class="nav-inner">
+      <a class="nav-logo" href="#">MINDKICK</a>
+      <div class="nav-links">
+        <a class="nav-link" href="#menu" data-section="menu">Menu</a>
+        <a class="nav-link" href="#about" data-section="about">About</a>
+        <a class="nav-link" href="#find-us" data-section="find-us">Find Us</a>
       </div>
+      <button class="btn-primary nav-order" id="nav-order-btn" onclick="openCart()">
+        Order Now <span class="cart-badge" id="cart-badge" style="display:none">0</span>
+      </button>
+      <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
     </div>
-
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" class="md:hidden hidden absolute w-full left-0 top-20 border-b" style="background: rgba(10, 6, 0, 0.95); backdrop-filter: blur(20px); border-color: rgba(86, 67, 58, 0.25);">
-      <div class="px-4 pt-2 pb-6 space-y-4 shadow-2xl">
-        <a href="#menu" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface-var hover:text-primary transition-colors">Menu</a>
-        <a href="#about" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface-var hover:text-primary transition-colors">About</a>
-        <a href="#find-us" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface-var hover:text-primary transition-colors">Find Us</a>
-        <button class="w-full btn-primary rounded-full mt-4 order-now-btn relative">
-          Order Now 🛒
-          <span class="cart-badge" style="display: none;">0</span>
-        </button>
-      </div>
+    <div class="nav-mobile" id="mobile-menu">
+      <a href="#menu" class="mobile-link">Menu</a>
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#find-us" class="mobile-link">Find Us</a>
+      <button class="btn-primary" style="width:100%;margin-top:12px" onclick="openCart()">Order Now</button>
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <section id="hero" class="relative w-full h-[100dvh] min-h-[800px] flex items-center overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 pt-20">
-
-      <!-- Left Content -->
-      <div class="w-full lg:w-5/12 flex flex-col items-start space-y-6 text-left">
-        <div class="hero-label bg-tertiary-dk/20 border border-tertiary/30 text-tertiary text-xs font-sora font-bold tracking-widest px-4 py-1.5 rounded-full">
-          PREMIUM URBAN CAFÉ ✦
-        </div>
-        <h1 class="hero-h1 font-sora font-extrabold text-[48px] lg:text-[64px] leading-[1.1] text-on-surface">
-          Fuel Your Mind.
-        </h1>
-        <p class="hero-sub font-inter text-[18px] text-on-surface-var max-w-lg leading-relaxed">
-          Experience the nocturnal energy of urban coffee.<br>
-          Premium roasts served from our signature midnight diorama kiosk.
-        </p>
-        <div class="hero-btns flex flex-wrap items-center gap-4 pt-4">
-          <a href="#menu" class="btn-primary">Explore Menu</a>
-          <button class="btn-secondary flex items-center gap-2 order-now-btn">Order Now &rarr;</button>
-        </div>
-      </div>
-
-      <!-- Right Content (3D Kiosk Card) -->
-      <div class="hero-canvas-wrap w-full lg:w-7/12 relative">
-        <div class="relative w-full h-[420px] lg:h-[520px] rounded-2xl overflow-hidden border border-primary/15" style="background: radial-gradient(ellipse at 40% 30%, #3d1f0a 0%, #0d0700 100%); box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 80px rgba(255,177,0,0.05); padding: 0;">
-          <canvas id="hero-canvas" class="w-full h-full block"></canvas>
-
-          <!-- Open Now Badge -->
-          <div class="absolute top-6 right-6 glass px-4 py-2 rounded-full flex items-center gap-2.5 z-20">
-            <div class="w-2.5 h-2.5 rounded-full bg-tertiary open-now-dot"></div>
-            <span class="font-inter font-bold text-[11px] tracking-widest text-on-surface">OPEN NOW</span>
+  <!-- HERO -->
+  <section id="hero">
+    <div id="hero-sticky-wrap">
+      <div id="hero-sticky">
+        <div class="hero-text" id="hero-text">
+          <div class="hero-badge">
+            <span class="hero-badge-dot"></span>
+            PREMIUM URBAN CAFÉ
           </div>
-
-          <!-- WebGL Fallback -->
-          <div id="hero-fallback" class="hidden absolute inset-0 bg-surface-highest flex-col items-center justify-center text-center p-6">
-            <span class="material-symbols-outlined text-tertiary text-4xl mb-2">3d_rotation</span>
-            <p class="font-sora text-on-surface font-semibold">3D View Not Supported</p>
-            <p class="font-inter text-on-surface-var text-sm mt-1">Please enable WebGL to view the kiosk.</p>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- About Section -->
-  <section id="about" class="py-24 lg:py-32 relative overflow-hidden">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="flex flex-col lg:flex-row gap-12 lg:gap-8 items-center justify-between">
-
-        <!-- Left: Text & Features (30%) -->
-        <div class="w-full lg:w-[30%] flex flex-col items-start fade-in">
-          <h2 class="font-sora font-extrabold text-4xl lg:text-5xl mb-2 text-on-surface">
-            Our Vibe,
-          </h2>
-          <h2 class="font-sora font-extrabold text-4xl lg:text-5xl mb-6 text-tertiary">
-            Your Fuel
-          </h2>
-          <p class="font-inter text-on-surface-var text-lg mb-8">
-            Experience the nocturnal energy of our premium street cafe. High-fidelity brews engineered for your daily grind.
+          <h1 class="hero-h1">
+            <span id="hero-line1">Fuel Your</span><br>
+            <span id="hero-line2" style="color:var(--amber)">Mind.</span>
+          </h1>
+          <p class="hero-sub" id="hero-sub">
+            Experience the nocturnal energy of urban coffee.
+            Premium roasts brewed for the relentless.
           </p>
-          <div class="flex flex-col gap-3 w-full">
-            <div class="glass px-5 py-3.5 rounded-full flex items-center gap-3 font-inter font-semibold text-on-surface">
-              <span class="text-xl">☕</span> Premium Brews
-            </div>
-            <div class="glass px-5 py-3.5 rounded-full flex items-center gap-3 font-inter font-semibold text-on-surface">
-              <span class="text-xl">🌿</span> Fresh Ingredients
-            </div>
-            <div class="glass px-5 py-3.5 rounded-full flex items-center gap-3 font-inter font-semibold text-on-surface">
-              <span class="text-xl">⚡</span> Energy Boosters
-            </div>
+          <div class="hero-btns" id="hero-btns">
+            <button class="btn-primary" onclick="document.getElementById('menu').scrollIntoView({behavior:'smooth'})">
+              Explore Menu
+            </button>
+            <button class="btn-ghost" onclick="openCart()">Order Now →</button>
+          </div>
+          <div class="scroll-hint" id="scroll-hint">
+            <div class="scroll-hint-line"></div>
+            <span>Scroll</span>
           </div>
         </div>
 
-        <!-- Center: Draggable 3D Canvas (40%) -->
-        <div class="w-full lg:w-[40%] flex flex-col items-center fade-in">
-          <div class="relative w-full max-w-[420px] aspect-square rounded-2xl overflow-hidden border border-primary/15" style="background: radial-gradient(ellipse at center, #251206 0%, #0a0600 100%); box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
-            <canvas id="about-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
-            <!-- WebGL Fallback -->
-            <div id="about-fallback" class="hidden absolute inset-0 bg-surface-highest flex-col items-center justify-center text-center p-6">
-              <span class="material-symbols-outlined text-tertiary text-4xl mb-2">3d_rotation</span>
-              <p class="font-sora text-on-surface font-semibold">3D View Not Supported</p>
-            </div>
+        <div class="hero-canvas-wrap" id="hero-canvas-wrap">
+          <div class="open-now-badge">
+            <span class="open-dot"></span> OPEN NOW
           </div>
-          <div class="drag-hint mt-6 flex items-center gap-2 glass px-4 py-2 rounded-full text-xs text-tertiary font-inter font-semibold tracking-widest transition-opacity duration-500">
-            <span class="material-symbols-outlined text-sm animate-spin" style="animation-duration: 4s;">rotate_right</span>
-            DRAG TO ROTATE
-          </div>
+          <canvas id="cup-canvas"></canvas>
+          <div class="cup-stage-label" id="cup-stage-label">☕ Scroll to brew</div>
         </div>
-
-        <!-- Right: IMPACT Card (30%) -->
-        <div class="w-full lg:w-[30%] fade-in">
-          <div class="relative rounded-2xl border border-primary/15 overflow-hidden" style="background: rgba(20, 16, 10, 0.8); padding: 28px; box-shadow: 0 12px 30px rgba(0,0,0,0.4);">
-            <div class="font-inter font-medium text-[11px] text-tertiary-dk tracking-[0.15em] mb-4">IMPACT</div>
-
-            <div class="mb-2">
-              <span class="font-sora font-extrabold text-[56px] text-on-surface leading-none stat-num" data-target="482">0</span>
-            </div>
-            <div class="font-inter text-on-surface-var text-sm mb-6">Cups Served Today</div>
-
-            <!-- Progress Bar -->
-            <div class="w-full h-2 rounded-full bg-surface-highest mb-8 overflow-hidden">
-              <div class="h-full rounded-full" style="width: 80%; background: linear-gradient(90deg, #ffba3f, #dc743e);"></div>
-            </div>
-
-            <div class="h-[1px] w-full bg-outline/30 mb-8"></div>
-
-            <div class="mb-1">
-              <span class="font-sora font-bold text-[32px] text-on-surface leading-none">10K+</span>
-            </div>
-            <div class="font-inter text-on-surface-var text-sm mb-6">Happy Customers</div>
-
-            <!-- Avatar Stack -->
-            <div class="flex items-center">
-              <img src="https://i.pravatar.cc/32?img=47" class="w-8 h-8 rounded-full border-2 border-surface object-cover" alt="Customer avatar">
-              <img src="https://i.pravatar.cc/32?img=23" class="w-8 h-8 rounded-full border-2 border-surface object-cover -ml-2" alt="Customer avatar">
-              <img src="https://i.pravatar.cc/32?img=31" class="w-8 h-8 rounded-full border-2 border-surface object-cover -ml-2" alt="Customer avatar">
-              <div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-high flex items-center justify-center -ml-2 text-xs font-inter font-medium text-on-surface-var">+</div>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </section>
 
-  <!-- Menu Section -->
-  <section id="menu" class="py-24 relative" style="background: rgba(19, 20, 17, 0.4);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <!-- Section Header -->
-      <div class="text-center mb-12 fade-in">
-        <h2 class="font-sora font-bold text-[40px] lg:text-[52px] text-on-surface mb-4">
-          The Midnight Diner
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="about-divider-top"></div>
+    <div class="about-banner">
+      <div class="about-banner-bg"></div>
+      <div class="about-banner-content">
+        <p class="about-overline">EST. 2024 — SHOLAPUR</p>
+        <h2 class="about-h2">
+          Our Vibe,<br>
+          <em style="color:var(--amber);font-style:normal">Your Fuel.</em>
         </h2>
-        <p class="font-inter text-on-surface-var max-w-2xl mx-auto text-base">
-          Fuel your nocturnal endeavors with our premium urban selection. Designed for the relentless.
+        <p class="about-desc">
+          Experience the nocturnal energy of our premium street café.
+          High-fidelity brews engineered for your daily grind.
+          No compromises. No shortcuts. Just coffee done right.
         </p>
       </div>
+      <div class="about-big-num">2024</div>
+    </div>
 
-      <!-- Category Filter Tabs -->
-      <div class="flex justify-center mb-12 fade-in">
-        <div class="tab-group" id="menu-filters">
-          <button class="tab active" data-cat="All">All</button>
-          <button class="tab" data-cat="Coffee">Coffee</button>
-          <button class="tab" data-cat="Tea">Tea</button>
-          <button class="tab" data-cat="Burgers">Burgers</button>
-          <button class="tab" data-cat="Fries">Fries</button>
-          <button class="tab" data-cat="Combos">Combos</button>
+    <div class="about-grid">
+      <div class="about-feature-card fade-in">
+        <div class="about-feature-icon">☕</div>
+        <div class="about-feature-num">500+</div>
+        <div class="about-feature-label">Daily Orders</div>
+        <p class="about-feature-desc">Serving the city's night owls, one perfect cup at a time.</p>
+      </div>
+      <div class="about-feature-card fade-in" style="transition-delay:0.1s">
+        <div class="about-feature-icon">⭐</div>
+        <div class="about-feature-num">4.9</div>
+        <div class="about-feature-label">Rating</div>
+        <p class="about-feature-desc">Consistently rated the best coffee experience in Sholapur.</p>
+      </div>
+      <div class="about-feature-card fade-in" style="transition-delay:0.2s">
+        <div class="about-feature-icon">🕐</div>
+        <div class="about-feature-num">2AM</div>
+        <div class="about-feature-label">Open Until</div>
+        <p class="about-feature-desc">Because great ideas don't follow a 9-to-5 schedule.</p>
+      </div>
+      <div class="about-feature-card fade-in" style="transition-delay:0.3s">
+        <div class="about-feature-icon">🌿</div>
+        <div class="about-feature-num">100%</div>
+        <div class="about-feature-label">Fresh Daily</div>
+        <p class="about-feature-desc">Beans sourced and roasted fresh every single morning.</p>
+      </div>
+    </div>
+
+    <div class="about-marquee-wrap">
+      <div class="about-marquee">
+        <span>PREMIUM ROASTS</span><span class="about-marquee-dot">◆</span>
+        <span>MIDNIGHT BREWS</span><span class="about-marquee-dot">◆</span>
+        <span>URBAN ENERGY</span><span class="about-marquee-dot">◆</span>
+        <span>MINDKICK FUEL</span><span class="about-marquee-dot">◆</span>
+        <span>PREMIUM ROASTS</span><span class="about-marquee-dot">◆</span>
+        <span>MIDNIGHT BREWS</span><span class="about-marquee-dot">◆</span>
+        <span>URBAN ENERGY</span><span class="about-marquee-dot">◆</span>
+        <span>MINDKICK FUEL</span><span class="about-marquee-dot">◆</span>
+      </div>
+    </div>
+
+    <div class="about-impact">
+      <div class="about-impact-left">
+        <div class="about-impact-label">IMPACT</div>
+        <div class="about-impact-number">
+          <span class="count-up" data-target="482" id="count-cups">0</span>
+        </div>
+        <div class="about-impact-sub">Cups Served Today</div>
+        <div class="about-progress-bar">
+          <div class="about-progress-fill" id="cups-progress"></div>
         </div>
       </div>
-
-      <!-- Menu Grid -->
-      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
-        <!-- Cards injected by JS -->
+      <div class="about-impact-right">
+        <div class="about-impact-label">COMMUNITY</div>
+        <div class="about-impact-number">
+          <span class="count-up" data-target="10000" id="count-customers">0</span>
+          <span style="font-size:0.5em;vertical-align:super">+</span>
+        </div>
+        <div class="about-impact-sub">Happy Customers</div>
+        <div class="about-avatars">
+          <img src="https://i.pravatar.cc/40?img=47" alt="">
+          <img src="https://i.pravatar.cc/40?img=23" alt="">
+          <img src="https://i.pravatar.cc/40?img=31" alt="">
+          <img src="https://i.pravatar.cc/40?img=12" alt="">
+          <span class="avatar-more">+9K</span>
+        </div>
       </div>
-
     </div>
   </section>
 
-  <!-- Cart Sidebar & Overlay -->
-  <div id="cart-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
-  <div id="cart-sidebar" class="cart-sidebar border-l border-primary/15">
-
-    <!-- Cart Header -->
-    <div class="pb-6 border-b border-outline/30 flex justify-between items-center shrink-0">
-      <h3 class="font-sora font-bold text-xl text-primary">Your Order</h3>
-      <button id="close-cart-btn" class="text-on-surface-var hover:text-primary transition-colors p-1">
-        <span class="material-symbols-outlined text-2xl">close</span>
-      </button>
-    </div>
-
-    <!-- Cart Items (Scrollable) -->
-    <div id="cart-items" class="flex-1 overflow-y-auto py-6 space-y-4 pr-2 custom-scrollbar">
-      <!-- Items will be injected here -->
-      <div id="cart-empty-state" class="text-center text-on-surface-var font-inter py-10 fade-in">
-        <span class="text-3xl mb-4 block opacity-50">✨</span>
-        <p class="font-medium text-on-surface">Your cart is empty.</p>
-        <p class="text-sm mt-1">Add something delicious.</p>
-      </div>
-    </div>
-
-    <!-- Cart Footer -->
-    <div class="pt-6 border-t border-outline/30 shrink-0">
-      <div class="flex justify-between items-center mb-6">
-        <span class="font-inter font-medium text-on-surface-var">Subtotal</span>
-        <span id="cart-subtotal" class="font-sora font-bold text-2xl text-tertiary">₹0</span>
-      </div>
-      <button id="checkout-btn" class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
-        Place Order
-      </button>
-    </div>
-  </div>
-
-  <!-- Success Toast -->
-  <div id="toast" class="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 glass px-6 py-4 rounded-xl flex items-center gap-3 z-[70] translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <span class="text-xl">🎉</span>
-    <span class="font-inter font-medium text-on-surface text-sm">Order placed! Ready in ~15 min</span>
-  </div>
-
-  <!-- Find Us Section -->
-  <section id="find-us" class="py-24 lg:py-32 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-      <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
-
-        <!-- Left: City Diorama (40%) -->
-        <div class="w-full lg:w-[40%] flex flex-col items-center fade-in">
-          <div class="relative w-full max-w-[480px] h-[480px] rounded-2xl overflow-hidden border border-primary/15" style="background: radial-gradient(ellipse at center, #1a0e05 0%, #0a0600 100%); box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
-            <canvas id="map-canvas" class="w-full h-full block"></canvas>
-
-            <!-- Coordinates -->
-            <div class="absolute bottom-4 left-4 font-inter text-[12px] text-on-surface-var tracking-widest pointer-events-none">
-              17.6868° N, 75.9064° E
-            </div>
-
-            <!-- WebGL Fallback -->
-            <div id="map-fallback" class="hidden absolute inset-0 bg-surface-highest flex-col items-center justify-center text-center p-6">
-              <span class="material-symbols-outlined text-tertiary text-4xl mb-2">3d_rotation</span>
-              <p class="font-sora text-on-surface font-semibold">3D View Not Supported</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Right: Info Card (60%) -->
-        <div class="w-full lg:w-[60%] fade-in">
-          <div class="glass rounded-3xl p-8 lg:p-12">
-            <h2 class="font-sora font-bold text-[40px] lg:text-[48px] text-on-surface mb-2 leading-tight">
-              Come Find Us
-            </h2>
-            <p class="font-inter text-on-surface-var text-base mb-10">
-              Drop by for your midnight fix. We're brewing until late.
-            </p>
-
-            <div class="info-chip">
-              <div class="info-chip-icon text-2xl">📍</div>
-              <div>
-                <div class="info-chip-label">THE SPOT</div>
-                <div class="info-chip-text">
-                  Plot 12, Urban Street<br>
-                  Sholapur, Maharashtra 413001
-                </div>
-              </div>
-            </div>
-
-            <div class="info-chip">
-              <div class="info-chip-icon text-2xl">🕐</div>
-              <div>
-                <div class="info-chip-label">HOURS</div>
-                <div class="info-chip-text">
-                  Mon – Sun: 10:00 AM – 2:00 AM
-                </div>
-              </div>
-            </div>
-
-            <div class="info-chip">
-              <div class="info-chip-icon text-2xl">@</div>
-              <div>
-                <div class="info-chip-label">CONNECT</div>
-                <div class="info-chip-text">
-                  @mindkick.cafe<br>
-                  +91 98765 43210
-                </div>
-              </div>
-            </div>
-
-            <div class="mt-8">
-              <a href="https://maps.google.com/?q=Sholapur+Maharashtra+413001" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block w-full text-center">
-                GET DIRECTIONS &rarr;
-              </a>
-            </div>
-
-          </div>
-        </div>
-
+  <!-- MENU -->
+  <section id="menu">
+    <div class="menu-inner">
+      <div class="menu-header fade-in">
+        <p class="menu-overline">THE MIDNIGHT DINER</p>
+        <h2 class="menu-h2">Every sip,<br><span style="color:var(--amber)">a ritual.</span></h2>
+        <p class="menu-sub">Fuel your nocturnal endeavors with our premium urban selection. Designed for the relentless.</p>
       </div>
 
-      <!-- Contact Form -->
-      <div class="glass p-8 lg:p-12 rounded-3xl mt-12 fade-in">
-        <h3 class="font-sora font-bold text-2xl mb-8">Send Us a Message</h3>
-        <form id="contact-form" class="space-y-6">
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div>
-              <label class="block font-inter text-sm text-on-surface-var mb-2" for="name">Name</label>
-              <input type="text" id="name" required class="w-full bg-[#0a0600]/80 border border-outline/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
-            </div>
-            <div>
-              <label class="block font-inter text-sm text-on-surface-var mb-2" for="email">Email</label>
-              <input type="email" id="email" required class="w-full bg-[#0a0600]/80 border border-outline/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
-            </div>
-          </div>
-          <div>
-            <label class="block font-inter text-sm text-on-surface-var mb-2" for="message">Message</label>
-            <textarea id="message" rows="4" required class="w-full bg-[#0a0600]/80 border border-outline/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"></textarea>
-          </div>
-          <div class="flex items-center gap-4">
-            <button type="submit" class="btn-primary rounded-full px-8 py-3 font-sora font-semibold">
-              Send Message
-            </button>
-            <span id="form-msg" class="text-sm font-inter text-tertiary opacity-0 transition-opacity"></span>
-          </div>
-        </form>
+      <div class="menu-tabs fade-in">
+        <button class="menu-tab active" onclick="filterMenu('All', this)">All</button>
+        <button class="menu-tab" onclick="filterMenu('Coffee', this)">Coffee</button>
+        <button class="menu-tab" onclick="filterMenu('Tea', this)">Tea</button>
+        <button class="menu-tab" onclick="filterMenu('Burgers', this)">Burgers</button>
+        <button class="menu-tab" onclick="filterMenu('Fries', this)">Fries</button>
+        <button class="menu-tab" onclick="filterMenu('Combos', this)">Combos</button>
       </div>
 
+      <div id="featured-card-wrap"></div>
+      <div class="menu-grid" id="menu-grid"></div>
     </div>
   </section>
 
-  <!-- Footer -->
-  <footer class="py-12 border-t border-outline/30 mt-12 bg-bg text-center relative z-10">
-    <div class="max-w-7xl mx-auto px-4">
-      <a href="#" class="font-sora font-extrabold text-2xl tracking-wider text-tertiary-dk mb-3 block">MINDKICK</a>
-      <p class="font-inter text-on-surface-var text-sm mb-6">Fuel Your Mind. One Sip at a Time.</p>
-
-      <div class="flex justify-center gap-6 mb-8 font-inter font-medium text-sm">
-        <a href="#" class="text-on-surface-var hover:text-primary transition-colors">Instagram</a>
-        <a href="#" class="text-on-surface-var hover:text-primary transition-colors">WhatsApp</a>
-        <a href="#" class="text-on-surface-var hover:text-primary transition-colors">Order Online</a>
+  <!-- CART SIDEBAR -->
+  <div class="cart-overlay" id="cart-overlay" onclick="closeCart()"></div>
+  <div class="cart-sidebar" id="cart-sidebar">
+    <div class="cart-header">
+      <div>
+        <div style="font-size:11px;letter-spacing:0.12em;color:var(--amber);margin-bottom:4px">YOUR ORDER</div>
+        <div style="font-family:'Sora';font-weight:800;font-size:22px">Cart</div>
       </div>
-
-      <p class="font-inter text-on-surface-var/50 text-xs">
-        © 2025 Mindkick. All rights reserved.
+      <button class="cart-close" onclick="closeCart()">✕</button>
+    </div>
+    <div class="cart-items" id="cart-items">
+      <div class="cart-empty" id="cart-empty">
+        <div style="font-size:48px;margin-bottom:16px">☕</div>
+        <div style="color:var(--on-muted);font-size:15px">Your cart is empty.</div>
+        <div style="color:rgba(181,168,152,0.5);font-size:13px;margin-top:8px">Add something delicious ✨</div>
+      </div>
+    </div>
+    <div class="cart-footer" id="cart-footer" style="display:none">
+      <div class="cart-subtotal">
+        <span style="color:var(--on-muted)">Subtotal</span>
+        <span style="font-family:'Sora';font-weight:800;font-size:20px;color:var(--amber)" id="cart-total">₹0</span>
+      </div>
+      <button class="btn-primary" style="width:100%;padding:16px;font-size:15px;margin-top:16px" onclick="placeOrder()">
+        Place Order →
+      </button>
+      <p style="text-align:center;font-size:12px;color:rgba(181,168,152,0.5);margin-top:12px">
+        Ready in ~15 minutes
       </p>
+    </div>
+  </div>
+
+  <!-- FIND US -->
+  <section id="find-us">
+    <div class="findus-inner">
+      <div class="findus-map-col">
+        <div class="findus-map-wrap glass fade-in">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d60866.04761025578!2d75.86418!3d17.68680!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc5db7b8d7a5c4f%3A0xf3b8ef5b2f5c7e5!2sSolapur%2C%20Maharashtra%20413001!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+            width="100%" height="100%" style="border:0;filter:invert(90%) hue-rotate(180deg) saturate(0.3) brightness(0.85);"
+            allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+          <div class="findus-coords">17.6868° N, 75.9064° E</div>
+          <div class="findus-pin-overlay">
+            <div class="findus-pin-card glass">
+              <span style="font-size:18px">☕</span>
+              <span style="font-family:'Sora';font-weight:800;font-size:13px;color:var(--amber)">MINDKICK HQ</span>
+            </div>
+            <div class="findus-pin-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="findus-info-col fade-in">
+        <p class="menu-overline">COME FIND US</p>
+        <h2 class="findus-h2">Drop by for<br>your <span style="color:var(--amber)">midnight fix.</span></h2>
+        <p style="color:var(--on-muted);font-size:16px;line-height:1.7;margin-bottom:40px">
+          We're brewing until late. No judgement, just great coffee.
+        </p>
+
+        <div class="findus-chips">
+          <div class="findus-chip glass">
+            <div class="findus-chip-icon">📍</div>
+            <div>
+              <div class="findus-chip-label">THE SPOT</div>
+              <div class="findus-chip-value">Plot 12, Urban Street<br>Sholapur, Maharashtra 413001</div>
+            </div>
+          </div>
+          <div class="findus-chip glass">
+            <div class="findus-chip-icon">🕐</div>
+            <div>
+              <div class="findus-chip-label">HOURS</div>
+              <div class="findus-chip-value">Mon – Sun: 10:00 AM – 2:00 AM</div>
+            </div>
+          </div>
+          <div class="findus-chip glass">
+            <div class="findus-chip-icon">@</div>
+            <div>
+              <div class="findus-chip-label">CONNECT</div>
+              <div class="findus-chip-value">@mindkick.cafe<br>+91 98765 43210</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="btn-primary" style="width:100%;padding:16px;font-size:15px;margin-top:8px"
+          onclick="window.open('https://maps.google.com/?q=Solapur+Maharashtra+413001','_blank')">
+          GET DIRECTIONS →
+        </button>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="findus-form-wrap">
+      <div class="findus-form glass fade-in">
+        <h3 style="font-family:'Sora';font-weight:800;font-size:28px;margin-bottom:8px">Send Us a Message</h3>
+        <p style="color:var(--on-muted);font-size:14px;margin-bottom:32px">We read every message. Usually reply within the hour.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Your Name</label>
+            <input class="form-input" id="f-name" type="text" placeholder="e.g. Rahul Shah">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email Address</label>
+            <input class="form-input" id="f-email" type="email" placeholder="you@example.com">
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Message</label>
+          <textarea class="form-input form-textarea" id="f-msg" placeholder="Tell us anything — feedback, events, collab ideas..."></textarea>
+        </div>
+        <button class="btn-primary" style="width:100%;padding:16px" onclick="submitForm()">Send Message ✦</button>
+        <div id="form-success" style="display:none;text-align:center;padding:20px;color:var(--amber);font-weight:600">
+          ✓ Message sent! We'll get back to you soon. ☕
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div class="nav-logo" style="font-size:28px;margin-bottom:12px">MINDKICK</div>
+        <p class="footer-tagline">Fuel Your Mind. One Sip at a Time.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#menu">Menu</a>
+        <a href="#about">About</a>
+        <a href="#find-us">Find Us</a>
+        <a href="https://instagram.com" target="_blank">Instagram</a>
+      </div>
+      <div class="footer-copy">© 2025 Mindkick. All rights reserved.</div>
     </div>
   </footer>
 
-  <!-- Three.js CDN -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-
+  <!-- JS Logic goes here -->
   <script>
-    // ==========================================
-    // MENU DATA (with Unsplash images)
-    // ==========================================
+    // ─── MENU DATA ────────────────────────────────────────────
     const MENU = [
       {
-        id: 1, name: "Combo Deal", cat: "Combos", price: 25, featured: true,
-        desc: "The ultimate midnight fuel. A classic artisan burger, a side of crispy golden fries, and our signature MindKick espresso. Perfectly balanced for the late-night grind.",
-        img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
+        id:1, name:"Combo Deal", cat:"Combos", price:25, featured:true,
+        desc:"The ultimate midnight fuel. Artisan burger, crispy golden fries, and our signature MindKick espresso. Perfectly balanced for the late-night grind.",
+        img:"https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=700&q=80"
       },
       {
-        id: 2, name: "MindKick Espresso", cat: "Coffee", price: 10,
-        desc: "A double shot of our darkest roast, engineered for maximum clarity and focus.",
-        img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&q=80"
+        id:2, name:"MindKick Espresso", cat:"Coffee", price:10,
+        desc:"Double shot, darkest roast. Engineered for maximum clarity and focus.",
+        img:"https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=500&q=80"
       },
       {
-        id: 3, name: "Masala Chai", cat: "Tea", price: 10,
-        desc: "Spiced black tea simmered with milk. A warm, aromatic alternative.",
-        img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&q=80"
+        id:3, name:"Masala Chai", cat:"Tea", price:10,
+        desc:"Spiced black tea simmered with milk. Warm, aromatic, grounding.",
+        img:"https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=500&q=80"
       },
       {
-        id: 4, name: "Classic Burger", cat: "Burgers", price: 10,
-        desc: "Smashed beef patty, sharp cheddar, house pickles, toasted brioche.",
-        img: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80"
+        id:4, name:"Classic Burger", cat:"Burgers", price:10,
+        desc:"Smashed beef patty, sharp cheddar, house pickles, toasted brioche.",
+        img:"https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=500&q=80"
       },
       {
-        id: 5, name: "Crispy Fries", cat: "Fries", price: 10,
-        desc: "Double-fried shoestring potatoes with sea salt and rosemary dust.",
-        img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80"
+        id:5, name:"Crispy Fries", cat:"Fries", price:10,
+        desc:"Double-fried shoestring potatoes with sea salt and rosemary dust.",
+        img:"https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=500&q=80"
       },
       {
-        id: 6, name: "Cold Brew", cat: "Coffee", price: 12,
-        desc: "12-hour slow-steeped Colombian beans. Served over obsidian ice.",
-        img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80"
+        id:6, name:"Cold Brew", cat:"Coffee", price:12,
+        desc:"12-hour slow-steeped Colombian beans served over obsidian ice.",
+        img:"https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=500&q=80"
       },
       {
-        id: 7, name: "Cappuccino", cat: "Coffee", price: 11,
-        desc: "Silky microfoam over a bold ristretto pull. Tactile, cinematic, precise.",
-        img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&q=80"
+        id:7, name:"Cappuccino", cat:"Coffee", price:11,
+        desc:"Silky microfoam over a bold ristretto pull. Cinematic, precise.",
+        img:"https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=500&q=80"
       },
       {
-        id: 8, name: "Smoky Fries", cat: "Fries", price: 12,
-        desc: "Shoestring fries dusted with smoked paprika, garlic, and Parmesan.",
-        img: "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=400&q=80"
+        id:8, name:"Smoky Fries", cat:"Fries", price:12,
+        desc:"Shoestring fries dusted with smoked paprika, garlic, and Parmesan.",
+        img:"https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=500&q=80"
       }
     ];
 
-    // ==========================================
-    // STATE & DOM ELEMENTS
-    // ==========================================
-    let cart = [];
-
-    // UI Elements
-    const menuGrid = document.getElementById('menu-grid');
-    const filterTabs = document.querySelectorAll('.tab');
-    const cartSidebar = document.getElementById('cart-sidebar');
-    const cartOverlay = document.getElementById('cart-overlay');
-    const closeCartBtn = document.getElementById('close-cart-btn');
-    const orderBtns = document.querySelectorAll('.order-now-btn');
-    const cartBadges = document.querySelectorAll('.cart-badge');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartEmptyState = document.getElementById('cart-empty-state');
-    const cartSubtotal = document.getElementById('cart-subtotal');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const toast = document.getElementById('toast');
-
-    // Mobile Nav
-    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-    const mobileMenu = document.getElementById('mobile-menu');
-    const menuIcon = document.getElementById('menu-icon');
-    const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
-
-    // ==========================================
-    // UI BEHAVIORS (Nav, Scroll, Animations)
-    // ==========================================
-
-    // Mobile Menu
-    mobileMenuBtn.addEventListener('click', () => {
-      if(typeof playClick === 'function') playClick();
-      mobileMenu.classList.toggle('hidden');
-      menuIcon.textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
-    });
-    mobileNavLinks.forEach(link => {
-      link.addEventListener('click', () => {
-        mobileMenu.classList.add('hidden');
-        menuIcon.textContent = 'menu';
-      });
-    });
-
-    // Active Nav Link on Scroll
-    const sectionsArr = ['menu','about','find-us'].map(id => document.getElementById(id));
-    window.addEventListener('scroll', () => {
-      let active = '';
-      sectionsArr.forEach(s => {
-        if(s && window.scrollY >= s.offsetTop - 120) active = s.id;
-      });
-      document.querySelectorAll('.nav-link').forEach(l => {
-        const isActive = l.dataset.section === active;
-        l.style.color = isActive ? 'var(--primary)' : 'var(--on-surface-var)';
-        l.style.borderBottom = isActive ? '2px solid var(--tertiary)' : '2px solid transparent';
-      });
-    });
-
-    // IntersectionObserver for Fade-in Elements
-    const scrollObs = new IntersectionObserver(entries => {
+    // ─── INTERSECTION OBSERVER (fade-in) ──────────────────────
+    const fadeObserver = new IntersectionObserver(entries => {
       entries.forEach(e => {
         if(e.isIntersecting){
-          e.target.style.opacity = '1';
-          e.target.style.transform = 'translateY(0)';
-
-          // Trigger Count Up if applicable
-          const statNum = e.target.querySelector('.stat-num');
-          if (statNum && !statNum.classList.contains('counted')) {
-            countUp(statNum, parseInt(statNum.dataset.target), 1500);
-            statNum.classList.add('counted');
-          }
-
-          scrollObs.unobserve(e.target);
+          e.target.style.opacity='1';
+          e.target.style.transform='translateY(0)';
+          fadeObserver.unobserve(e.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, { threshold:0.1 });
 
-    document.querySelectorAll('.fade-in').forEach(el => scrollObs.observe(el));
+    document.querySelectorAll('.fade-in').forEach(el => {
+      el.style.opacity='0';
+      el.style.transform='translateY(24px)';
+      el.style.transition='opacity 0.55s ease, transform 0.55s ease';
+      fadeObserver.observe(el);
+    });
 
-    // Count Up Animation helper
-    function countUp(el, target, duration = 1500){
-      const start = Date.now();
-      const tick = () => {
-        const progress = Math.min((Date.now()-start)/duration, 1);
-        const ease = 1 - Math.pow(1-progress, 3); // cubic ease out
-        el.textContent = Math.floor(ease * target);
-        if(progress < 1) requestAnimationFrame(tick);
-      };
-      tick();
+    // ─── RENDER FEATURED CARD ──────────────────────────────────
+    function renderFeatured() {
+      const item = MENU.find(m => m.featured);
+      document.getElementById('featured-card-wrap').innerHTML = `
+        <div class="featured-card menu-item fade-in" data-cat="${item.cat}">
+          <div class="featured-photo">
+            <img src="${item.img}" alt="${item.name}" loading="lazy">
+            <div class="featured-badge">MOST POPULAR</div>
+          </div>
+          <div class="featured-body">
+            <div>
+              <div class="featured-name">${item.name}</div>
+              <div class="featured-price">₹${item.price}</div>
+              <div class="featured-desc">${item.desc}</div>
+            </div>
+            <button class="btn-primary" onclick="addToCart(${item.id}, event)">
+              + Add to Order
+            </button>
+          </div>
+        </div>
+      `;
     }
 
-    // Contact Form Logic
-    const contactForm = document.getElementById('contact-form');
-    if (contactForm) {
-        const formMsg = document.getElementById('form-msg');
-        contactForm.addEventListener('submit', (e) => {
-          e.preventDefault();
+    // ─── RENDER MENU GRID ──────────────────────────────────────
+    function renderMenu(filter = 'All') {
+      const items = filter === 'All'
+        ? MENU.filter(m => !m.featured)
+        : MENU.filter(m => m.cat === filter && !m.featured);
 
-          const name = document.getElementById('name').value;
-          const email = document.getElementById('email').value;
-          const message = document.getElementById('message').value;
+      document.getElementById('menu-grid').innerHTML = items.map(item => `
+        <div class="menu-card menu-item fade-in" data-cat="${item.cat}"
+             onmousemove="tiltCard(this,event)" onmouseleave="resetCard(this)">
+          <div class="menu-card-photo-wrap">
+            <img class="menu-card-photo" src="${item.img}" alt="${item.name}" loading="lazy">
+            <div class="menu-card-price-tag">₹${item.price}</div>
+          </div>
+          <div class="menu-card-body">
+            <div class="menu-card-cat">${item.cat}</div>
+            <div class="menu-card-name">${item.name}</div>
+            <div class="menu-card-desc">${item.desc}</div>
+            <button class="menu-card-add" onclick="addToCart(${item.id}, event)">
+              + Add to Order
+            </button>
+          </div>
+        </div>
+      `).join('');
 
-          if(name && email && message) {
-            formMsg.textContent = "Message sent! We'll get back to you soon. ☕";
-            formMsg.classList.remove('opacity-0');
-            formMsg.classList.remove('text-red-400');
-            contactForm.reset();
-            setTimeout(() => formMsg.classList.add('opacity-0'), 4000);
-            if(typeof playClick === 'function') playClick();
-          } else {
-            formMsg.textContent = "Please fill all fields.";
-            formMsg.classList.add('text-red-400');
-            formMsg.classList.remove('opacity-0');
-          }
-        });
-    }
-
-    // ==========================================
-    // RENDER MENU
-    // ==========================================
-    function renderMenu() {
-      menuGrid.innerHTML = '';
-
-      MENU.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = `menu-item fade-in transition-all duration-500 ease-out ${item.featured ? 'lg:col-span-3' : ''}`;
-        card.dataset.cat = item.cat;
-        card.style.transitionDelay = `${index * 50}ms`;
-
-        if (item.featured) {
-          card.innerHTML = `
-            <div class="featured-card group">
-              <div class="relative w-full h-[200px] lg:h-full">
-                <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
-                <div class="absolute top-4 left-4 bg-tertiary-dk/90 text-on-surface font-sora font-bold text-[10px] tracking-widest px-3 py-1 rounded-full shadow-lg backdrop-blur-md border border-tertiary/20">MOST POPULAR</div>
-              </div>
-              <div class="p-6 lg:p-8 flex flex-col">
-                <div class="flex justify-between items-start mb-4">
-                  <h3 class="font-sora font-bold text-[28px] lg:text-[36px] leading-tight text-on-surface">${item.name}</h3>
-                  <span class="font-sora font-extrabold text-[28px] lg:text-[36px] text-tertiary leading-tight">₹${item.price}</span>
-                </div>
-                <p class="font-inter text-on-surface-var text-[15px] leading-relaxed mb-8 flex-1">${item.desc}</p>
-                <button class="btn-primary w-full text-base py-4" onclick="addToCart(${item.id}, event)">Add to Order</button>
-              </div>
-            </div>
-          `;
-        } else {
-          card.innerHTML = `
-            <div class="menu-card h-full group">
-              <img src="${item.img}" alt="${item.name}" class="menu-card-photo">
-              <div class="menu-card-body">
-                <div class="flex justify-between items-start mb-2">
-                  <h3 class="menu-card-name">${item.name}</h3>
-                  <span class="menu-card-price">₹${item.price}</span>
-                </div>
-                <p class="menu-card-desc">${item.desc}</p>
-                <button class="btn-secondary w-full" onclick="addToCart(${item.id}, event)">Add to Order</button>
-              </div>
-            </div>
-          `;
-        }
-        menuGrid.appendChild(card);
+      // Re-observe new cards for fade-in
+      document.querySelectorAll('.menu-item.fade-in').forEach(el => {
+        el.style.opacity='0'; el.style.transform='translateY(20px)';
+        el.style.transition='opacity 0.4s ease, transform 0.4s ease';
+        fadeObserver.observe(el);
       });
-
-      // Trigger observers for new items
-      document.querySelectorAll('.menu-item.fade-in').forEach(el => scrollObs.observe(el));
     }
 
-    // Initial Render
+    // ─── 3D CARD TILT ─────────────────────────────────────────
+    window.tiltCard = function(card, e) {
+      const rect = card.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width  - 0.5; // -0.5 to 0.5
+      const y = (e.clientY - rect.top)  / rect.height - 0.5;
+      const rotX = -y * 12; // max 12 degrees
+      const rotY =  x * 12;
+      card.style.transform = `
+        perspective(900px)
+        rotateX(${rotX}deg)
+        rotateY(${rotY}deg)
+        translateZ(8px)
+        scale(1.02)
+      `;
+      // Parallax: photo moves opposite direction slightly
+      const photo = card.querySelector('.menu-card-photo');
+      if(photo) photo.style.transform = `scale(1.08) translate(${-x*6}px, ${-y*6}px)`;
+    }
+    window.resetCard = function(card) {
+      card.style.transform = 'perspective(900px) rotateX(0) rotateY(0) translateZ(0) scale(1)';
+      card.style.transition = 'transform 0.5s cubic-bezier(0.4,0,0.2,1)';
+      const photo = card.querySelector('.menu-card-photo');
+      if(photo) { photo.style.transform = ''; photo.style.transition='transform 0.5s'; }
+      setTimeout(() => card.style.transition = '', 500);
+    }
+
+    // ─── FILTER ───────────────────────────────────────────────
+    window.filterMenu = function(cat, btn) {
+      if(typeof playClick === 'function') playClick();
+      document.querySelectorAll('.menu-tab').forEach(t => t.classList.remove('active'));
+      btn.classList.add('active');
+      if(cat === 'All') {
+        document.getElementById('featured-card-wrap').style.display='';
+      } else {
+        document.getElementById('featured-card-wrap').style.display='none';
+      }
+      renderMenu(cat);
+    }
+
+    renderFeatured();
     renderMenu();
 
-    // ==========================================
-    // FILTER LOGIC
-    // ==========================================
-    filterTabs.forEach(tab => {
-      tab.addEventListener('click', (e) => {
-        // Play click sound if initialized
-        if(typeof playClick === 'function') playClick();
+    // ─── CART STATE ───────────────────────────────────────────
+    let cart = [];
 
-        // Active styling
-        filterTabs.forEach(t => t.classList.remove('active'));
-        e.target.classList.add('active');
-
-        const cat = e.target.dataset.cat;
-
-        document.querySelectorAll('.menu-item').forEach(el => {
-          const match = cat === 'All' || el.dataset.cat === cat;
-          el.style.opacity = match ? '1' : '0';
-          el.style.transform = match ? 'translateY(0)' : 'translateY(12px)';
-          el.style.pointerEvents = match ? 'auto' : 'none';
-          setTimeout(() => {
-            el.style.display = match ? '' : 'none';
-          }, match ? 0 : 250);
-        });
-      });
-    });
-
-    // ==========================================
-    // CART LOGIC
-    // ==========================================
-    window.addToCart = function(id, event) {
+    window.openCart = function() {
+      document.getElementById('cart-sidebar').classList.add('open');
+      document.getElementById('cart-overlay').classList.add('open');
       if(typeof playClick === 'function') playClick();
+    }
+    window.closeCart = function() {
+      document.getElementById('cart-sidebar').classList.remove('open');
+      document.getElementById('cart-overlay').classList.remove('open');
+    }
 
+    window.addToCart = function(id, e) {
       const item = MENU.find(m => m.id === id);
       const existing = cart.find(c => c.id === id);
-
-      if (existing) {
-        existing.qty++;
-      } else {
-        cart.push({ ...item, qty: 1 });
-      }
-
-      // Micro-interaction: Button bump
-      const btn = event.currentTarget;
-      btn.style.transform = 'scale(1.05)';
-      setTimeout(() => btn.style.transform = '', 150);
-
-      // Micro-interaction: Floating +1
-      const rect = btn.getBoundingClientRect();
-      const floatEl = document.createElement('div');
-      floatEl.textContent = '+1';
-      floatEl.style.cssText = `
-        position:fixed; pointer-events:none; z-index:9999;
-        color:#ffba3f; font-weight:800; font-size:18px;
-        font-family:'Sora',sans-serif;
-        left:${rect.left + rect.width / 2}px;
-        top:${rect.top}px;
-        transition:all 0.6s cubic-bezier(0.2,0.8,0.3,1);
-        opacity:1; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
-      `;
-      document.body.appendChild(floatEl);
-
-      requestAnimationFrame(() => {
-        floatEl.style.top = (parseInt(floatEl.style.top) - 60) + 'px';
-        floatEl.style.opacity = '0';
-      });
-      setTimeout(() => floatEl.remove(), 700);
-
-      // Micro-interaction: Bounce cart badge
-      cartBadges.forEach(badge => {
-        badge.classList.remove('badge-pop');
-        // trigger reflow
-        void badge.offsetWidth;
-        badge.classList.add('badge-pop');
-      });
-
+      if(existing) existing.qty++;
+      else cart.push({...item, qty:1});
       updateCartUI();
-    };
-
-    window.updateQty = function(id, delta) {
+      animateAddToCart(e);
       if(typeof playClick === 'function') playClick();
-      const item = cart.find(c => c.id === id);
-      if (item) {
-        item.qty += delta;
-        if (item.qty <= 0) {
-          cart = cart.filter(c => c.id !== id);
-        }
-        updateCartUI();
-      }
-    };
-
-    window.removeFromCart = function(id) {
-      if(typeof playClick === 'function') playClick();
-      cart = cart.filter(c => c.id !== id);
-      updateCartUI();
-    };
+      openCart();
+    }
 
     function updateCartUI() {
-      // Update badges
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      cartBadges.forEach(badge => {
-        badge.textContent = totalItems;
-        badge.style.display = totalItems > 0 ? 'flex' : 'none';
-      });
+      const total = cart.reduce((s,c) => s+c.price*c.qty, 0);
+      const count = cart.reduce((s,c) => s+c.qty, 0);
 
-      // Update Sidebar Items
-      if (cart.length === 0) {
-        cartEmptyState.style.display = 'block';
-        cartItemsContainer.querySelectorAll('.cart-item').forEach(el => el.remove());
-        checkoutBtn.disabled = true;
+      // Badge
+      const badge = document.getElementById('cart-badge');
+      badge.textContent = count;
+      badge.style.display = count > 0 ? 'flex' : 'none';
+      badge.style.transform = 'scale(1.5)';
+      setTimeout(()=>badge.style.transform='',200);
+
+      // Total
+      document.getElementById('cart-total').textContent = `₹${total}`;
+
+      // Items list
+      const empty = document.getElementById('cart-empty');
+      const footer = document.getElementById('cart-footer');
+      const itemsWrap = document.getElementById('cart-items');
+      if(cart.length === 0) {
+        empty.style.display='block';
+        footer.style.display='none';
+        itemsWrap.innerHTML='<div class="cart-empty" id="cart-empty"><div style="font-size:48px;margin-bottom:16px">☕</div><div style="color:var(--on-muted);font-size:15px">Your cart is empty.</div><div style="color:rgba(181,168,152,0.5);font-size:13px;margin-top:8px">Add something delicious ✨</div></div>';
       } else {
-        cartEmptyState.style.display = 'none';
-        cartItemsContainer.querySelectorAll('.cart-item').forEach(el => el.remove());
-
-        cart.forEach(item => {
-          const itemEl = document.createElement('div');
-          itemEl.className = 'cart-item bg-surface-high border border-primary/10 p-4 rounded-xl flex items-center justify-between gap-3 mb-3';
-          itemEl.innerHTML = `
-            <div class="flex-1">
-              <p class="font-inter font-semibold text-sm text-on-surface leading-tight">${item.name}</p>
-              <p class="font-sora font-bold text-tertiary text-sm mt-1">₹${item.price}</p>
+        footer.style.display='block';
+        itemsWrap.innerHTML = cart.map(c => `
+          <div class="cart-item">
+            <img class="cart-item-img" src="${c.img}" alt="${c.name}">
+            <div style="flex:1;min-width:0">
+              <div class="cart-item-name">${c.name}</div>
+              <div class="cart-item-price">₹${c.price * c.qty}</div>
+              <div class="cart-item-controls">
+                <button class="cart-qty-btn" onclick="changeQty(${c.id},-1)">−</button>
+                <span class="cart-qty">${c.qty}</span>
+                <button class="cart-qty-btn" onclick="changeQty(${c.id},1)">+</button>
+              </div>
             </div>
-            <div class="flex items-center gap-1 bg-surface-highest rounded-full p-1 border border-outline/30">
-              <button class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface hover:text-primary hover:bg-surface-high transition-colors text-lg" onclick="updateQty(${item.id}, -1)">−</button>
-              <span class="font-inter font-semibold text-sm w-4 text-center">${item.qty}</span>
-              <button class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface hover:text-primary hover:bg-surface-high transition-colors text-lg" onclick="updateQty(${item.id}, 1)">+</button>
-            </div>
-            <button class="text-on-surface-var hover:text-red-400 transition-colors p-1" onclick="removeFromCart(${item.id})">
-              <span class="material-symbols-outlined text-xl">close</span>
-            </button>
-          `;
-          cartItemsContainer.insertBefore(itemEl, cartEmptyState);
-        });
-        checkoutBtn.disabled = false;
-      }
-
-      // Update Subtotal
-      const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      cartSubtotal.textContent = `₹${subtotal}`;
-    }
-
-    // Sidebar Toggles
-    function openCart() {
-      if(typeof playClick === 'function') playClick();
-      cartSidebar.classList.add('open');
-      cartOverlay.classList.remove('hidden');
-      setTimeout(() => cartOverlay.classList.remove('opacity-0'), 10);
-      document.body.style.overflow = 'hidden'; // prevent scrolling behind
-      if (!mobileMenu.classList.contains('hidden')) {
-        mobileMenuBtn.click(); // close mobile menu if open
+            <span class="cart-remove" onclick="removeFromCart(${c.id})">✕</span>
+          </div>
+        `).join('');
       }
     }
 
-    function closeCart() {
+    window.changeQty = function(id, delta) {
+      const item = cart.find(c => c.id === id);
+      if(!item) return;
+      item.qty += delta;
+      if(item.qty <= 0) cart = cart.filter(c => c.id !== id);
+      updateCartUI();
       if(typeof playClick === 'function') playClick();
-      cartSidebar.classList.remove('open');
-      cartOverlay.classList.add('opacity-0');
-      setTimeout(() => cartOverlay.classList.add('hidden'), 300);
-      document.body.style.overflow = '';
     }
 
-    orderBtns.forEach(btn => btn.addEventListener('click', openCart));
-    closeCartBtn.addEventListener('click', closeCart);
-    cartOverlay.addEventListener('click', closeCart);
-
-    // Checkout Action
-    checkoutBtn.addEventListener('click', () => {
+    window.removeFromCart = function(id) {
+      cart = cart.filter(c => c.id !== id);
+      updateCartUI();
       if(typeof playClick === 'function') playClick();
-      closeCart();
+    }
+
+    window.placeOrder = function() {
       cart = [];
       updateCartUI();
-
-      toast.classList.remove('translate-y-20', 'opacity-0');
-      setTimeout(() => {
-        toast.classList.add('translate-y-20', 'opacity-0');
-      }, 4000);
-    });
-
-    // ==========================================
-    // AMBIENT SOUND (Web Audio API)
-    // ==========================================
-    let AudioCtx, noiseNode, oscNode, noiseGain, oscGain, soundEnabled = false;
-    let audioInitialized = false;
-
-    function initAudio(){
-      if(audioInitialized) return;
-      audioInitialized = true;
-      AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-      // Brown noise (coffee shop hiss)
-      const bufSize = AudioCtx.sampleRate * 3;
-      const buf = AudioCtx.createBuffer(1, bufSize, AudioCtx.sampleRate);
-      const data = buf.getChannelData(0);
-      let last = 0;
-      for(let i=0; i<bufSize; i++){
-        const w = Math.random()*2-1;
-        data[i] = (last + 0.02*w)/1.02;
-        last = data[i];
-        data[i] *= 3.5;
-      }
-      noiseNode = AudioCtx.createBufferSource();
-      noiseNode.buffer = buf;
-      noiseNode.loop = true;
-      noiseGain = AudioCtx.createGain();
-      noiseGain.gain.value = 0; // start muted
-      noiseNode.connect(noiseGain).connect(AudioCtx.destination);
-      noiseNode.start();
-
-      // Low 60Hz hum
-      oscNode = AudioCtx.createOscillator();
-      oscNode.type = 'sine';
-      oscNode.frequency.value = 60;
-      oscGain = AudioCtx.createGain();
-      oscGain.gain.value = 0;
-      oscNode.connect(oscGain).connect(AudioCtx.destination);
-      oscNode.start();
+      closeCart();
+      showToast('🎉 Order placed! Ready in ~15 minutes');
+      if(typeof playClick === 'function') playClick();
     }
 
-    function toggleSound(){
-      if(!audioInitialized) initAudio();
+    // Floating +1 animation
+    function animateAddToCart(e) {
+      if(!e) return;
+      const float = document.createElement('div');
+      float.textContent = '+1';
+      const rect = e.currentTarget ? e.currentTarget.getBoundingClientRect() : {left:100, top:100};
+      float.style.cssText = `
+        position:fixed; z-index:9999; pointer-events:none;
+        font-family:'Sora';font-weight:900;font-size:20px;
+        color:var(--amber);
+        left:${rect.left+rect.width/2}px; top:${rect.top}px;
+        transition:all 0.7s cubic-bezier(0.2,0.8,0.3,1);
+        text-shadow:0 0 10px rgba(255,185,48,0.6);
+      `;
+      document.body.appendChild(float);
+      requestAnimationFrame(()=>{
+        float.style.top = (rect.top-60)+'px';
+        float.style.opacity='0';
+        float.style.transform='scale(1.3)';
+      });
+      setTimeout(()=>float.remove(), 750);
+    }
 
-      if (AudioCtx.state === 'suspended') {
-        AudioCtx.resume();
+    window.showToast = function(msg) {
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = `
+        position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+        background:rgba(26,24,20,0.95);backdrop-filter:blur(16px);
+        border:1px solid rgba(255,185,48,0.3);border-radius:100px;
+        padding:14px 28px;font-size:14px;color:var(--on-bg);
+        z-index:9999;white-space:nowrap;
+        box-shadow:0 8px 32px rgba(0,0,0,0.4),0 0 20px rgba(255,185,48,0.1);
+        animation:toastIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+      `;
+      document.body.appendChild(t);
+      setTimeout(()=>{ t.style.transition='all 0.4s'; t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(10px)'; }, 3000);
+      setTimeout(()=>t.remove(), 3500);
+    }
+
+    // ─── ACTIVE NAV ON SCROLL ─────────────────────────────────
+    const navSections = ['menu','about','find-us'];
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY + 100;
+      let active = '';
+      navSections.forEach(id => {
+        const el = document.getElementById(id);
+        if(el && el.offsetTop <= y) active = id;
+      });
+      document.querySelectorAll('.nav-link').forEach(l => {
+        l.classList.toggle('active', l.dataset.section === active);
+      });
+      // Nav shrink on scroll
+      document.getElementById('main-nav').style.boxShadow =
+        window.scrollY > 50 ? '0 4px 24px rgba(0,0,0,0.5)' : '';
+    }, { passive:true });
+
+    // ─── HAMBURGER ────────────────────────────────────────────
+    document.getElementById('hamburger').addEventListener('click', () => {
+      document.getElementById('mobile-menu').classList.toggle('open');
+      if(typeof playClick === 'function') playClick();
+    });
+    document.querySelectorAll('.mobile-link').forEach(l => {
+      l.addEventListener('click', () => {
+        document.getElementById('mobile-menu').classList.remove('open');
+      });
+    });
+
+    // ─── COUNT-UP ANIMATION ───────────────────────────────────
+    const countObserver = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(!e.isIntersecting) return;
+        const el = e.target;
+        const target = parseInt(el.dataset.target);
+        const dur = 1800;
+        const start = Date.now();
+        const tick = () => {
+          const p = Math.min((Date.now()-start)/dur,1);
+          const ease = 1-Math.pow(1-p,3);
+          el.textContent = Math.floor(ease*target).toLocaleString();
+          if(p<1) requestAnimationFrame(tick);
+        };
+        tick();
+        // Progress bar
+        if(el.id==='count-cups') {
+          setTimeout(()=>{
+            document.getElementById('cups-progress').style.width='80%';
+          },200);
+        }
+        countObserver.unobserve(el);
+      });
+    },{ threshold:0.5 });
+    document.querySelectorAll('.count-up').forEach(el=>countObserver.observe(el));
+
+    // Scroll hint fades on scroll
+    window.addEventListener('scroll',()=>{
+      const hint=document.getElementById('scroll-hint');
+      if(hint) hint.style.opacity = window.scrollY > 100 ? '0' : '0.6';
+    },{passive:true});
+
+    // Form logic
+    window.submitForm = function() {
+      const name = document.getElementById('f-name').value.trim();
+      const email = document.getElementById('f-email').value.trim();
+      const msg = document.getElementById('f-msg').value.trim();
+      if(!name || !email || !msg) { showToast('⚠️ Please fill in all fields'); return; }
+      if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { showToast('⚠️ Please enter a valid email'); return; }
+      document.getElementById('form-success').style.display='block';
+      if(typeof playClick === 'function') playClick();
+      setTimeout(()=>document.getElementById('form-success').style.display='none', 5000);
+    }
+
+    // ─── AMBIENT SOUND ────────────────────────────────────────
+    let AudioCtx, noiseGain, oscGain, soundOn=false, audioReady=false;
+
+    function initAudio(){
+      if(audioReady)return;
+      audioReady=true;
+      AudioCtx = new(window.AudioContext||window.webkitAudioContext)();
+      const buf=AudioCtx.createBuffer(1,AudioCtx.sampleRate*3,AudioCtx.sampleRate);
+      const d=buf.getChannelData(0); let last=0;
+      for(let i=0;i<d.length;i++){
+        const w=Math.random()*2-1;
+        d[i]=(last+0.02*w)/1.02; last=d[i]; d[i]*=3.5;
       }
+      const src=AudioCtx.createBufferSource();
+      src.buffer=buf; src.loop=true;
+      noiseGain=AudioCtx.createGain(); noiseGain.gain.value=0;
+      src.connect(noiseGain).connect(AudioCtx.destination); src.start();
+      const osc=AudioCtx.createOscillator();
+      osc.frequency.value=58; osc.type='sine';
+      oscGain=AudioCtx.createGain(); oscGain.gain.value=0;
+      osc.connect(oscGain).connect(AudioCtx.destination); osc.start();
+    }
 
-      soundEnabled = !soundEnabled;
-      if(noiseGain) noiseGain.gain.setTargetAtTime(soundEnabled ? 0.028 : 0, AudioCtx.currentTime, 0.5);
-      if(oscGain)   oscGain.gain.setTargetAtTime(soundEnabled ? 0.007 : 0, AudioCtx.currentTime, 0.5);
-      soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
-      soundBtn.title = soundEnabled ? 'Mute ambient sound' : 'Enable ambient sound';
+    window.toggleSound = function(){
+      initAudio();
+      if(AudioCtx.state === 'suspended') AudioCtx.resume();
+      soundOn=!soundOn;
+      noiseGain.gain.setTargetAtTime(soundOn?0.025:0,AudioCtx.currentTime,0.5);
+      oscGain.gain.setTargetAtTime(soundOn?0.006:0,AudioCtx.currentTime,0.5);
+      document.getElementById('sound-btn').textContent=soundOn?'🔊':'🔇';
     }
 
     window.playClick = function(){
-      if(!audioInitialized || !AudioCtx) return;
-      if (AudioCtx.state === 'suspended') {
-        AudioCtx.resume();
-      }
-      const o = AudioCtx.createOscillator();
-      const g = AudioCtx.createGain();
+      if(!audioReady||!AudioCtx)return;
+      if(AudioCtx.state === 'suspended') AudioCtx.resume();
+      const o=AudioCtx.createOscillator(),g=AudioCtx.createGain();
       o.connect(g).connect(AudioCtx.destination);
-      o.frequency.value = 900; o.type = 'sine';
-      g.gain.setValueAtTime(0.08, AudioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, AudioCtx.currentTime + 0.05);
-      o.start(); o.stop(AudioCtx.currentTime + 0.05);
+      o.frequency.value=880; o.type='sine';
+      g.gain.setValueAtTime(0.07,AudioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001,AudioCtx.currentTime+0.05);
+      o.start();o.stop(AudioCtx.currentTime+0.05);
     }
+    document.addEventListener('click',()=>initAudio(),{once:true, capture: true});
 
-    // Initialize on first interaction (capture phase to catch earlier events)
-    document.addEventListener('click', () => { if(!audioInitialized) initAudio(); }, { once: true, capture: true });
+    // Sound button
+    document.body.insertAdjacentHTML('beforeend',`
+      <button id="sound-btn" onclick="toggleSound()" title="Toggle ambient sound"
+        style="position:fixed;bottom:24px;right:24px;z-index:800;
+        width:48px;height:48px;border-radius:50%;
+        background:rgba(26,24,20,0.88);backdrop-filter:blur(12px);
+        border:1px solid rgba(255,185,48,0.2);color:var(--amber);
+        font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;
+        box-shadow:0 4px 20px rgba(0,0,0,0.4);transition:all 0.2s;">🔇</button>
+    `);
 
-    // Sound button (fixed bottom-right)
-    const soundBtn = document.createElement('button');
-    soundBtn.textContent = '🔇';
-    soundBtn.title = 'Enable ambient sound';
-    soundBtn.style.cssText = `
-      position:fixed; bottom:24px; right:24px; z-index:999;
-      width:48px; height:48px; border-radius:50%;
-      background:rgba(28,28,25,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-      border:1px solid rgba(255,186,63,0.2);
-      color:#ffba3f; font-size:20px; cursor:pointer;
-      display:flex; align-items:center; justify-content:center;
-      transition:all 0.2s; box-shadow:0 4px 16px rgba(0,0,0,0.4);
-    `;
-    soundBtn.addEventListener('click', toggleSound);
-    document.body.appendChild(soundBtn);
-
-    // Show tooltip on load
-    const tooltip = document.createElement('div');
-    tooltip.textContent = 'Click for ambient sound ☕';
-    tooltip.style.cssText = `
-      position:fixed; bottom:80px; right:16px; z-index:999;
-      background:rgba(28,22,14,0.9); border:1px solid rgba(255,186,63,0.2);
-      color:#c4a882; font-size:13px; padding:8px 14px; border-radius:10px;
-      pointer-events:none; opacity:1; transition:opacity 0.5s;
-      font-family:'Inter',sans-serif;
-    `;
-    document.body.appendChild(tooltip);
-    setTimeout(() => tooltip.style.opacity = '0', 4000);
-    setTimeout(() => tooltip.remove(), 4600);
-
-    // Call playClick() on every button click (except our manually handled ones like menu filter where it's called inline)
+    // Add click sound hook to appropriate elements
     document.addEventListener('click', e => {
-      if(e.target.closest('button, .tab, .btn-primary, .btn-secondary') && e.target.closest('button') !== soundBtn) {
-         // only fire if not already firing manually to avoid double click sound
-         if (!e.target.closest('.tab') && !e.target.closest('[onclick]')) {
-             playClick();
+      if(e.target.closest('button, .menu-tab, .btn-primary, .btn-secondary, .nav-link, .mobile-link')) {
+         if (!e.target.closest('[onclick]') || e.target.closest('#sound-btn')) {
+             if(e.target.id !== 'sound-btn') playClick();
          }
       }
     });
 
-    // ==========================================
-    // THREE.JS IMPLEMENTATION (Cinematic Dark Kiosk)
-    // ==========================================
-    function isWebGLAvailable() {
-      try {
-        const canvas = document.createElement('canvas');
-        return !!(window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl')));
-      } catch (e) {
-        return false;
-      }
-    }
+    // ============================================================
+    // SCROLL COFFEE CUP — THREE.JS
+    // ============================================================
 
-    if (!isWebGLAvailable()) {
-      document.getElementById('hero-fallback').classList.remove('hidden');
-      document.getElementById('about-fallback').classList.remove('hidden');
-      document.getElementById('map-fallback').classList.remove('hidden');
-    } else {
+    (function initCoffeeCup() {
+      const canvas = document.getElementById('cup-canvas');
+      const wrap = document.getElementById('hero-canvas-wrap');
+      const label = document.getElementById('cup-stage-label');
 
-      // Material Palette
-      const MAT = {
-        wood_dark:  new THREE.MeshStandardMaterial({ color: 0x1a0c06, roughness: 0.85, metalness: 0.05 }),
-        wood_med:   new THREE.MeshStandardMaterial({ color: 0x2d1509, roughness: 0.8,  metalness: 0.0  }),
-        wood_warm:  new THREE.MeshStandardMaterial({ color: 0x3d200e, roughness: 0.75, metalness: 0.0  }),
-        roof_dark:  new THREE.MeshStandardMaterial({ color: 0x111109, roughness: 0.9,  metalness: 0.1  }),
-        sign_bg:    new THREE.MeshStandardMaterial({ color: 0x1a1207, roughness: 0.6,  metalness: 0.2, emissive: 0xffa040, emissiveIntensity: 0.15 }),
-        glass_win:  new THREE.MeshStandardMaterial({ color: 0xffd090, transparent: true, opacity: 0.25, roughness: 0.0, metalness: 0.1, emissive: 0xffa030, emissiveIntensity: 0.6 }),
-        floor_tile: new THREE.MeshStandardMaterial({ color: 0x1c1510, roughness: 0.9,  metalness: 0.05 }),
-        counter:    new THREE.MeshStandardMaterial({ color: 0x251408, roughness: 0.7,  metalness: 0.0  }),
-        plant_pot:  new THREE.MeshStandardMaterial({ color: 0x5c2f1a, roughness: 0.8,  metalness: 0.0  }),
-        plant_leaf: new THREE.MeshStandardMaterial({ color: 0x1a3d15, roughness: 0.9,  metalness: 0.0  }),
-        chalk:      new THREE.MeshStandardMaterial({ color: 0x0d0d0b, roughness: 0.95, metalness: 0.0  }),
-        machine:    new THREE.MeshStandardMaterial({ color: 0x2a1f14, roughness: 0.5,  metalness: 0.6  }),
-        bulb:       new THREE.MeshStandardMaterial({ color: 0xffda80, emissive: 0xffaa30, emissiveIntensity: 2.0, roughness:0.3 }),
-        pillar:     new THREE.MeshStandardMaterial({ color: 0x160d05, roughness: 0.8,  metalness: 0.15 }),
-      };
+      if (!canvas || !wrap) return;
 
-      function addBox(group, size, pos, mat){
-        const m = new THREE.Mesh(new THREE.BoxGeometry(...size), mat);
-        m.position.set(...pos);
-        m.castShadow = true;
-        m.receiveShadow = true;
-        group.add(m);
-        return m;
-      }
+      const W = () => wrap.clientWidth;
+      const H = () => wrap.clientHeight;
 
-      function buildKiosk(scene) {
-        const kioskGroup = new THREE.Group();
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+      renderer.setSize(W(), H());
+      renderer.outputEncoding = THREE.sRGBEncoding;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.4;
+      renderer.shadowMap.enabled = true;
 
-        // BASE PLATFORM
-        addBox(kioskGroup, [4.4, 0.12, 4.4], [0, -1.56, 0], MAT.floor_tile);
-        addBox(kioskGroup, [4.8, 0.06, 4.8], [0, -1.62, 0], MAT.wood_dark);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, W()/H(), 0.1, 100);
+      camera.position.set(0, 1.5, 7);
+      camera.lookAt(0, 0.5, 0);
 
-        // MAIN KIOSK BODY
-        addBox(kioskGroup, [3.2, 2.6, 0.14], [0, -0.15, -1.45], MAT.wood_dark); // Back
-        addBox(kioskGroup, [0.14, 2.6, 2.9], [-1.6, -0.15, 0], MAT.wood_dark);  // Left
-        addBox(kioskGroup, [0.14, 2.6, 2.9], [1.6, -0.15, 0], MAT.wood_dark);   // Right
-
-        // Interior warm glow plane
-        const interiorGlow = new THREE.Mesh(
-          new THREE.PlaneGeometry(2.8, 2.2),
-          new THREE.MeshStandardMaterial({ color: 0xff8820, emissive: 0xff6010, emissiveIntensity: 0.4, side: THREE.DoubleSide })
-        );
-        interiorGlow.position.set(0, -0.15, -1.3);
-        kioskGroup.add(interiorGlow);
-
-        // FRONT COUNTER
-        addBox(kioskGroup, [3.0, 0.14, 0.65], [0, -0.55, 1.0], MAT.counter);
-        addBox(kioskGroup, [3.0, 0.7, 0.12], [0, -0.95, 1.28], MAT.wood_med);
-        addBox(kioskGroup, [0.12, 0.7, 0.65], [-1.44, -0.95, 1.0], MAT.wood_med);
-        addBox(kioskGroup, [0.12, 0.7, 0.65], [1.44, -0.95, 1.0], MAT.wood_med);
-
-        // FRONT PILLARS
-        addBox(kioskGroup, [0.18, 2.6, 0.18], [-1.5, -0.15, 1.4], MAT.pillar);
-        addBox(kioskGroup, [0.18, 2.6, 0.18], [1.5, -0.15, 1.4], MAT.pillar);
-
-        // ROOF STRUCTURE
-        addBox(kioskGroup, [3.8, 0.18, 3.8], [0, 1.22, 0], MAT.roof_dark);
-        addBox(kioskGroup, [3.8, 0.08, 0.3], [0, 1.13, 2.05], MAT.roof_dark);
-        addBox(kioskGroup, [0.5, 0.3, 0.5], [0.6, 1.48, -0.5], MAT.wood_dark);
-        addBox(kioskGroup, [0.5, 0.3, 0.5], [-0.6, 1.48, -0.5], MAT.wood_dark);
-
-        // AWNING
-        addBox(kioskGroup, [3.5, 0.06, 0.6], [0, 0.9, 1.7], MAT.roof_dark);
-
-        // SIGN BOARD "MINDKICK"
-        addBox(kioskGroup, [2.0, 0.5, 0.08], [0, 0.7, 1.44], MAT.sign_bg);
-        const signCanvas = document.createElement('canvas');
-        signCanvas.width = 512; signCanvas.height = 128;
-        const sCtx = signCanvas.getContext('2d');
-        sCtx.fillStyle = '#1a1207';
-        sCtx.fillRect(0,0,512,128);
-        sCtx.font = 'bold 80px "Sora", sans-serif';
-        sCtx.fillStyle = '#ffffff';
-        sCtx.textAlign = 'center';
-        sCtx.textBaseline = 'middle';
-        sCtx.fillText('MINDKICK', 256, 64);
-        const signTex = new THREE.CanvasTexture(signCanvas);
-        const signPlane = new THREE.Mesh(
-          new THREE.PlaneGeometry(1.9, 0.44),
-          new THREE.MeshStandardMaterial({ map: signTex, emissive: 0xffffff, emissiveIntensity: 0.6, transparent: true })
-        );
-        signPlane.position.set(0, 0.7, 1.49);
-        kioskGroup.add(signPlane);
-
-        // COFFEE EQUIPMENT
-        addBox(kioskGroup, [0.45, 0.45, 0.35], [-0.5, -0.28, 0.3], MAT.machine);
-        addBox(kioskGroup, [0.45, 0.08, 0.35], [-0.5, 0.0, 0.3], MAT.machine);
-        addBox(kioskGroup, [0.25, 0.5, 0.25], [0.2, -0.3, 0.4], MAT.machine);
-        const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.055, 0.12, 12), MAT.counter);
-        cup.position.set(0.7, -0.47, 0.7);
-        kioskGroup.add(cup);
-
-        // CHALKBOARD SIGN
-        addBox(kioskGroup, [0.06, 0.7, 0.5], [-2.0, -1.05, 0.8], MAT.wood_med);
-        addBox(kioskGroup, [0.04, 0.55, 0.4], [-2.0, -0.65, 0.8], MAT.chalk);
-
-        // DECORATIVE PLANT
-        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.14, 0.32, 16), MAT.plant_pot);
-        pot.position.set(1.95, -1.4, 1.1);
-        kioskGroup.add(pot);
-        for(let i=0; i<5; i++){
-          const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.1 + Math.random()*0.08, 8, 8), MAT.plant_leaf);
-          leaf.position.set(1.95 + (Math.random()-0.5)*0.25, -1.05 + Math.random()*0.35, 1.1 + (Math.random()-0.5)*0.25);
-          kioskGroup.add(leaf);
-        }
-        addBox(kioskGroup, [0.04, 0.55, 0.04], [1.95, -0.95, 1.1], MAT.plant_leaf);
-
-        // STRING LIGHTS
-        const stringLightPositions = [];
-        for(let i=0; i<10; i++){
-          const t = i / 9;
-          const x = -1.4 + t * 2.8;
-          const y = 1.05 + Math.sin(t * Math.PI) * (-0.12);
-          const z = 1.42;
-          stringLightPositions.push([x, y, z]);
-          const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), MAT.bulb);
-          bulb.position.set(x, y, z);
-          kioskGroup.add(bulb);
-          if(i % 2 === 0){
-            const pl = new THREE.PointLight(0xffaa30, 0.6, 1.2);
-            pl.position.set(x, y, z);
-            kioskGroup.add(pl);
-          }
-        }
-        for(let i=0; i<stringLightPositions.length-1; i++){
-          const [x1,y1,z1] = stringLightPositions[i];
-          const [x2,y2,z2] = stringLightPositions[i+1];
-          const mid = new THREE.Vector3((x1+x2)/2, (y1+y2)/2, (z1+z2)/2);
-          const len = Math.sqrt((x2-x1)**2+(y2-y1)**2);
-          const wire = new THREE.Mesh(new THREE.BoxGeometry(len, 0.01, 0.01), new THREE.MeshBasicMaterial({color: 0x2a1f14}));
-          wire.position.set(mid.x, mid.y, mid.z);
-          wire.rotation.z = Math.atan2(y2-y1, x2-x1);
-          kioskGroup.add(wire);
-        }
-
-        scene.add(kioskGroup);
-        return kioskGroup;
-      }
-
-      function setupCinematicLighting(scene) {
-        scene.add(new THREE.AmbientLight(0x1a0e05, 1.2));
-
-        const keyLight = new THREE.PointLight(0xffb060, 4.5, 12);
-        keyLight.position.set(3, 4, 4);
-        keyLight.castShadow = true;
-        scene.add(keyLight);
-
-        const fillLight = new THREE.PointLight(0xff6820, 1.8, 10);
-        fillLight.position.set(-3, 1.5, 3);
-        scene.add(fillLight);
-
-        const rimLight = new THREE.PointLight(0x2040a0, 0.5, 14);
-        rimLight.position.set(0, 3, -5);
-        scene.add(rimLight);
-
-        const interiorLight = new THREE.PointLight(0xff8820, 3.5, 4);
-        interiorLight.position.set(0, -0.2, 0.4);
-        scene.add(interiorLight);
-
-        const signLight = new THREE.PointLight(0xffd080, 1.2, 2);
-        signLight.position.set(0, 0.7, 1.8);
-        scene.add(signLight);
-      }
-
-      function initRenderer(canvasElement) {
-        const renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true, alpha: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(canvasElement.clientWidth, canvasElement.clientHeight);
-        renderer.outputEncoding = THREE.sRGBEncoding;
-        renderer.toneMapping = THREE.ACESFilmicToneMapping;
-        renderer.toneMappingExposure = 1.2;
-        renderer.shadowMap.enabled = true;
-        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-        return renderer;
-      }
-
-      // --- HERO CANVAS ---
-      const heroCanvas = document.getElementById('hero-canvas');
-      const heroScene = new THREE.Scene();
-      const heroCamera = new THREE.PerspectiveCamera(38, heroCanvas.clientWidth / heroCanvas.clientHeight, 0.1, 100);
-      heroCamera.position.set(2.5, 1.8, 5.5);
-      heroCamera.lookAt(0, 0.2, 0);
-      const heroRenderer = initRenderer(heroCanvas);
-      setupCinematicLighting(heroScene);
-      const heroKiosk = buildKiosk(heroScene);
-
-      // --- ABOUT CANVAS ---
-      const aboutCanvas = document.getElementById('about-canvas');
-      const aboutScene = new THREE.Scene();
-      const aboutCamera = new THREE.PerspectiveCamera(38, aboutCanvas.clientWidth / aboutCanvas.clientHeight, 0.1, 100);
-      aboutCamera.position.set(-1.5, 2.0, 5.5);
-      aboutCamera.lookAt(0, 0.0, 0);
-      const aboutRenderer = initRenderer(aboutCanvas);
-      setupCinematicLighting(aboutScene);
-      const aboutKiosk = buildKiosk(aboutScene);
-
-      let isDragging = false, prevX = 0, targetRotY = 0;
-      const dragHint = document.querySelector('.drag-hint');
-
-      aboutCanvas.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; if(dragHint) dragHint.style.opacity='0'; });
-      window.addEventListener('mousemove', e => {
-        if(!isDragging) return;
-        targetRotY += (e.clientX - prevX) * 0.006;
-        prevX = e.clientX;
+      // ─── MATERIALS ─────────────────────────────────────────────
+      const cupMat = new THREE.MeshStandardMaterial({
+        color: 0xf5f0e8,      // cream paper white
+        roughness: 0.85,
+        metalness: 0.0,
       });
-      window.addEventListener('mouseup', () => { isDragging = false; });
+      // Kraft paper texture via canvas
+      const paperCanvas = document.createElement('canvas');
+      paperCanvas.width = 512; paperCanvas.height = 512;
+      const pc = paperCanvas.getContext('2d');
+      // Base cream color
+      pc.fillStyle = '#f0e8d5';
+      pc.fillRect(0,0,512,512);
+      // Vertical stripe texture (paper cup lines)
+      for(let i=0;i<512;i+=6){
+        pc.strokeStyle = `rgba(180,150,100,${0.05+Math.random()*0.04})`;
+        pc.lineWidth=1;
+        pc.beginPath(); pc.moveTo(i,0); pc.lineTo(i,512); pc.stroke();
+      }
+      // MINDKICK branding on cup
+      pc.font = 'bold 52px Arial';
+      pc.fillStyle = '#1a0a00';
+      pc.textAlign = 'center';
+      pc.fillText('MINDKICK', 256, 200);
+      pc.font = '24px Arial';
+      pc.fillStyle = '#c45e1e';
+      pc.fillText('PREMIUM COFFEE', 256, 240);
+      // Small logo circle
+      pc.beginPath();
+      pc.arc(256, 310, 28, 0, Math.PI*2);
+      pc.fillStyle = '#ffb930';
+      pc.fill();
+      pc.font = 'bold 20px Arial';
+      pc.fillStyle = '#1a0a00';
+      pc.fillText('MK', 256, 318);
+      const paperTex = new THREE.CanvasTexture(paperCanvas);
+      cupMat.map = paperTex;
 
-      aboutCanvas.addEventListener('touchstart', e => { isDragging = true; prevX = e.touches[0].clientX; if(dragHint) dragHint.style.opacity='0'; }, {passive:true});
-      window.addEventListener('touchmove', e => {
-        if(!isDragging) return;
-        targetRotY += (e.touches[0].clientX - prevX) * 0.006;
-        prevX = e.touches[0].clientX;
-      }, {passive:true});
-      window.addEventListener('touchend', () => { isDragging = false; });
+      const lidMat = new THREE.MeshStandardMaterial({
+        color: 0x1a1310,    // dark espresso brown lid
+        roughness: 0.3,
+        metalness: 0.1,
+      });
+      const coffeeMat = new THREE.MeshStandardMaterial({
+        color: 0x2c1408,    // dark coffee liquid
+        roughness: 0.05,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.92,
+      });
+      const foamMat = new THREE.MeshStandardMaterial({
+        color: 0xc8985a,    // latte foam
+        roughness: 0.9,
+        metalness: 0.0,
+      });
+      const splashMat = new THREE.MeshStandardMaterial({
+        color: 0x3d1c08,
+        roughness: 0.1,
+        metalness: 0.0,
+        transparent: true,
+        opacity: 0.85,
+      });
 
-      let autoRotate = true, dragTimer;
+      // ─── CUP BODY ──────────────────────────────────────────────
+      // Paper cup shape: tapered cylinder (wider at top)
+      const cupGroup = new THREE.Group();
+      scene.add(cupGroup);
 
-      // --- MAP CANVAS ---
-      const mapCanvas = document.getElementById('map-canvas');
-      const mapScene = new THREE.Scene();
-      const mapCamera = new THREE.PerspectiveCamera(32, mapCanvas.clientWidth / mapCanvas.clientHeight, 0.1, 100);
-      mapCamera.position.set(7, 10, 7);
-      mapCamera.lookAt(0, 0, 0);
-      const mapRenderer = initRenderer(mapCanvas);
+      // Main cup body — CylinderGeometry(topR, bottomR, height, segments)
+      const cupBody = new THREE.Mesh(
+        new THREE.CylinderGeometry(1.0, 0.75, 2.8, 64, 1, true),
+        cupMat
+      );
+      cupBody.castShadow = true;
+      cupGroup.add(cupBody);
 
-      // Map Elements
-      addBox(mapScene, [14, 0.1, 14], [0, -0.05, 0], new THREE.MeshStandardMaterial({color:0x151210,roughness:0.95}));
-      addBox(mapScene, [14, 0.12, 1.4], [0, 0.01, 0], new THREE.MeshStandardMaterial({color:0x1f1c18,roughness:0.9}));
-      addBox(mapScene, [1.4, 0.12, 14], [0, 0.01, 0], new THREE.MeshStandardMaterial({color:0x1f1c18,roughness:0.9}));
-      for(let i=-3; i<=3; i++){
-        addBox(mapScene, [0.06, 0.13, 0.6], [0, 0.02, i*1.4], new THREE.MeshStandardMaterial({color:0x3a3020,roughness:0.9}));
-        addBox(mapScene, [0.6, 0.13, 0.06], [i*1.4, 0.02, 0], new THREE.MeshStandardMaterial({color:0x3a3020,roughness:0.9}));
+      // Cup bottom disk
+      const cupBottom = new THREE.Mesh(
+        new THREE.CircleGeometry(0.75, 64),
+        new THREE.MeshStandardMaterial({ color: 0xd4c8ae, roughness: 0.9 })
+      );
+      cupBottom.rotation.x = -Math.PI/2;
+      cupBottom.position.y = -1.4;
+      cupGroup.add(cupBottom);
+
+      // Cup bottom ridge (thicker base ring)
+      const baseRidge = new THREE.Mesh(
+        new THREE.TorusGeometry(0.77, 0.06, 8, 64),
+        new THREE.MeshStandardMaterial({ color: 0xc8b898, roughness: 0.9 })
+      );
+      baseRidge.rotation.x = Math.PI/2;
+      baseRidge.position.y = -1.38;
+      cupGroup.add(baseRidge);
+
+      // Corrugated sleeve (middle of cup)
+      const sleeve = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.95, 0.82, 1.2, 64, 1, true),
+        new THREE.MeshStandardMaterial({
+          color: 0x2a1a0a,
+          roughness: 0.95,
+          metalness: 0.0,
+        })
+      );
+      sleeve.position.y = -0.3;
+      cupGroup.add(sleeve);
+
+      // Sleeve corrugation lines
+      for(let i=0;i<12;i++){
+        const ring = new THREE.Mesh(
+          new THREE.TorusGeometry(0.905 - i*0.01, 0.008, 4, 48),
+          new THREE.MeshStandardMaterial({ color:0x3d2510, roughness:0.95 })
+        );
+        ring.rotation.x = Math.PI/2;
+        ring.position.y = -0.85 + i*0.1;
+        sleeve.add(ring);
       }
 
-      const buildingDefs = [
-        {pos:[-3.5,0,-3.5], size:[1.8, 2.8, 1.8]}, {pos:[3.5,0,-3.5],  size:[1.6, 3.8, 1.6]},
-        {pos:[-3.5,0,3.5],  size:[2.0, 2.2, 2.0]}, {pos:[3.5,0,3.5],   size:[1.7, 4.2, 1.7]},
-        {pos:[-3.8,0,0.2],  size:[1.4, 3.0, 1.4]}, {pos:[3.8,0,-0.5],  size:[1.5, 2.5, 1.5]},
-        {pos:[0.3,0,-3.8],  size:[1.6, 3.5, 1.4]},
+      // ─── LID GROUP (will rotate open) ──────────────────────────
+      const lidGroup = new THREE.Group();
+      lidGroup.position.y = 1.4; // top of cup
+      cupGroup.add(lidGroup);
+
+      // Lid base ring (snaps onto cup rim)
+      const lidRim = new THREE.Mesh(
+        new THREE.TorusGeometry(1.02, 0.07, 8, 64),
+        lidMat
+      );
+      lidRim.rotation.x = Math.PI/2;
+      lidGroup.add(lidRim);
+
+      // Lid dome (slightly domed flat top)
+      const lidDome = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.98, 1.02, 0.15, 64),
+        lidMat
+      );
+      lidDome.position.y = 0.1;
+      lidGroup.add(lidDome);
+
+      // Lid top dome curve
+      const lidTop = new THREE.Mesh(
+        new THREE.SphereGeometry(0.98, 64, 16, 0, Math.PI*2, 0, Math.PI*0.15),
+        lidMat
+      );
+      lidTop.position.y = 0.17;
+      lidGroup.add(lidTop);
+
+      // Drink hole on lid
+      const drinkHole = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.12, 0.12, 0.06, 32),
+        new THREE.MeshStandardMaterial({ color:0x0a0604, roughness:0.2 })
+      );
+      drinkHole.position.set(0.4, 0.22, 0);
+      lidGroup.add(drinkHole);
+
+      // Lid tab (pull tab)
+      const lidTab = new THREE.Mesh(
+        new THREE.BoxGeometry(0.25, 0.06, 0.18),
+        new THREE.MeshStandardMaterial({ color:0x110d08, roughness:0.4 })
+      );
+      lidTab.position.set(-0.6, 0.22, 0);
+      lidGroup.add(lidTab);
+
+      // Set rotation pivot at back of lid for hinge effect
+      lidGroup.position.x = 0; // pivot centered, rotates on Z axis
+
+      // ─── COFFEE LIQUID (inside cup, rises on scroll) ───────────
+      const coffeeGroup = new THREE.Group();
+      coffeeGroup.position.y = -0.5; // starts below visible area
+      cupGroup.add(coffeeGroup);
+
+      const coffeeSurface = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.88, 0.88, 0.06, 64),
+        coffeeMat
+      );
+      coffeeSurface.position.y = 1.2; // starts low, will animate up
+      coffeeGroup.add(coffeeSurface);
+
+      // Foam ring on coffee surface
+      const foam = new THREE.Mesh(
+        new THREE.TorusGeometry(0.6, 0.15, 8, 48),
+        foamMat
+      );
+      foam.rotation.x = Math.PI/2;
+      foam.position.y = 1.24;
+      coffeeGroup.add(foam);
+
+      // Coffee fill cylinder (inner cup fill)
+      const coffeeFill = new THREE.Mesh(
+        new THREE.CylinderGeometry(0.86, 0.72, 2.4, 64),
+        coffeeMat
+      );
+      coffeeFill.position.y = 0.0;
+      coffeeGroup.add(coffeeFill);
+
+      coffeeGroup.scale.set(0, 0, 0); // starts invisible
+
+      // ─── SPLASH DROPS (appear when lid opens) ──────────────────
+      const splashGroup = new THREE.Group();
+      splashGroup.position.y = 1.6;
+      scene.add(splashGroup);
+      splashGroup.visible = false;
+
+      const splashDrops = [];
+      const dropCount = 24;
+      for(let i=0; i<dropCount; i++){
+        const angle = (i/dropCount)*Math.PI*2;
+        const r = 0.3 + Math.random()*0.8;
+        const drop = new THREE.Mesh(
+          new THREE.SphereGeometry(0.04 + Math.random()*0.06, 8, 8),
+          splashMat.clone()
+        );
+        drop.userData = {
+          angle,
+          r,
+          vy: 1.5 + Math.random()*2.0,      // initial upward velocity
+          vr: r * (0.8 + Math.random()*0.6), // radial velocity
+          t: Math.random(),                   // time offset
+          baseY: 0,
+          gravity: -2.5 - Math.random()*1.5,
+        };
+        drop.position.set(
+          Math.cos(angle)*0.3,
+          0,
+          Math.sin(angle)*0.3
+        );
+        splashGroup.add(drop);
+        splashDrops.push(drop);
+      }
+
+      // Large splash arc pieces (4 big curved splashes)
+      for(let i=0; i<4; i++){
+        const angle = (i/4)*Math.PI*2 + 0.3;
+        const arc = new THREE.Mesh(
+          new THREE.TorusGeometry(0.3+i*0.15, 0.04, 6, 16, Math.PI*0.4),
+          new THREE.MeshStandardMaterial({ color:0x3d1c08, transparent:true, opacity:0.7, roughness:0.1 })
+        );
+        arc.rotation.x = Math.PI/2;
+        arc.rotation.z = angle;
+        arc.userData = { angle, i };
+        splashGroup.add(arc);
+      }
+
+      // ─── STEAM PARTICLES ───────────────────────────────────────
+      const steamParticles = [];
+      const steamCount = 40;
+      const steamGeom = new THREE.SphereGeometry(0.04, 6, 6);
+      const steamMat = new THREE.MeshBasicMaterial({
+        color: 0xddccbb, transparent:true, opacity:0.0
+      });
+      for(let i=0; i<steamCount; i++){
+        const s = new THREE.Mesh(steamGeom, steamMat.clone());
+        s.userData = {
+          x: (Math.random()-0.5)*0.6,
+          delay: Math.random()*2.0,
+          speed: 0.4 + Math.random()*0.3,
+          wobble: Math.random()*0.3,
+          wobbleSpeed: 1 + Math.random()*2,
+          active: false,
+        };
+        s.position.set(s.userData.x, 0, 0);
+        s.visible = false;
+        scene.add(s);
+        steamParticles.push(s);
+      }
+
+      // ─── LIGHTING ──────────────────────────────────────────────
+      scene.add(new THREE.AmbientLight(0x1a1208, 2.5));
+
+      const keyLight = new THREE.PointLight(0xffb040, 5, 15);
+      keyLight.position.set(3, 5, 4);
+      keyLight.castShadow = true;
+      scene.add(keyLight);
+
+      const fillLight = new THREE.PointLight(0xff5520, 2, 10);
+      fillLight.position.set(-3, 2, 3);
+      scene.add(fillLight);
+
+      const rimLight = new THREE.PointLight(0x2040c0, 0.8, 12);
+      rimLight.position.set(0, 3, -5);
+      scene.add(rimLight);
+
+      // Warm under-light (coffee glow)
+      const underLight = new THREE.PointLight(0xff8020, 0, 5);
+      underLight.position.set(0, -1, 1);
+      scene.add(underLight);
+
+      // ─── SCROLL ANIMATION CONTROLLER ───────────────────────────
+      let scrollProgress = 0;
+      let splashTime = 0;
+      let steamTime = 0;
+
+      function getScrollProgress() {
+        const section = document.getElementById('hero');
+        const rect = section.getBoundingClientRect();
+        const totalScroll = section.offsetHeight - window.innerHeight;
+        const scrolled = -rect.top;
+        return Math.max(0, Math.min(1, scrolled / totalScroll));
+      }
+
+      const labels = [
+        { threshold:0.0,  text:'☕ Scroll to brew' },
+        { threshold:0.28, text:'🔓 Opening the lid...' },
+        { threshold:0.58, text:'☁️ Coffee rising...' },
+        { threshold:0.78, text:'💥 Splash!' },
+        { threshold:0.95, text:'🔥 Your fuel is ready' },
       ];
-      buildingDefs.forEach(({pos, size}) => {
-        const mat = new THREE.MeshStandardMaterial({color:0x16130f, roughness:0.92, metalness:0.08});
-        const b = new THREE.Mesh(new THREE.BoxGeometry(...size), mat);
-        b.position.set(pos[0], size[1]/2, pos[2]);
-        mapScene.add(b);
-        for(let w=0; w<3; w++){
-          const wm = new THREE.Mesh(new THREE.PlaneGeometry(0.12,0.12), new THREE.MeshStandardMaterial({color:0xffd080, emissive:0xffc040, emissiveIntensity:0.5}));
-          wm.position.set(pos[0]+(Math.random()-0.5)*size[0]*0.6, size[1]/2+(Math.random()-0.5)*size[1]*0.5, pos[2]+size[2]/2+0.01);
-          mapScene.add(wm);
-        }
-      });
 
-      const kioskBase = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.6, 1.0), new THREE.MeshStandardMaterial({color:0x2d1509, roughness:0.7, emissive:0xff8820, emissiveIntensity:0.2}));
-      kioskBase.position.set(0, 0.3, 0);
-      mapScene.add(kioskBase);
-      const kioskRoof = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.12, 1.3), new THREE.MeshStandardMaterial({color:0x0d0d0b, roughness:0.9}));
-      kioskRoof.position.set(0, 0.66, 0);
-      mapScene.add(kioskRoof);
-
-      const kioskGlow = new THREE.PointLight(0xffaa30, 4.0, 5.0);
-      kioskGlow.position.set(0, 1.2, 0);
-      mapScene.add(kioskGlow);
-
-      const pinStem = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.12, 0.5, 8), new THREE.MeshStandardMaterial({color:0xffba3f, emissive:0xffba3f, emissiveIntensity:0.8}));
-      pinStem.position.set(0, 1.25, 0);
-      mapScene.add(pinStem);
-      const pinHead = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), new THREE.MeshStandardMaterial({color:0xffba3f, emissive:0xffba3f, emissiveIntensity:1.2}));
-      pinHead.position.set(0, 1.6, 0);
-      mapScene.add(pinHead);
-
-      mapScene.add(new THREE.AmbientLight(0x150f08, 2.0));
-      const mapKey = new THREE.DirectionalLight(0xffd090, 1.5);
-      mapKey.position.set(4, 8, 4);
-      mapScene.add(mapKey);
-
-      // --- ANIMATION LOOP ---
-      function animate(){
-        requestAnimationFrame(animate);
-
-        // Hero
-        heroKiosk.rotation.y += 0.003;
-        heroKiosk.position.y = Math.sin(Date.now() * 0.0008) * 0.04;
-        heroRenderer.render(heroScene, heroCamera);
-
-        // About
-        if(isDragging){ autoRotate = false; clearTimeout(dragTimer); dragTimer = setTimeout(()=>autoRotate=true, 2000); }
-        if(autoRotate) targetRotY += 0.003;
-        aboutKiosk.rotation.y += (targetRotY - aboutKiosk.rotation.y) * 0.06;
-        aboutKiosk.position.y = Math.sin(Date.now() * 0.0008) * 0.04; // match hero float
-        aboutRenderer.render(aboutScene, aboutCamera);
-
-        // Map
-        mapScene.rotation.y += 0.0015;
-        pinStem.position.y = 1.25 + Math.sin(Date.now()*0.002)*0.08;
-        pinHead.position.y = 1.6 + Math.sin(Date.now()*0.002)*0.08;
-        mapRenderer.render(mapScene, mapCamera);
+      function updateLabel(p) {
+        let text = labels[0].text;
+        for(const l of labels) { if(p >= l.threshold) text = l.text; }
+        label.textContent = text;
       }
+
+      function lerp(a,b,t){ return a + (b-a)*t; }
+      function clamp01(v){ return Math.max(0,Math.min(1,v)); }
+      function easeInOut(t){ return t<0.5 ? 2*t*t : -1+(4-2*t)*t; }
+      function easeOut(t){ return 1-(1-t)*(1-t); }
+
+      // ─── ANIMATION LOOP ────────────────────────────────────────
+      const clock = new THREE.Clock();
+
+      function animate() {
+        requestAnimationFrame(animate);
+        const dt = clock.getDelta();
+        const t = clock.getElapsedTime();
+        scrollProgress = getScrollProgress();
+        const p = scrollProgress;
+
+        updateLabel(p);
+
+        // ── Phase 0-0.3: Idle float + gentle auto-rotate ──
+        if(p < 0.3) {
+          cupGroup.rotation.y = t * 0.4;
+          cupGroup.position.y = Math.sin(t*0.8)*0.06;
+          cupGroup.position.x = 0;
+          cupGroup.rotation.z = 0;
+          // lid closed
+          lidGroup.rotation.z = 0;
+          // coffee hidden
+          coffeeGroup.scale.setScalar(0);
+          underLight.intensity = 0;
+        }
+
+        // ── Phase 0.3-0.6: Lid opens (hinge backward) ──
+        if(p >= 0.3 && p < 0.6) {
+          const phase = clamp01((p-0.3)/0.3);
+          const e = easeInOut(phase);
+          // Stop auto-rotate, settle to front
+          cupGroup.rotation.y = lerp(cupGroup.rotation.y, 0, 0.05);
+          cupGroup.position.y = Math.sin(t*0.8)*0.04 * (1-phase);
+          // Lid rotates back (around its back edge) — Z axis hinge
+          lidGroup.rotation.z = lerp(0, -Math.PI * 0.85, e); // opens ~153 degrees back
+          lidGroup.position.z = lerp(0, -0.2, e); // slight back shift during open
+          // Coffee starts fading in
+          const coffeeScale = clamp01((phase-0.3)/0.7);
+          coffeeGroup.scale.setScalar(coffeeScale);
+          coffeeSurface.position.y = lerp(-1, 1.22, clamp01((phase-0.4)/0.6));
+          foam.position.y = coffeeSurface.position.y + 0.04;
+          underLight.intensity = coffeeScale * 1.5;
+        }
+
+        // ── Phase 0.6-0.8: Coffee fully visible, steam rises ──
+        if(p >= 0.6 && p < 0.8) {
+          const phase = clamp01((p-0.6)/0.2);
+          lidGroup.rotation.z = -Math.PI * 0.85;
+          coffeeGroup.scale.setScalar(1);
+          coffeeSurface.position.y = 1.22;
+          foam.position.y = 1.26;
+          underLight.intensity = 1.5 + Math.sin(t*3)*0.3;
+          steamTime += dt;
+
+          // Activate steam particles
+          steamParticles.forEach((s,i) => {
+            const d = s.userData;
+            if(steamTime - d.delay > 0) {
+              s.visible = true;
+              d.active = true;
+              const lt = (steamTime - d.delay) * d.speed % 3.0;
+              const lt01 = lt/3.0;
+              const opacity = lt01 < 0.2 ? lt01/0.2 : lt01 > 0.8 ? 1-(lt01-0.8)/0.2 : 1;
+              s.material.opacity = opacity * 0.35 * phase;
+              s.position.set(
+                d.x + Math.sin(t*d.wobbleSpeed + i)*d.wobble,
+                1.5 + lt*2.5,
+                Math.cos(t*d.wobbleSpeed*0.7 + i)*d.wobble*0.5
+              );
+              s.scale.setScalar(1 + lt01 * 2.5);
+            }
+          });
+
+          // Gentle cup wobble
+          cupGroup.rotation.z = Math.sin(t*1.2)*0.02;
+        }
+
+        // ── Phase 0.8-1.0: SPLASH! Cup tilts, drops fly ──
+        if(p >= 0.8) {
+          const phase = clamp01((p-0.8)/0.2);
+          const e = easeOut(phase);
+          splashTime += dt;
+
+          // Cup tilts dramatically
+          cupGroup.rotation.z = lerp(0, -0.45, e); // tilt ~26 degrees left
+          cupGroup.rotation.y = lerp(0, 0.3, e);
+          cupGroup.position.x = lerp(0, -0.5, e);
+          cupGroup.position.y = lerp(0, 0.3, e);
+          underLight.intensity = 2.5 + Math.sin(t*8)*0.8; // flicker
+          underLight.color.setHex(0xff4400);
+
+          // Show splash
+          splashGroup.visible = true;
+          splashGroup.position.y = 1.5 + cupGroup.position.y;
+          splashGroup.position.x = cupGroup.position.x;
+
+          // Animate each drop
+          splashDrops.forEach((drop,i) => {
+            const d = drop.userData;
+            const lt = (splashTime * 1.5 + d.t) % 2.0;
+            const lt01 = lt/2.0;
+            // Parabolic arc
+            drop.position.x = Math.cos(d.angle) * d.vr * lt;
+            drop.position.y = d.vy * lt + 0.5*d.gravity * lt*lt;
+            drop.position.z = Math.sin(d.angle) * d.vr * lt;
+            // Scale/opacity
+            drop.scale.setScalar(Math.max(0, 1 - lt01*0.6));
+            drop.material.opacity = Math.max(0, 0.85 - lt01*0.7);
+            // Stretch in direction of travel
+            drop.scale.y = drop.scale.x * (1 + lt*0.5);
+          });
+
+          // Steam still going
+          steamParticles.forEach((s,i) => {
+            const d = s.userData;
+            s.visible = true;
+            const lt = (splashTime - d.delay*0.3 + i*0.1) * d.speed % 2.5;
+            s.material.opacity = Math.max(0, 0.4 - lt/2.5*0.4);
+            s.position.set(
+              d.x + Math.sin(t*d.wobbleSpeed)*d.wobble + cupGroup.position.x,
+              1.5 + lt*3,
+              Math.cos(t*d.wobbleSpeed)*d.wobble*0.5
+            );
+            s.scale.setScalar(1 + lt/2.5*3);
+          });
+
+          // Foam also tilts/rises
+          foam.position.y = 1.26 + phase*0.3;
+        }
+
+        // Always: amber key light flicker based on scroll
+        keyLight.intensity = 4 + Math.sin(t*7)*0.3*p;
+
+        renderer.render(scene, camera);
+      }
+
       animate();
 
-      // Handle Resizing
+      // Resize handler
       window.addEventListener('resize', () => {
-        heroCamera.aspect = heroCanvas.clientWidth / heroCanvas.clientHeight; heroCamera.updateProjectionMatrix();
-        heroRenderer.setSize(heroCanvas.clientWidth, heroCanvas.clientHeight);
-
-        aboutCamera.aspect = aboutCanvas.clientWidth / aboutCanvas.clientHeight; aboutCamera.updateProjectionMatrix();
-        aboutRenderer.setSize(aboutCanvas.clientWidth, aboutCanvas.clientHeight);
-
-        mapCamera.aspect = mapCanvas.clientWidth / mapCanvas.clientHeight; mapCamera.updateProjectionMatrix();
-        mapRenderer.setSize(mapCanvas.clientWidth, mapCanvas.clientHeight);
+        renderer.setSize(W(), H());
+        camera.aspect = W()/H();
+        camera.updateProjectionMatrix();
       });
-    }
+
+    })();
   </script>
 </body>
 </html>
