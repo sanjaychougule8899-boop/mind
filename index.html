@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mindkick 3D Café</title>
+  <title>Mindkick Café - Midnight Fuel</title>
 
   <!-- Google Fonts: Sora & Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Sora:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-  <!-- Material Symbols Outlined -->
+  <!-- Material Symbols Outlined (for minor UI icons) -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
 
   <!-- Tailwind CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Tailwind Configuration to map our variables -->
   <script>
     tailwind.config = {
       theme: {
@@ -24,28 +22,24 @@
           colors: {
             bg: 'var(--bg)',
             surface: {
-              low: 'var(--surface-low)',
+              dim: 'var(--surface-dim)',
               DEFAULT: 'var(--surface)',
               high: 'var(--surface-high)',
               highest: 'var(--surface-highest)'
             },
             on: {
               surface: 'var(--on-surface)',
-              'surface-var': 'var(--on-surface-var)',
-              primary: 'var(--on-primary)'
+              'surface-var': 'var(--on-surface-var)'
             },
             primary: {
               DEFAULT: 'var(--primary)',
-              container: 'var(--primary-container)'
+              dk: 'var(--primary-dk)'
             },
             tertiary: {
               DEFAULT: 'var(--tertiary)',
-              container: 'var(--tertiary-container)'
+              dk: 'var(--tertiary-dk)'
             },
-            outline: {
-              DEFAULT: 'var(--outline)',
-              var: 'var(--outline-var)'
-            }
+            outline: 'var(--outline)'
           },
           fontFamily: {
             sora: ['Sora', 'sans-serif'],
@@ -58,20 +52,26 @@
 
   <style>
     :root {
-      --bg: #131411;
-      --surface-low: #1c1c19;
-      --surface: #20201d;
-      --surface-high: #2a2a27;
-      --surface-highest: #353532;
-      --on-surface: #e5e2dd;
-      --on-surface-var: #dcc1b5;
-      --primary: #ffb693;
-      --primary-container: #dc743e;
-      --on-primary: #561f00;
-      --tertiary: #ffba3f;
-      --tertiary-container: #c18500;
-      --outline: #a48c81;
-      --outline-var: #56433a;
+      --bg:               #0a0600;
+      --surface-dim:      #131411;
+      --surface:          #1c1c19;
+      --surface-high:     #252522;
+      --surface-highest:  #2f2f2b;
+      --on-surface:       #e5e2dd;
+      --on-surface-var:   #c4a882;
+      --primary:          #ffb693;
+      --primary-dk:       #dc743e;
+      --tertiary:         #ffba3f;
+      --tertiary-dk:      #c18500;
+      --outline:          #56433a;
+      --glass-bg:         rgba(28, 28, 25, 0.75);
+      --glass-border:     rgba(255, 186, 63, 0.12);
+      --glow-amber:       rgba(255, 186, 63, 0.35);
+      --glow-terra:       rgba(220, 116, 62, 0.30);
+    }
+
+    * {
+      box-sizing: border-box;
     }
 
     body {
@@ -79,66 +79,8 @@
       color: var(--on-surface);
       font-family: 'Inter', sans-serif;
       overflow-x: hidden;
-    }
-
-    h1, h2, h3, h4, h5, h6, .font-sora {
-      font-family: 'Sora', sans-serif;
-    }
-
-    /* Animations */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes pulseAmber {
-      0% { box-shadow: 0 0 0 0 rgba(255, 186, 63, 0.7); }
-      70% { box-shadow: 0 0 0 8px rgba(255, 186, 63, 0); }
-      100% { box-shadow: 0 0 0 0 rgba(255, 186, 63, 0); }
-    }
-
-    /* Hide scrollbar for horizontal scrolling filter tabs */
-    .scrollbar-hide::-webkit-scrollbar {
-      display: none;
-    }
-    .scrollbar-hide {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-
-    /* Glassmorphism Panel Style */
-    .glass {
-      background: rgba(42, 42, 39, 0.72);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-top: 1px solid rgba(229,226,221,0.10);
-      border-left: 1px solid rgba(229,226,221,0.10);
-      border-bottom: 1px solid rgba(255,177,0,0.15);
-      border-right: 1px solid rgba(255,177,0,0.15);
-      box-shadow: 0 8px 32px rgba(255,177,0,0.06);
-    }
-
-    /* Button Styles */
-    .btn-primary {
-      background: linear-gradient(180deg, #ffb693, #dc743e);
-      color: var(--on-primary);
-      transition: all 0.3s ease;
-    }
-    .btn-primary:hover {
-      box-shadow: 0 0 20px rgba(255,186,63,0.45);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid rgba(255,182,147,0.3);
-      color: var(--primary);
-      transition: all 0.3s ease;
-    }
-    .btn-secondary:hover {
-      background: rgba(255,182,147,0.1);
+      margin: 0;
+      padding: 0;
     }
 
     html {
@@ -146,33 +88,243 @@
       scroll-padding-top: 80px;
     }
 
-  </style>
+    h1, h2, h3, h4, h5, h6, .font-sora {
+      font-family: 'Sora', sans-serif;
+    }
 
+    /* Glassmorphism */
+    .glass {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, #ffb693 0%, #dc743e 100%);
+      color: #3b1800;
+      font-family: 'Inter', sans-serif;
+      font-weight: 700;
+      border: none;
+      border-radius: 50px;
+      padding: 14px 28px;
+      cursor: pointer;
+      transition: box-shadow 0.2s, transform 0.15s;
+      letter-spacing: 0.02em;
+    }
+    .btn-primary:hover {
+      box-shadow: 0 0 24px rgba(255,186,63,0.50), 0 4px 16px rgba(220,116,62,0.35);
+      transform: translateY(-1px);
+    }
+    .btn-primary:active { transform: scale(0.97); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary);
+      border: 1px solid rgba(255,182,147,0.35);
+      border-radius: 50px;
+      padding: 10px 22px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-secondary:hover {
+      background: rgba(255,182,147,0.08);
+      border-color: var(--primary);
+    }
+
+    /* Menu Tabs */
+    .tab-group {
+      display: inline-flex;
+      gap: 8px;
+      background: rgba(28,28,25,0.6);
+      border: 1px solid rgba(86,67,58,0.3);
+      border-radius: 50px;
+      padding: 6px;
+      overflow-x: auto;
+      max-width: 100%;
+    }
+    .tab-group::-webkit-scrollbar { display: none; }
+    .tab {
+      padding: 10px 22px;
+      border-radius: 50px;
+      border: none;
+      background: transparent;
+      color: #c4a882;
+      font-family: 'Inter'; font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+    .tab.active {
+      background: #2a2a27;
+      color: #ffb693;
+      box-shadow: 0 0 12px rgba(255,186,63,0.15);
+    }
+
+    /* Menu Cards */
+    .featured-card {
+      display: grid;
+      grid-template-columns: 1fr; /* Default mobile */
+      min-height: 260px;
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--surface-high);
+      border: 1px solid rgba(255,186,63,0.12);
+    }
+    @media (min-width: 1024px) {
+      .featured-card {
+        grid-template-columns: 40% 1fr;
+      }
+    }
+
+    .menu-card {
+      background: var(--surface-high);
+      border: 1px solid rgba(255,186,63,0.08);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .menu-card-photo {
+      width: 100%;
+      height: 160px;
+      object-fit: cover;
+      display: block;
+    }
+    .menu-card-body {
+      padding: 16px 18px 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .menu-card-name { font-family:'Sora'; font-weight:700; font-size:18px; color:#e5e2dd; }
+    .menu-card-price { font-family:'Sora'; font-weight:800; color:#ffba3f; }
+    .menu-card-desc { font-size:13px; color:#c4a882; margin: 8px 0 14px; flex:1; }
+
+    /* Cart Sidebar & Badge */
+    .cart-sidebar {
+      position: fixed; right: 0; top: 0; height: 100vh;
+      width: 380px; max-width: 100vw;
+      background: rgba(15, 11, 6, 0.97);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-left: 1px solid rgba(255,186,63,0.15);
+      transform: translateX(100%);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 1000;
+      display: flex; flex-direction: column;
+      padding: 24px;
+    }
+    .cart-sidebar.open { transform: translateX(0); }
+
+    .cart-badge {
+      position: absolute; top: -6px; right: -6px;
+      background: #dc743e; color: white;
+      border-radius: 50%; width: 20px; height: 20px;
+      font-size: 11px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+    @keyframes badgePop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.6); }
+      100% { transform: scale(1); }
+    }
+    .badge-pop {
+      animation: badgePop 0.2s cubic-bezier(0.34,1.56,0.64,1);
+    }
+
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(255,186,63,0.3);
+      border-radius: 4px;
+    }
+
+    /* Info Chips (Find Us) */
+    .info-chip {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 16px 18px;
+      background: rgba(28,22,14,0.7);
+      border: 1px solid rgba(255,186,63,0.12);
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+    .info-chip-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: rgba(255,186,63,0.10);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .info-chip-label { font-size: 10px; letter-spacing: 0.12em; color: #c18500; font-weight: 600; }
+    .info-chip-text { font-size: 15px; color: #e5e2dd; margin-top: 2px; }
+
+    /* Animations */
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(24px); }
+      to   { opacity:1; transform:translateY(0); }
+    }
+    .hero-label   { animation: fadeUp 0.5s ease-out 0.1s both; }
+    .hero-h1      { animation: fadeUp 0.6s ease-out 0.2s both; }
+    .hero-sub     { animation: fadeUp 0.6s ease-out 0.4s both; }
+    .hero-btns    { animation: fadeUp 0.6s ease-out 0.55s both; }
+    .hero-canvas-wrap { animation: fadeUp 0.8s ease-out 0.3s both; }
+    nav           { animation: slideDown 0.5s ease-out both; }
+
+    @keyframes slideDown {
+      from { transform: translateY(-100%); opacity:0; }
+      to   { transform: translateY(0); opacity:1; }
+    }
+
+    @keyframes pulseDot {
+      0%, 100% { opacity:1; transform:scale(1); }
+      50% { opacity:0.5; transform:scale(1.4); }
+    }
+    .open-now-dot { animation: pulseDot 1.8s ease-in-out infinite; }
+
+    /* Intersection Observer Base Class */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
+    }
+
+  </style>
 </head>
 <body>
+
   <!-- Navigation -->
-  <nav class="fixed top-0 left-0 w-full z-50 transition-transform duration-500 ease-out translate-y-[-100%]" id="navbar" style="background: rgba(19,20,17,0.85); backdrop-filter: blur(16px); border-bottom: 1px solid rgba(86,67,58,0.2);">
+  <nav class="fixed top-0 left-0 w-full z-50 transition-colors" style="background: rgba(10, 6, 0, 0.88); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid rgba(86, 67, 58, 0.25);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-20">
         <!-- Logo -->
-        <a href="#" class="font-sora font-bold text-2xl text-[#c18500] tracking-wider" style="text-shadow: 0 0 8px rgba(193,133,0,0.4);">
+        <a href="#" class="font-sora font-extrabold text-2xl tracking-wider" style="color: #c18500; text-shadow: 0 0 12px rgba(193,133,0,0.4);">
           MINDKICK
         </a>
 
         <!-- Desktop Links -->
-        <div class="hidden md:flex space-x-8 items-center">
-          <a href="#menu" class="nav-link text-on-surface hover:text-primary transition-colors font-medium border-b-2 border-transparent">Menu</a>
-          <a href="#about" class="nav-link text-on-surface hover:text-primary transition-colors font-medium border-b-2 border-transparent">About</a>
-          <a href="#find-us" class="nav-link text-on-surface hover:text-primary transition-colors font-medium border-b-2 border-transparent">Find Us</a>
-          <button id="order-now-btn" class="btn-primary rounded-full px-6 py-2.5 font-sora font-semibold flex items-center gap-2 relative">
-            Order Now
-            <span id="cart-badge" class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center transform transition-transform shadow-lg border-2 border-bg hidden">0</span>
-          </button>
+        <div class="hidden md:flex space-x-8 items-center h-full">
+          <a href="#menu" class="nav-link h-full flex items-center font-inter font-medium transition-colors" data-section="menu" style="color: #c4a882; border-bottom: 2px solid transparent; border-top: 2px solid transparent;">Menu</a>
+          <a href="#about" class="nav-link h-full flex items-center font-inter font-medium transition-colors" data-section="about" style="color: #c4a882; border-bottom: 2px solid transparent; border-top: 2px solid transparent;">About</a>
+          <a href="#find-us" class="nav-link h-full flex items-center font-inter font-medium transition-colors" data-section="find-us" style="color: #c4a882; border-bottom: 2px solid transparent; border-top: 2px solid transparent;">Find Us</a>
+          <div class="flex items-center ml-4">
+            <button class="btn-primary rounded-full relative order-now-btn">
+              Order Now 🛒
+              <span class="cart-badge" style="display: none;">0</span>
+            </button>
+          </div>
         </div>
 
         <!-- Mobile Menu Button -->
         <div class="md:hidden flex items-center">
-          <button id="mobile-menu-btn" class="text-on-surface hover:text-primary transition-colors" aria-label="Toggle Menu">
+          <button id="mobile-menu-btn" class="text-on-surface-var hover:text-primary transition-colors p-2" aria-label="Toggle Menu">
             <span class="material-symbols-outlined text-3xl" id="menu-icon">menu</span>
           </button>
         </div>
@@ -180,54 +332,58 @@
     </div>
 
     <!-- Mobile Menu -->
-    <div id="mobile-menu" class="md:hidden hidden bg-bg/95 backdrop-blur-lg border-b border-outline-var/30 absolute w-full left-0 top-20">
+    <div id="mobile-menu" class="md:hidden hidden absolute w-full left-0 top-20 border-b" style="background: rgba(10, 6, 0, 0.95); backdrop-filter: blur(20px); border-color: rgba(86, 67, 58, 0.25);">
       <div class="px-4 pt-2 pb-6 space-y-4 shadow-2xl">
-        <a href="#menu" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface hover:bg-surface hover:text-primary transition-colors">Menu</a>
-        <a href="#about" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface hover:bg-surface hover:text-primary transition-colors">About</a>
-        <a href="#find-us" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface hover:bg-surface hover:text-primary transition-colors">Find Us</a>
-        <button id="mobile-order-now-btn" class="w-full btn-primary rounded-full px-6 py-3 font-sora font-semibold text-center mt-4">
-          Order Now
+        <a href="#menu" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface-var hover:text-primary transition-colors">Menu</a>
+        <a href="#about" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface-var hover:text-primary transition-colors">About</a>
+        <a href="#find-us" class="mobile-nav-link block px-3 py-3 rounded-md text-base font-medium text-on-surface-var hover:text-primary transition-colors">Find Us</a>
+        <button class="w-full btn-primary rounded-full mt-4 order-now-btn relative">
+          Order Now 🛒
+          <span class="cart-badge" style="display: none;">0</span>
         </button>
       </div>
     </div>
   </nav>
 
   <!-- Hero Section -->
-  <section id="hero" class="relative w-full h-[100dvh] flex items-center overflow-hidden" style="background: radial-gradient(ellipse at 60% 40%, #2a2a27 0%, #131411 100%);">
-
-    <!-- Decorative Blurred Blobs -->
-    <div class="absolute w-[40vw] h-[40vw] rounded-full mix-blend-screen opacity-10 blur-[100px] pointer-events-none" style="background: var(--primary); top: 10%; left: 40%;"></div>
-    <div class="absolute w-[30vw] h-[30vw] rounded-full mix-blend-screen opacity-10 blur-[100px] pointer-events-none" style="background: var(--tertiary); bottom: 10%; right: 10%;"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col-reverse lg:flex-row items-center justify-between h-full pt-20">
+  <section id="hero" class="relative w-full h-[100dvh] min-h-[800px] flex items-center overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full relative z-10 flex flex-col lg:flex-row items-center justify-between gap-12 pt-20">
 
       <!-- Left Content -->
-      <div class="w-full lg:w-1/2 flex flex-col items-start space-y-6 z-10 text-left" id="hero-text">
-        <h1 class="font-sora font-extrabold text-[36px] lg:text-[56px] leading-tight text-on-surface opacity-0 translate-y-8" style="animation: fadeUp 0.8s ease-out 0.2s forwards;">
+      <div class="w-full lg:w-5/12 flex flex-col items-start space-y-6 text-left">
+        <div class="hero-label bg-tertiary-dk/20 border border-tertiary/30 text-tertiary text-xs font-sora font-bold tracking-widest px-4 py-1.5 rounded-full">
+          PREMIUM URBAN CAFÉ ✦
+        </div>
+        <h1 class="hero-h1 font-sora font-extrabold text-[48px] lg:text-[64px] leading-[1.1] text-on-surface">
           Fuel Your Mind.
         </h1>
-        <p class="font-inter text-lg text-on-surface-var max-w-lg opacity-0 translate-y-8" style="animation: fadeUp 0.8s ease-out 0.4s forwards;">
-          Experience the nocturnal energy of urban coffee. Premium roasts from our signature midnight diorama kiosk.
+        <p class="hero-sub font-inter text-[18px] text-on-surface-var max-w-lg leading-relaxed">
+          Experience the nocturnal energy of urban coffee.<br>
+          Premium roasts served from our signature midnight diorama kiosk.
         </p>
-        <div class="opacity-0 translate-y-8" style="animation: fadeUp 0.8s ease-out 0.6s forwards;">
-          <a href="#menu" class="btn-primary inline-flex rounded-full px-8 py-4 font-sora font-bold text-lg items-center gap-2">
-            Explore Menu
-            <span class="material-symbols-outlined">arrow_forward</span>
-          </a>
+        <div class="hero-btns flex flex-wrap items-center gap-4 pt-4">
+          <a href="#menu" class="btn-primary">Explore Menu</a>
+          <button class="btn-secondary flex items-center gap-2 order-now-btn">Order Now &rarr;</button>
         </div>
       </div>
 
-      <!-- Right Content (3D Canvas Area) -->
-      <div class="w-full lg:w-1/2 h-[50vh] lg:h-full relative opacity-0" style="animation: fadeIn 1s ease-out 0.8s forwards;">
-        <!-- Canvas Container -->
-        <div id="hero-canvas-container" class="w-full h-full absolute inset-0 flex items-center justify-center">
-          <!-- The canvas element will be appended here by Three.js -->
-        </div>
+      <!-- Right Content (3D Kiosk Card) -->
+      <div class="hero-canvas-wrap w-full lg:w-7/12 relative">
+        <div class="relative w-full h-[420px] lg:h-[520px] rounded-2xl overflow-hidden border border-primary/15" style="background: radial-gradient(ellipse at 40% 30%, #3d1f0a 0%, #0d0700 100%); box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 80px rgba(255,177,0,0.05); padding: 0;">
+          <canvas id="hero-canvas" class="w-full h-full block"></canvas>
 
-        <!-- Open Now Badge -->
-        <div class="absolute top-4 lg:top-1/4 right-0 lg:-right-4 glass px-4 py-2 rounded-full flex items-center gap-3 shadow-lg z-20">
-          <div class="w-2.5 h-2.5 rounded-full bg-tertiary shadow-[0_0_8px_var(--tertiary)]" style="animation: pulseAmber 2s infinite;"></div>
-          <span class="font-sora font-bold text-xs tracking-widest text-on-surface">OPEN NOW</span>
+          <!-- Open Now Badge -->
+          <div class="absolute top-6 right-6 glass px-4 py-2 rounded-full flex items-center gap-2.5 z-20">
+            <div class="w-2.5 h-2.5 rounded-full bg-tertiary open-now-dot"></div>
+            <span class="font-inter font-bold text-[11px] tracking-widest text-on-surface">OPEN NOW</span>
+          </div>
+
+          <!-- WebGL Fallback -->
+          <div id="hero-fallback" class="hidden absolute inset-0 bg-surface-highest flex-col items-center justify-center text-center p-6">
+            <span class="material-symbols-outlined text-tertiary text-4xl mb-2">3d_rotation</span>
+            <p class="font-sora text-on-surface font-semibold">3D View Not Supported</p>
+            <p class="font-inter text-on-surface-var text-sm mt-1">Please enable WebGL to view the kiosk.</p>
+          </div>
         </div>
       </div>
 
@@ -235,98 +391,115 @@
   </section>
 
   <!-- About Section -->
-  <section id="about" class="py-24 relative overflow-hidden">
+  <section id="about" class="py-24 lg:py-32 relative overflow-hidden">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <!-- Headings -->
-      <div class="text-center mb-16 scroll-anim opacity-0 translate-y-8 transition-all duration-500">
-        <h2 class="font-sora font-extrabold text-4xl lg:text-5xl mb-4">
-          Our Vibe, <span style="color:#ffba3f">Your Fuel</span>
-        </h2>
-        <p class="font-inter text-on-surface-var max-w-2xl mx-auto text-lg">
-          Experience the nocturnal energy of our premium street cafe. High-fidelity brews engineered for your daily grind.
-        </p>
-      </div>
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-8 items-center justify-between">
 
-      <div class="flex flex-col lg:flex-row gap-12 items-center">
-        <!-- Left: 3D Canvas -->
-        <div class="w-full lg:w-1/2 relative flex flex-col items-center scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-100">
-          <div class="w-full aspect-square relative rounded-3xl overflow-hidden glass">
-            <!-- Background glow behind canvas -->
-            <div class="absolute inset-0 bg-gradient-to-tr from-surface-highest to-bg opacity-50"></div>
-            <div id="about-canvas-container" class="absolute inset-0 cursor-grab active:cursor-grabbing">
-              <!-- Three.js canvas goes here -->
+        <!-- Left: Text & Features (30%) -->
+        <div class="w-full lg:w-[30%] flex flex-col items-start fade-in">
+          <h2 class="font-sora font-extrabold text-4xl lg:text-5xl mb-2 text-on-surface">
+            Our Vibe,
+          </h2>
+          <h2 class="font-sora font-extrabold text-4xl lg:text-5xl mb-6 text-tertiary">
+            Your Fuel
+          </h2>
+          <p class="font-inter text-on-surface-var text-lg mb-8">
+            Experience the nocturnal energy of our premium street cafe. High-fidelity brews engineered for your daily grind.
+          </p>
+          <div class="flex flex-col gap-3 w-full">
+            <div class="glass px-5 py-3.5 rounded-full flex items-center gap-3 font-inter font-semibold text-on-surface">
+              <span class="text-xl">☕</span> Premium Brews
+            </div>
+            <div class="glass px-5 py-3.5 rounded-full flex items-center gap-3 font-inter font-semibold text-on-surface">
+              <span class="text-xl">🌿</span> Fresh Ingredients
+            </div>
+            <div class="glass px-5 py-3.5 rounded-full flex items-center gap-3 font-inter font-semibold text-on-surface">
+              <span class="text-xl">⚡</span> Energy Boosters
             </div>
           </div>
-          <!-- Hint Badge -->
-          <div id="drag-hint" class="mt-4 flex items-center gap-2 glass px-4 py-2 rounded-full text-sm text-tertiary font-sora font-semibold transition-opacity duration-500">
-            <span class="material-symbols-outlined text-lg animate-spin" style="animation-duration: 3s;">360</span>
+        </div>
+
+        <!-- Center: Draggable 3D Canvas (40%) -->
+        <div class="w-full lg:w-[40%] flex flex-col items-center fade-in">
+          <div class="relative w-full max-w-[420px] aspect-square rounded-2xl overflow-hidden border border-primary/15" style="background: radial-gradient(ellipse at center, #251206 0%, #0a0600 100%); box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+            <canvas id="about-canvas" class="w-full h-full block cursor-grab active:cursor-grabbing"></canvas>
+            <!-- WebGL Fallback -->
+            <div id="about-fallback" class="hidden absolute inset-0 bg-surface-highest flex-col items-center justify-center text-center p-6">
+              <span class="material-symbols-outlined text-tertiary text-4xl mb-2">3d_rotation</span>
+              <p class="font-sora text-on-surface font-semibold">3D View Not Supported</p>
+            </div>
+          </div>
+          <div class="drag-hint mt-6 flex items-center gap-2 glass px-4 py-2 rounded-full text-xs text-tertiary font-inter font-semibold tracking-widest transition-opacity duration-500">
+            <span class="material-symbols-outlined text-sm animate-spin" style="animation-duration: 4s;">rotate_right</span>
             DRAG TO ROTATE
           </div>
         </div>
 
-        <!-- Right: Features & Stats -->
-        <div class="w-full lg:w-1/2 space-y-12">
+        <!-- Right: IMPACT Card (30%) -->
+        <div class="w-full lg:w-[30%] fade-in">
+          <div class="relative rounded-2xl border border-primary/15 overflow-hidden" style="background: rgba(20, 16, 10, 0.8); padding: 28px; box-shadow: 0 12px 30px rgba(0,0,0,0.4);">
+            <div class="font-inter font-medium text-[11px] text-tertiary-dk tracking-[0.15em] mb-4">IMPACT</div>
 
-          <!-- Feature Chips -->
-          <div class="flex flex-wrap gap-4 scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-200">
-            <div class="glass px-5 py-3 rounded-full flex items-center gap-2 font-inter font-semibold">
-              <span class="text-xl">☕</span> Premium Brews
+            <div class="mb-2">
+              <span class="font-sora font-extrabold text-[56px] text-on-surface leading-none stat-num" data-target="482">0</span>
             </div>
-            <div class="glass px-5 py-3 rounded-full flex items-center gap-2 font-inter font-semibold">
-              <span class="text-xl">🌿</span> Fresh Ingredients
+            <div class="font-inter text-on-surface-var text-sm mb-6">Cups Served Today</div>
+
+            <!-- Progress Bar -->
+            <div class="w-full h-2 rounded-full bg-surface-highest mb-8 overflow-hidden">
+              <div class="h-full rounded-full" style="width: 80%; background: linear-gradient(90deg, #ffba3f, #dc743e);"></div>
             </div>
-            <div class="glass px-5 py-3 rounded-full flex items-center gap-2 font-inter font-semibold">
-              <span class="text-xl">⚡</span> Energy Boosters
+
+            <div class="h-[1px] w-full bg-outline/30 mb-8"></div>
+
+            <div class="mb-1">
+              <span class="font-sora font-bold text-[32px] text-on-surface leading-none">10K+</span>
+            </div>
+            <div class="font-inter text-on-surface-var text-sm mb-6">Happy Customers</div>
+
+            <!-- Avatar Stack -->
+            <div class="flex items-center">
+              <img src="https://i.pravatar.cc/32?img=47" class="w-8 h-8 rounded-full border-2 border-surface object-cover" alt="Customer avatar">
+              <img src="https://i.pravatar.cc/32?img=23" class="w-8 h-8 rounded-full border-2 border-surface object-cover -ml-2" alt="Customer avatar">
+              <img src="https://i.pravatar.cc/32?img=31" class="w-8 h-8 rounded-full border-2 border-surface object-cover -ml-2" alt="Customer avatar">
+              <div class="w-8 h-8 rounded-full border-2 border-surface bg-surface-high flex items-center justify-center -ml-2 text-xs font-inter font-medium text-on-surface-var">+</div>
             </div>
           </div>
-
-          <!-- Stats Panel -->
-          <div class="glass p-8 rounded-3xl grid grid-cols-2 gap-8 scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-300">
-            <div class="flex flex-col">
-              <span class="font-sora font-extrabold text-3xl text-primary stat-num" data-target="500">0</span>
-              <span class="font-inter text-on-surface-var text-sm mt-1">+ Daily Orders</span>
-            </div>
-            <div class="flex flex-col">
-              <span class="font-sora font-extrabold text-3xl text-primary"><span class="stat-num" data-target="4.9" data-float="true">0.0</span>★</span>
-              <span class="font-inter text-on-surface-var text-sm mt-1">Rating</span>
-            </div>
-            <div class="flex flex-col">
-              <span class="font-sora font-extrabold text-3xl text-primary stat-num" data-target="3">0</span>
-              <span class="font-inter text-on-surface-var text-sm mt-1">Locations</span>
-            </div>
-            <div class="flex flex-col">
-              <span class="font-sora font-extrabold text-3xl text-primary">2AM</span>
-              <span class="font-inter text-on-surface-var text-sm mt-1">Open Until</span>
-            </div>
-          </div>
-
         </div>
-      </div>
 
+      </div>
     </div>
   </section>
 
   <!-- Menu Section -->
-  <section id="menu" class="py-24 relative bg-surface-low">
+  <section id="menu" class="py-24 relative" style="background: rgba(19, 20, 17, 0.4);">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <h2 class="font-sora font-bold text-3xl lg:text-4xl text-center mb-10 scroll-anim opacity-0 translate-y-8 transition-all duration-500">
-        The Midnight Diner
-      </h2>
+      <!-- Section Header -->
+      <div class="text-center mb-12 fade-in">
+        <h2 class="font-sora font-bold text-[40px] lg:text-[52px] text-on-surface mb-4">
+          The Midnight Diner
+        </h2>
+        <p class="font-inter text-on-surface-var max-w-2xl mx-auto text-base">
+          Fuel your nocturnal endeavors with our premium urban selection. Designed for the relentless.
+        </p>
+      </div>
 
       <!-- Category Filter Tabs -->
-      <div class="flex overflow-x-auto pb-4 mb-12 gap-3 scrollbar-hide justify-start lg:justify-center scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-100" id="menu-filters">
-        <button class="filter-btn px-6 py-2 rounded-full font-sora font-semibold text-sm whitespace-nowrap transition-all" data-cat="All" style="background: var(--surface-high); color: var(--primary); box-shadow: 0 0 15px rgba(255,186,63,0.2);">All</button>
-        <button class="filter-btn px-6 py-2 rounded-full font-sora font-semibold text-sm whitespace-nowrap text-on-surface-var hover:text-primary transition-all" data-cat="Coffee">Coffee</button>
-        <button class="filter-btn px-6 py-2 rounded-full font-sora font-semibold text-sm whitespace-nowrap text-on-surface-var hover:text-primary transition-all" data-cat="Tea">Tea</button>
-        <button class="filter-btn px-6 py-2 rounded-full font-sora font-semibold text-sm whitespace-nowrap text-on-surface-var hover:text-primary transition-all" data-cat="Burgers">Burgers</button>
-        <button class="filter-btn px-6 py-2 rounded-full font-sora font-semibold text-sm whitespace-nowrap text-on-surface-var hover:text-primary transition-all" data-cat="Fries">Fries</button>
-        <button class="filter-btn px-6 py-2 rounded-full font-sora font-semibold text-sm whitespace-nowrap text-on-surface-var hover:text-primary transition-all" data-cat="Combos">Combos</button>
+      <div class="flex justify-center mb-12 fade-in">
+        <div class="tab-group" id="menu-filters">
+          <button class="tab active" data-cat="All">All</button>
+          <button class="tab" data-cat="Coffee">Coffee</button>
+          <button class="tab" data-cat="Tea">Tea</button>
+          <button class="tab" data-cat="Burgers">Burgers</button>
+          <button class="tab" data-cat="Fries">Fries</button>
+          <button class="tab" data-cat="Combos">Combos</button>
+        </div>
       </div>
 
       <!-- Menu Grid -->
-      <div id="menu-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6 scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-200">
+      <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 fade-in">
         <!-- Cards injected by JS -->
       </div>
 
@@ -334,34 +507,34 @@
   </section>
 
   <!-- Cart Sidebar & Overlay -->
-  <div id="cart-overlay" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
-  <div id="cart-sidebar" class="fixed top-0 right-0 h-[100vh] w-full md:w-[360px] glass z-[60] translate-x-full transition-transform duration-300 flex flex-col shadow-2xl border-l border-outline-var/30">
+  <div id="cart-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden opacity-0 transition-opacity duration-300"></div>
+  <div id="cart-sidebar" class="cart-sidebar border-l border-primary/15">
 
     <!-- Cart Header -->
-    <div class="p-6 border-b border-outline-var/30 flex justify-between items-center">
+    <div class="pb-6 border-b border-outline/30 flex justify-between items-center shrink-0">
       <h3 class="font-sora font-bold text-xl text-primary">Your Order</h3>
-      <button id="close-cart-btn" class="text-on-surface-var hover:text-primary transition-colors">
+      <button id="close-cart-btn" class="text-on-surface-var hover:text-primary transition-colors p-1">
         <span class="material-symbols-outlined text-2xl">close</span>
       </button>
     </div>
 
     <!-- Cart Items (Scrollable) -->
-    <div id="cart-items" class="flex-1 overflow-y-auto p-6 space-y-4">
+    <div id="cart-items" class="flex-1 overflow-y-auto py-6 space-y-4 pr-2 custom-scrollbar">
       <!-- Items will be injected here -->
-      <div id="cart-empty-state" class="text-center text-on-surface-var font-inter py-10">
-        <span class="text-4xl mb-4 block">✨</span>
-        <p>Your cart is empty.</p>
-        <p class="text-sm">Add something delicious.</p>
+      <div id="cart-empty-state" class="text-center text-on-surface-var font-inter py-10 fade-in">
+        <span class="text-3xl mb-4 block opacity-50">✨</span>
+        <p class="font-medium text-on-surface">Your cart is empty.</p>
+        <p class="text-sm mt-1">Add something delicious.</p>
       </div>
     </div>
 
     <!-- Cart Footer -->
-    <div class="p-6 border-t border-outline-var/30 bg-surface/50">
+    <div class="pt-6 border-t border-outline/30 shrink-0">
       <div class="flex justify-between items-center mb-6">
-        <span class="font-inter font-semibold text-on-surface">Subtotal</span>
-        <span id="cart-subtotal" class="font-sora font-bold text-xl text-primary">$0</span>
+        <span class="font-inter font-medium text-on-surface-var">Subtotal</span>
+        <span id="cart-subtotal" class="font-sora font-bold text-2xl text-tertiary">₹0</span>
       </div>
-      <button id="checkout-btn" class="w-full btn-primary rounded-full py-4 font-sora font-bold text-lg disabled:opacity-50 disabled:cursor-not-allowed">
+      <button id="checkout-btn" class="w-full btn-primary disabled:opacity-50 disabled:cursor-not-allowed">
         Place Order
       </button>
     </div>
@@ -369,99 +542,104 @@
 
   <!-- Success Toast -->
   <div id="toast" class="fixed bottom-6 right-6 lg:bottom-10 lg:right-10 glass px-6 py-4 rounded-xl flex items-center gap-3 z-[70] translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <span class="text-2xl">🎉</span>
-    <span class="font-inter font-medium text-on-surface text-sm" id="toast-message">Order placed! Ready in ~15 min</span>
+    <span class="text-xl">🎉</span>
+    <span class="font-inter font-medium text-on-surface text-sm">Order placed! Ready in ~15 min</span>
   </div>
 
   <!-- Find Us Section -->
-  <section id="find-us" class="py-24 relative overflow-hidden">
+  <section id="find-us" class="py-24 lg:py-32 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
-      <h2 class="font-sora font-extrabold text-3xl lg:text-4xl text-center mb-16 scroll-anim opacity-0 translate-y-8 transition-all duration-500">
-        Find Us
-      </h2>
+      <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
 
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
-        <!-- Contact Info (Left) -->
-        <div class="glass p-8 rounded-3xl flex flex-col justify-between scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-100">
-          <div class="space-y-6">
-            <div class="flex items-start gap-4">
-              <span class="text-2xl mt-1">📍</span>
-              <div>
-                <p class="font-inter font-semibold text-on-surface">Address</p>
-                <p class="text-on-surface-var text-sm">Plot 12, Urban Street, Sholapur, Maharashtra 413001</p>
-              </div>
+        <!-- Left: City Diorama (40%) -->
+        <div class="w-full lg:w-[40%] flex flex-col items-center fade-in">
+          <div class="relative w-full max-w-[480px] h-[480px] rounded-2xl overflow-hidden border border-primary/15" style="background: radial-gradient(ellipse at center, #1a0e05 0%, #0a0600 100%); box-shadow: 0 12px 40px rgba(0,0,0,0.5);">
+            <canvas id="map-canvas" class="w-full h-full block"></canvas>
+
+            <!-- Coordinates -->
+            <div class="absolute bottom-4 left-4 font-inter text-[12px] text-on-surface-var tracking-widest pointer-events-none">
+              17.6868° N, 75.9064° E
             </div>
-            <div class="flex items-start gap-4">
-              <span class="text-2xl mt-1">🕐</span>
-              <div>
-                <p class="font-inter font-semibold text-on-surface">Hours</p>
-                <p class="text-on-surface-var text-sm">Mon–Sun: 10AM – 2AM</p>
-              </div>
+
+            <!-- WebGL Fallback -->
+            <div id="map-fallback" class="hidden absolute inset-0 bg-surface-highest flex-col items-center justify-center text-center p-6">
+              <span class="material-symbols-outlined text-tertiary text-4xl mb-2">3d_rotation</span>
+              <p class="font-sora text-on-surface font-semibold">3D View Not Supported</p>
             </div>
-            <div class="flex items-start gap-4">
-              <span class="text-2xl mt-1">📞</span>
-              <div>
-                <p class="font-inter font-semibold text-on-surface">Phone</p>
-                <p class="text-on-surface-var text-sm">+91 98765 43210</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <span class="text-2xl mt-1">📸</span>
-              <div>
-                <p class="font-inter font-semibold text-on-surface">Instagram</p>
-                <p class="text-on-surface-var text-sm">@mindkick.cafe</p>
-              </div>
-            </div>
-            <div class="flex items-start gap-4">
-              <span class="text-2xl mt-1">💬</span>
-              <div>
-                <p class="font-inter font-semibold text-on-surface">WhatsApp</p>
-                <p class="text-on-surface-var text-sm">+91 98765 43210</p>
-              </div>
-            </div>
-          </div>
-          <div class="mt-10">
-            <a href="https://maps.google.com/?q=Sholapur+Maharashtra" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block w-full text-center rounded-full px-6 py-3 font-sora font-semibold">
-              Get Directions
-            </a>
           </div>
         </div>
 
-        <!-- Map Placeholder (Right) -->
-        <div class="glass rounded-3xl overflow-hidden relative aspect-[4/3] flex items-center justify-center scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-200" id="map-container">
-          <div id="map-canvas-container" class="absolute inset-0 z-10">
-            <!-- Three.js map goes here -->
-          </div>
-          <!-- Fallback -->
-          <div class="absolute inset-0 flex items-center justify-center bg-surface-highest" id="map-fallback">
-            <div class="relative flex items-center justify-center">
-              <div class="absolute w-32 h-32 rounded-full border-2 border-primary/20 animate-ping" style="animation-duration: 3s;"></div>
-              <div class="absolute w-16 h-16 rounded-full border-2 border-primary/40 animate-ping" style="animation-duration: 2s;"></div>
-              <div class="w-4 h-4 bg-tertiary rounded-full shadow-[0_0_15px_var(--tertiary)] z-20"></div>
-              <div class="absolute -top-10 text-3xl z-20 animate-bounce">📍</div>
+        <!-- Right: Info Card (60%) -->
+        <div class="w-full lg:w-[60%] fade-in">
+          <div class="glass rounded-3xl p-8 lg:p-12">
+            <h2 class="font-sora font-bold text-[40px] lg:text-[48px] text-on-surface mb-2 leading-tight">
+              Come Find Us
+            </h2>
+            <p class="font-inter text-on-surface-var text-base mb-10">
+              Drop by for your midnight fix. We're brewing until late.
+            </p>
+
+            <div class="info-chip">
+              <div class="info-chip-icon text-2xl">📍</div>
+              <div>
+                <div class="info-chip-label">THE SPOT</div>
+                <div class="info-chip-text">
+                  Plot 12, Urban Street<br>
+                  Sholapur, Maharashtra 413001
+                </div>
+              </div>
             </div>
+
+            <div class="info-chip">
+              <div class="info-chip-icon text-2xl">🕐</div>
+              <div>
+                <div class="info-chip-label">HOURS</div>
+                <div class="info-chip-text">
+                  Mon – Sun: 10:00 AM – 2:00 AM
+                </div>
+              </div>
+            </div>
+
+            <div class="info-chip">
+              <div class="info-chip-icon text-2xl">@</div>
+              <div>
+                <div class="info-chip-label">CONNECT</div>
+                <div class="info-chip-text">
+                  @mindkick.cafe<br>
+                  +91 98765 43210
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-8">
+              <a href="https://maps.google.com/?q=Sholapur+Maharashtra+413001" target="_blank" rel="noopener noreferrer" class="btn-primary inline-block w-full text-center">
+                GET DIRECTIONS &rarr;
+              </a>
+            </div>
+
           </div>
         </div>
+
       </div>
 
       <!-- Contact Form -->
-      <div class="glass p-8 lg:p-12 rounded-3xl scroll-anim opacity-0 translate-y-8 transition-all duration-500 delay-300">
+      <div class="glass p-8 lg:p-12 rounded-3xl mt-12 fade-in">
         <h3 class="font-sora font-bold text-2xl mb-8">Send Us a Message</h3>
         <form id="contact-form" class="space-y-6">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label class="block font-inter text-sm text-on-surface-var mb-2" for="name">Name</label>
-              <input type="text" id="name" required class="w-full bg-[#0e0e0c]/60 border border-outline-var/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/15 transition-all">
+              <input type="text" id="name" required class="w-full bg-[#0a0600]/80 border border-outline/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
             </div>
             <div>
               <label class="block font-inter text-sm text-on-surface-var mb-2" for="email">Email</label>
-              <input type="email" id="email" required class="w-full bg-[#0e0e0c]/60 border border-outline-var/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/15 transition-all">
+              <input type="email" id="email" required class="w-full bg-[#0a0600]/80 border border-outline/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all">
             </div>
           </div>
           <div>
             <label class="block font-inter text-sm text-on-surface-var mb-2" for="message">Message</label>
-            <textarea id="message" rows="4" required class="w-full bg-[#0e0e0c]/60 border border-outline-var/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-3 focus:ring-primary/15 transition-all"></textarea>
+            <textarea id="message" rows="4" required class="w-full bg-[#0a0600]/80 border border-outline/40 rounded-lg px-4 py-3 text-on-surface focus:outline-none focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all"></textarea>
           </div>
           <div class="flex items-center gap-4">
             <button type="submit" class="btn-primary rounded-full px-8 py-3 font-sora font-semibold">
@@ -476,15 +654,15 @@
   </section>
 
   <!-- Footer -->
-  <footer class="bg-[#0e0e0c] pt-16 pb-8 relative" style="box-shadow: 0 -8px 40px rgba(255,177,0,0.05);">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center flex flex-col items-center">
-      <a href="#" class="font-sora font-extrabold text-3xl text-tertiary mb-4 tracking-wide">MINDKICK</a>
-      <p class="font-inter text-on-surface-var mb-8">Fuel Your Mind. One Sip at a Time.</p>
+  <footer class="py-12 border-t border-outline/30 mt-12 bg-bg text-center relative z-10">
+    <div class="max-w-7xl mx-auto px-4">
+      <a href="#" class="font-sora font-extrabold text-2xl tracking-wider text-tertiary-dk mb-3 block">MINDKICK</a>
+      <p class="font-inter text-on-surface-var text-sm mb-6">Fuel Your Mind. One Sip at a Time.</p>
 
-      <div class="flex gap-6 mb-12">
-        <a href="#" class="text-on-surface-var hover:text-primary transition-colors text-sm font-semibold">Instagram</a>
-        <a href="#" class="text-on-surface-var hover:text-primary transition-colors text-sm font-semibold">WhatsApp</a>
-        <a href="#" class="text-on-surface-var hover:text-primary transition-colors text-sm font-semibold">Restaurant</a>
+      <div class="flex justify-center gap-6 mb-8 font-inter font-medium text-sm">
+        <a href="#" class="text-on-surface-var hover:text-primary transition-colors">Instagram</a>
+        <a href="#" class="text-on-surface-var hover:text-primary transition-colors">WhatsApp</a>
+        <a href="#" class="text-on-surface-var hover:text-primary transition-colors">Order Online</a>
       </div>
 
       <p class="font-inter text-on-surface-var/50 text-xs">
@@ -493,43 +671,91 @@
     </div>
   </footer>
 
-  <!-- Sound Toggle -->
-  <button id="sound-toggle" class="fixed bottom-6 left-6 lg:bottom-10 lg:left-10 w-12 h-12 rounded-full glass flex items-center justify-center z-50 text-xl hover:scale-110 transition-transform">
-    🔇
-  </button>
-  <div id="sound-tooltip" class="fixed bottom-[88px] left-6 lg:bottom-[104px] lg:left-10 glass px-4 py-2 rounded-lg text-xs font-inter text-on-surface pointer-events-none opacity-0 transition-opacity delay-1000 duration-500">
-    Click for ambient sound ☕
-  </div>
-
   <!-- Three.js CDN -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-  <!-- App Script -->
   <script>
-    // Entry Animations
-    document.addEventListener('DOMContentLoaded', () => {
-      // Nav entry
-      setTimeout(() => {
-        document.getElementById('navbar').classList.remove('translate-y-[-100%]');
-      }, 50);
-    });
+    // ==========================================
+    // MENU DATA (with Unsplash images)
+    // ==========================================
+    const MENU = [
+      {
+        id: 1, name: "Combo Deal", cat: "Combos", price: 25, featured: true,
+        desc: "The ultimate midnight fuel. A classic artisan burger, a side of crispy golden fries, and our signature MindKick espresso. Perfectly balanced for the late-night grind.",
+        img: "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=600&q=80"
+      },
+      {
+        id: 2, name: "MindKick Espresso", cat: "Coffee", price: 10,
+        desc: "A double shot of our darkest roast, engineered for maximum clarity and focus.",
+        img: "https://images.unsplash.com/photo-1510591509098-f4fdc6d0ff04?w=400&q=80"
+      },
+      {
+        id: 3, name: "Masala Chai", cat: "Tea", price: 10,
+        desc: "Spiced black tea simmered with milk. A warm, aromatic alternative.",
+        img: "https://images.unsplash.com/photo-1544787219-7f47ccb76574?w=400&q=80"
+      },
+      {
+        id: 4, name: "Classic Burger", cat: "Burgers", price: 10,
+        desc: "Smashed beef patty, sharp cheddar, house pickles, toasted brioche.",
+        img: "https://images.unsplash.com/photo-1565299507177-b0ac66763828?w=400&q=80"
+      },
+      {
+        id: 5, name: "Crispy Fries", cat: "Fries", price: 10,
+        desc: "Double-fried shoestring potatoes with sea salt and rosemary dust.",
+        img: "https://images.unsplash.com/photo-1573080496219-bb080dd4f877?w=400&q=80"
+      },
+      {
+        id: 6, name: "Cold Brew", cat: "Coffee", price: 12,
+        desc: "12-hour slow-steeped Colombian beans. Served over obsidian ice.",
+        img: "https://images.unsplash.com/photo-1461023058943-07fcbe16d735?w=400&q=80"
+      },
+      {
+        id: 7, name: "Cappuccino", cat: "Coffee", price: 11,
+        desc: "Silky microfoam over a bold ristretto pull. Tactile, cinematic, precise.",
+        img: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?w=400&q=80"
+      },
+      {
+        id: 8, name: "Smoky Fries", cat: "Fries", price: 12,
+        desc: "Shoestring fries dusted with smoked paprika, garlic, and Parmesan.",
+        img: "https://images.unsplash.com/photo-1518013431117-eb1465fa5752?w=400&q=80"
+      }
+    ];
 
-    // Mobile Menu Toggle
+    // ==========================================
+    // STATE & DOM ELEMENTS
+    // ==========================================
+    let cart = [];
+
+    // UI Elements
+    const menuGrid = document.getElementById('menu-grid');
+    const filterTabs = document.querySelectorAll('.tab');
+    const cartSidebar = document.getElementById('cart-sidebar');
+    const cartOverlay = document.getElementById('cart-overlay');
+    const closeCartBtn = document.getElementById('close-cart-btn');
+    const orderBtns = document.querySelectorAll('.order-now-btn');
+    const cartBadges = document.querySelectorAll('.cart-badge');
+    const cartItemsContainer = document.getElementById('cart-items');
+    const cartEmptyState = document.getElementById('cart-empty-state');
+    const cartSubtotal = document.getElementById('cart-subtotal');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    const toast = document.getElementById('toast');
+
+    // Mobile Nav
     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
     const mobileMenu = document.getElementById('mobile-menu');
     const menuIcon = document.getElementById('menu-icon');
     const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
 
-    mobileMenuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-      if (mobileMenu.classList.contains('hidden')) {
-        menuIcon.textContent = 'menu';
-      } else {
-        menuIcon.textContent = 'close';
-      }
-    });
+    // ==========================================
+    // UI BEHAVIORS (Nav, Scroll, Animations)
+    // ==========================================
 
-    // Close mobile menu on link click
+    // Mobile Menu
+    mobileMenuBtn.addEventListener('click', () => {
+      if(typeof playClick === 'function') playClick();
+      mobileMenu.classList.toggle('hidden');
+      menuIcon.textContent = mobileMenu.classList.contains('hidden') ? 'menu' : 'close';
+    });
     mobileNavLinks.forEach(link => {
       link.addEventListener('click', () => {
         mobileMenu.classList.add('hidden');
@@ -537,108 +763,236 @@
       });
     });
 
-    // --- Data ---
-    const MENU = [
-      { id:1, name:"MindKick Espresso",  cat:"Coffee",  price:10, desc:"Double shot, darkest roast. Engineered for maximum clarity and focus.",        emoji:"☕" },
-      { id:2, name:"Masala Chai",         cat:"Tea",     price:10, desc:"Spiced black tea simmered with milk. A warm, aromatic alternative.",             emoji:"🍵" },
-      { id:3, name:"Classic Burger",      cat:"Burgers", price:10, desc:"Smashed beef patty, sharp cheddar, house pickles, toasted brioche.",             emoji:"🍔" },
-      { id:4, name:"Crispy Fries",        cat:"Fries",   price:10, desc:"Double-fried shoestring potatoes with sea salt and rosemary dust.",              emoji:"🍟" },
-      { id:5, name:"Combo Deal",          cat:"Combos",  price:25, desc:"Burger + fries + MindKick espresso. Perfectly balanced for the late-night grind.",emoji:"🎯", featured:true },
-      { id:6, name:"Cold Brew",           cat:"Coffee",  price:12, desc:"12-hour slow-steeped Colombian beans. Served over obsidian ice.",                emoji:"🧊" },
-      { id:7, name:"Cappuccino",          cat:"Coffee",  price:11, desc:"Silky microfoam over a bold ristretto pull. Tactile, cinematic, precise.",       emoji:"☕" },
-      { id:8, name:"Smoky Fries",         cat:"Fries",   price:12, desc:"Shoestring fries dusted with smoked paprika, garlic, and Parmesan.",             emoji:"🍟" },
-    ];
-
-    // --- State ---
-    let cart = [];
-
-    // --- DOM Elements ---
-    const menuGrid = document.getElementById('menu-grid');
-    const filterBtns = document.querySelectorAll('.filter-btn');
-    const navLinks = document.querySelectorAll('.nav-link');
-    const sections = document.querySelectorAll('section');
-    const orderBtns = [document.getElementById('order-now-btn'), document.getElementById('mobile-order-now-btn')];
-    const cartSidebar = document.getElementById('cart-sidebar');
-    const cartOverlay = document.getElementById('cart-overlay');
-    const closeCartBtn = document.getElementById('close-cart-btn');
-    const cartBadge = document.getElementById('cart-badge');
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartEmptyState = document.getElementById('cart-empty-state');
-    const cartSubtotal = document.getElementById('cart-subtotal');
-    const checkoutBtn = document.getElementById('checkout-btn');
-    const toast = document.getElementById('toast');
-    const contactForm = document.getElementById('contact-form');
-    const formMsg = document.getElementById('form-msg');
-
-    // --- Render Menu ---
-    function renderMenu(category = 'All') {
-      menuGrid.innerHTML = '';
-      const filtered = category === 'All' ? MENU : MENU.filter(item => item.cat === category);
-
-      filtered.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.className = `glass p-6 rounded-3xl flex flex-col justify-between transition-all duration-300 transform translate-y-2 opacity-0 ${item.featured ? 'lg:col-span-2 bg-gradient-to-br from-surface-high to-surface-low border-primary/20' : ''}`;
-
-        // Staggered entry animation for filtering
-        setTimeout(() => {
-          card.classList.remove('translate-y-2', 'opacity-0');
-        }, index * 30);
-
-        card.innerHTML = `
-          <div class="flex items-start gap-4 mb-6">
-            <div class="w-14 h-14 rounded-full bg-surface-highest flex items-center justify-center text-3xl shadow-[0_0_15px_rgba(255,186,63,0.1)] border border-outline-var/30 shrink-0">
-              ${item.emoji}
-            </div>
-            <div>
-              <h3 class="font-sora font-semibold text-lg ${item.featured ? 'text-xl text-primary' : 'text-on-surface'}">${item.name}</h3>
-              <p class="font-sora font-extrabold text-tertiary mt-1">$${item.price}</p>
-            </div>
-          </div>
-          <p class="font-inter text-on-surface-var text-sm mb-6 flex-1">${item.desc}</p>
-          <button class="btn-secondary rounded-full px-6 py-2.5 font-sora font-semibold text-sm w-full md:w-auto self-start relative overflow-hidden group" onclick="addToCart(${item.id}, this)">
-            <span class="relative z-10 flex items-center justify-center gap-2">Add to Order <span class="material-symbols-outlined text-sm">add</span></span>
-          </button>
-        `;
-        menuGrid.appendChild(card);
+    // Active Nav Link on Scroll
+    const sectionsArr = ['menu','about','find-us'].map(id => document.getElementById(id));
+    window.addEventListener('scroll', () => {
+      let active = '';
+      sectionsArr.forEach(s => {
+        if(s && window.scrollY >= s.offsetTop - 120) active = s.id;
       });
-    }
-
-    // Initial render
-    renderMenu();
-
-    // Filter Logic
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        // Reset styles
-        filterBtns.forEach(b => {
-          b.style.background = 'transparent';
-          b.style.color = 'var(--on-surface-var)';
-          b.style.boxShadow = 'none';
-          b.classList.remove('text-primary');
-        });
-
-        // Apply active styles
-        btn.style.background = 'var(--surface-high)';
-        btn.style.color = 'var(--primary)';
-        btn.style.boxShadow = '0 0 15px rgba(255,186,63,0.2)';
-
-        const cat = btn.getAttribute('data-cat');
-        renderMenu(cat);
-        playClickSound(); // defined in sound section
+      document.querySelectorAll('.nav-link').forEach(l => {
+        const isActive = l.dataset.section === active;
+        l.style.color = isActive ? 'var(--primary)' : 'var(--on-surface-var)';
+        l.style.borderBottom = isActive ? '2px solid var(--tertiary)' : '2px solid transparent';
       });
     });
 
-    // --- Cart Logic ---
-    function updateCartUI() {
-      // Update Badge
-      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-      cartBadge.textContent = totalItems;
-      if (totalItems > 0) {
-        cartBadge.classList.remove('hidden');
-        cartBadge.classList.add('scale-100');
+    // IntersectionObserver for Fade-in Elements
+    const scrollObs = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if(e.isIntersecting){
+          e.target.style.opacity = '1';
+          e.target.style.transform = 'translateY(0)';
+
+          // Trigger Count Up if applicable
+          const statNum = e.target.querySelector('.stat-num');
+          if (statNum && !statNum.classList.contains('counted')) {
+            countUp(statNum, parseInt(statNum.dataset.target), 1500);
+            statNum.classList.add('counted');
+          }
+
+          scrollObs.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll('.fade-in').forEach(el => scrollObs.observe(el));
+
+    // Count Up Animation helper
+    function countUp(el, target, duration = 1500){
+      const start = Date.now();
+      const tick = () => {
+        const progress = Math.min((Date.now()-start)/duration, 1);
+        const ease = 1 - Math.pow(1-progress, 3); // cubic ease out
+        el.textContent = Math.floor(ease * target);
+        if(progress < 1) requestAnimationFrame(tick);
+      };
+      tick();
+    }
+
+    // Contact Form Logic
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+        const formMsg = document.getElementById('form-msg');
+        contactForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+
+          const name = document.getElementById('name').value;
+          const email = document.getElementById('email').value;
+          const message = document.getElementById('message').value;
+
+          if(name && email && message) {
+            formMsg.textContent = "Message sent! We'll get back to you soon. ☕";
+            formMsg.classList.remove('opacity-0');
+            formMsg.classList.remove('text-red-400');
+            contactForm.reset();
+            setTimeout(() => formMsg.classList.add('opacity-0'), 4000);
+            if(typeof playClick === 'function') playClick();
+          } else {
+            formMsg.textContent = "Please fill all fields.";
+            formMsg.classList.add('text-red-400');
+            formMsg.classList.remove('opacity-0');
+          }
+        });
+    }
+
+    // ==========================================
+    // RENDER MENU
+    // ==========================================
+    function renderMenu() {
+      menuGrid.innerHTML = '';
+
+      MENU.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.className = `menu-item fade-in transition-all duration-500 ease-out ${item.featured ? 'lg:col-span-3' : ''}`;
+        card.dataset.cat = item.cat;
+        card.style.transitionDelay = `${index * 50}ms`;
+
+        if (item.featured) {
+          card.innerHTML = `
+            <div class="featured-card group">
+              <div class="relative w-full h-[200px] lg:h-full">
+                <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover">
+                <div class="absolute top-4 left-4 bg-tertiary-dk/90 text-on-surface font-sora font-bold text-[10px] tracking-widest px-3 py-1 rounded-full shadow-lg backdrop-blur-md border border-tertiary/20">MOST POPULAR</div>
+              </div>
+              <div class="p-6 lg:p-8 flex flex-col">
+                <div class="flex justify-between items-start mb-4">
+                  <h3 class="font-sora font-bold text-[28px] lg:text-[36px] leading-tight text-on-surface">${item.name}</h3>
+                  <span class="font-sora font-extrabold text-[28px] lg:text-[36px] text-tertiary leading-tight">₹${item.price}</span>
+                </div>
+                <p class="font-inter text-on-surface-var text-[15px] leading-relaxed mb-8 flex-1">${item.desc}</p>
+                <button class="btn-primary w-full text-base py-4" onclick="addToCart(${item.id}, event)">Add to Order</button>
+              </div>
+            </div>
+          `;
+        } else {
+          card.innerHTML = `
+            <div class="menu-card h-full group">
+              <img src="${item.img}" alt="${item.name}" class="menu-card-photo">
+              <div class="menu-card-body">
+                <div class="flex justify-between items-start mb-2">
+                  <h3 class="menu-card-name">${item.name}</h3>
+                  <span class="menu-card-price">₹${item.price}</span>
+                </div>
+                <p class="menu-card-desc">${item.desc}</p>
+                <button class="btn-secondary w-full" onclick="addToCart(${item.id}, event)">Add to Order</button>
+              </div>
+            </div>
+          `;
+        }
+        menuGrid.appendChild(card);
+      });
+
+      // Trigger observers for new items
+      document.querySelectorAll('.menu-item.fade-in').forEach(el => scrollObs.observe(el));
+    }
+
+    // Initial Render
+    renderMenu();
+
+    // ==========================================
+    // FILTER LOGIC
+    // ==========================================
+    filterTabs.forEach(tab => {
+      tab.addEventListener('click', (e) => {
+        // Play click sound if initialized
+        if(typeof playClick === 'function') playClick();
+
+        // Active styling
+        filterTabs.forEach(t => t.classList.remove('active'));
+        e.target.classList.add('active');
+
+        const cat = e.target.dataset.cat;
+
+        document.querySelectorAll('.menu-item').forEach(el => {
+          const match = cat === 'All' || el.dataset.cat === cat;
+          el.style.opacity = match ? '1' : '0';
+          el.style.transform = match ? 'translateY(0)' : 'translateY(12px)';
+          el.style.pointerEvents = match ? 'auto' : 'none';
+          setTimeout(() => {
+            el.style.display = match ? '' : 'none';
+          }, match ? 0 : 250);
+        });
+      });
+    });
+
+    // ==========================================
+    // CART LOGIC
+    // ==========================================
+    window.addToCart = function(id, event) {
+      if(typeof playClick === 'function') playClick();
+
+      const item = MENU.find(m => m.id === id);
+      const existing = cart.find(c => c.id === id);
+
+      if (existing) {
+        existing.qty++;
       } else {
-        cartBadge.classList.add('hidden');
+        cart.push({ ...item, qty: 1 });
       }
+
+      // Micro-interaction: Button bump
+      const btn = event.currentTarget;
+      btn.style.transform = 'scale(1.05)';
+      setTimeout(() => btn.style.transform = '', 150);
+
+      // Micro-interaction: Floating +1
+      const rect = btn.getBoundingClientRect();
+      const floatEl = document.createElement('div');
+      floatEl.textContent = '+1';
+      floatEl.style.cssText = `
+        position:fixed; pointer-events:none; z-index:9999;
+        color:#ffba3f; font-weight:800; font-size:18px;
+        font-family:'Sora',sans-serif;
+        left:${rect.left + rect.width / 2}px;
+        top:${rect.top}px;
+        transition:all 0.6s cubic-bezier(0.2,0.8,0.3,1);
+        opacity:1; text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+      `;
+      document.body.appendChild(floatEl);
+
+      requestAnimationFrame(() => {
+        floatEl.style.top = (parseInt(floatEl.style.top) - 60) + 'px';
+        floatEl.style.opacity = '0';
+      });
+      setTimeout(() => floatEl.remove(), 700);
+
+      // Micro-interaction: Bounce cart badge
+      cartBadges.forEach(badge => {
+        badge.classList.remove('badge-pop');
+        // trigger reflow
+        void badge.offsetWidth;
+        badge.classList.add('badge-pop');
+      });
+
+      updateCartUI();
+    };
+
+    window.updateQty = function(id, delta) {
+      if(typeof playClick === 'function') playClick();
+      const item = cart.find(c => c.id === id);
+      if (item) {
+        item.qty += delta;
+        if (item.qty <= 0) {
+          cart = cart.filter(c => c.id !== id);
+        }
+        updateCartUI();
+      }
+    };
+
+    window.removeFromCart = function(id) {
+      if(typeof playClick === 'function') playClick();
+      cart = cart.filter(c => c.id !== id);
+      updateCartUI();
+    };
+
+    function updateCartUI() {
+      // Update badges
+      const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
+      cartBadges.forEach(badge => {
+        badge.textContent = totalItems;
+        badge.style.display = totalItems > 0 ? 'flex' : 'none';
+      });
 
       // Update Sidebar Items
       if (cart.length === 0) {
@@ -651,18 +1005,18 @@
 
         cart.forEach(item => {
           const itemEl = document.createElement('div');
-          itemEl.className = 'cart-item glass p-4 rounded-xl flex items-center justify-between gap-3 mb-3';
+          itemEl.className = 'cart-item bg-surface-high border border-primary/10 p-4 rounded-xl flex items-center justify-between gap-3 mb-3';
           itemEl.innerHTML = `
             <div class="flex-1">
-              <p class="font-sora font-semibold text-sm text-on-surface">${item.name}</p>
-              <p class="font-sora font-bold text-tertiary text-sm mt-1">$${item.price}</p>
+              <p class="font-inter font-semibold text-sm text-on-surface leading-tight">${item.name}</p>
+              <p class="font-sora font-bold text-tertiary text-sm mt-1">₹${item.price}</p>
             </div>
-            <div class="flex items-center gap-2 bg-surface-highest rounded-full px-2 py-1 border border-outline-var/30">
-              <button class="w-6 h-6 flex items-center justify-center text-on-surface-var hover:text-primary transition-colors" onclick="updateQty(${item.id}, -1)">−</button>
+            <div class="flex items-center gap-1 bg-surface-highest rounded-full p-1 border border-outline/30">
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface hover:text-primary hover:bg-surface-high transition-colors text-lg" onclick="updateQty(${item.id}, -1)">−</button>
               <span class="font-inter font-semibold text-sm w-4 text-center">${item.qty}</span>
-              <button class="w-6 h-6 flex items-center justify-center text-on-surface-var hover:text-primary transition-colors" onclick="updateQty(${item.id}, 1)">+</button>
+              <button class="w-7 h-7 rounded-full flex items-center justify-center text-on-surface hover:text-primary hover:bg-surface-high transition-colors text-lg" onclick="updateQty(${item.id}, 1)">+</button>
             </div>
-            <button class="text-on-surface-var hover:text-red-400 transition-colors shrink-0" onclick="removeFromCart(${item.id})">
+            <button class="text-on-surface-var hover:text-red-400 transition-colors p-1" onclick="removeFromCart(${item.id})">
               <span class="material-symbols-outlined text-xl">close</span>
             </button>
           `;
@@ -673,312 +1027,160 @@
 
       // Update Subtotal
       const subtotal = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      cartSubtotal.textContent = `$${subtotal}`;
+      cartSubtotal.textContent = `₹${subtotal}`;
     }
 
-    window.addToCart = function(id, btnElement) {
-      const product = MENU.find(m => m.id === id);
-      const existing = cart.find(c => c.id === id);
-
-      if (existing) {
-        existing.qty++;
-      } else {
-        cart.push({ ...product, qty: 1 });
-      }
-
-      // Button visual feedback
-      btnElement.style.transform = 'scale(1.15)';
-      setTimeout(() => btnElement.style.transform = 'scale(1)', 150);
-
-      // +1 floating animation
-      const rect = btnElement.getBoundingClientRect();
-      const floatEl = document.createElement('div');
-      floatEl.textContent = '+1';
-      floatEl.className = 'fixed font-sora font-bold text-primary z-[100] transition-all duration-700 pointer-events-none';
-      floatEl.style.left = `${rect.left + rect.width / 2}px`;
-      floatEl.style.top = `${rect.top}px`;
-      document.body.appendChild(floatEl);
-
-      // Animate up and towards cart badge (approx top right)
-      requestAnimationFrame(() => {
-        floatEl.style.transform = `translate(${window.innerWidth - rect.left - 100}px, -${rect.top - 20}px) scale(0.5)`;
-        floatEl.style.opacity = '0';
-      });
-      setTimeout(() => floatEl.remove(), 700);
-
-      // Cart badge bounce
-      cartBadge.classList.remove('scale-100');
-      cartBadge.classList.add('scale-150');
-      setTimeout(() => {
-        cartBadge.classList.remove('scale-150');
-        cartBadge.classList.add('scale-100');
-      }, 300);
-
-      updateCartUI();
-      playClickSound();
-    };
-
-    window.updateQty = function(id, delta) {
-      const item = cart.find(c => c.id === id);
-      if (item) {
-        item.qty += delta;
-        if (item.qty <= 0) {
-          cart = cart.filter(c => c.id !== id);
-        }
-        updateCartUI();
-        playClickSound();
-      }
-    };
-
-    window.removeFromCart = function(id) {
-      cart = cart.filter(c => c.id !== id);
-      updateCartUI();
-      playClickSound();
-    };
-
-    // Cart Sidebar Toggles
+    // Sidebar Toggles
     function openCart() {
-      cartSidebar.classList.remove('translate-x-full');
+      if(typeof playClick === 'function') playClick();
+      cartSidebar.classList.add('open');
       cartOverlay.classList.remove('hidden');
-      // small delay to allow display:block to apply before opacity transition
       setTimeout(() => cartOverlay.classList.remove('opacity-0'), 10);
-      document.body.style.overflow = 'hidden';
+      document.body.style.overflow = 'hidden'; // prevent scrolling behind
       if (!mobileMenu.classList.contains('hidden')) {
         mobileMenuBtn.click(); // close mobile menu if open
       }
-      playClickSound();
     }
 
     function closeCart() {
-      cartSidebar.classList.add('translate-x-full');
+      if(typeof playClick === 'function') playClick();
+      cartSidebar.classList.remove('open');
       cartOverlay.classList.add('opacity-0');
       setTimeout(() => cartOverlay.classList.add('hidden'), 300);
       document.body.style.overflow = '';
-      playClickSound();
     }
 
     orderBtns.forEach(btn => btn.addEventListener('click', openCart));
     closeCartBtn.addEventListener('click', closeCart);
     cartOverlay.addEventListener('click', closeCart);
 
-    // Checkout
+    // Checkout Action
     checkoutBtn.addEventListener('click', () => {
+      if(typeof playClick === 'function') playClick();
       closeCart();
       cart = [];
       updateCartUI();
 
-      // Show toast
       toast.classList.remove('translate-y-20', 'opacity-0');
       setTimeout(() => {
         toast.classList.add('translate-y-20', 'opacity-0');
       }, 4000);
-      playClickSound();
     });
 
-    // --- Active Nav Link on Scroll ---
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (pageYOffset >= (sectionTop - sectionHeight / 3)) {
-          current = section.getAttribute('id');
-        }
-      });
+    // ==========================================
+    // AMBIENT SOUND (Web Audio API)
+    // ==========================================
+    let AudioCtx, noiseNode, oscNode, noiseGain, oscGain, soundEnabled = false;
+    let audioInitialized = false;
 
-      navLinks.forEach(link => {
-        link.classList.remove('text-primary', 'border-primary');
-        link.classList.add('border-transparent');
-        if (link.getAttribute('href').includes(current)) {
-          link.classList.add('text-primary', 'border-primary');
-          link.classList.remove('border-transparent');
-        }
-      });
-    });
+    function initAudio(){
+      if(audioInitialized) return;
+      audioInitialized = true;
+      AudioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
-    // --- Intersection Observers for Scroll Animations ---
-    const scrollObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.remove('opacity-0', 'translate-y-8');
-
-          // Number Counter Animation
-          const numEls = entry.target.querySelectorAll('.stat-num');
-          numEls.forEach(el => {
-            if (!el.classList.contains('counted')) {
-              const target = parseFloat(el.getAttribute('data-target'));
-              const isFloat = el.getAttribute('data-float') === 'true';
-              let start = 0;
-              const duration = 2000; // ms
-              const startTimestamp = performance.now();
-
-              const step = (timestamp) => {
-                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-                // ease out quad
-                const easeProgress = progress * (2 - progress);
-                const current = easeProgress * target;
-
-                if (isFloat) {
-                  el.textContent = current.toFixed(1);
-                } else {
-                  el.textContent = Math.floor(current);
-                }
-
-                if (progress < 1) {
-                  window.requestAnimationFrame(step);
-                } else {
-                  el.textContent = isFloat ? target.toFixed(1) : target;
-                }
-              };
-              window.requestAnimationFrame(step);
-              el.classList.add('counted');
-            }
-          });
-          scrollObserver.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.1 });
-
-    document.querySelectorAll('.scroll-anim').forEach(el => scrollObserver.observe(el));
-
-    // --- Contact Form ---
-    contactForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-
-      const name = document.getElementById('name').value;
-      const email = document.getElementById('email').value;
-      const message = document.getElementById('message').value;
-
-      if(name && email && message) {
-        formMsg.textContent = "Message sent! We'll get back to you soon. ☕";
-        formMsg.classList.remove('opacity-0');
-        formMsg.classList.remove('text-red-400');
-        contactForm.reset();
-        setTimeout(() => formMsg.classList.add('opacity-0'), 4000);
-        playClickSound();
-      } else {
-        formMsg.textContent = "Please fill all fields.";
-        formMsg.classList.add('text-red-400');
-        formMsg.classList.remove('opacity-0');
-      }
-    });
-
-    // --- Ambient Sound System ---
-    let audioCtx;
-    let noiseGain;
-    let oscGain;
-    let isSoundInitialized = false;
-    let isMuted = true;
-
-    const soundToggle = document.getElementById('sound-toggle');
-    const soundTooltip = document.getElementById('sound-tooltip');
-
-    function initSound() {
-      if (isSoundInitialized) return;
-
-      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
-      // 1. COFFEE SHOP HISS (brown noise)
-      const bufferSize = audioCtx.sampleRate * 2;
-      const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-      const data = buffer.getChannelData(0);
-      let lastOut = 0;
-      for (let i = 0; i < bufferSize; i++) {
-        const white = Math.random() * 2 - 1;
-        data[i] = (lastOut + (0.02 * white)) / 1.02;
-        lastOut = data[i];
+      // Brown noise (coffee shop hiss)
+      const bufSize = AudioCtx.sampleRate * 3;
+      const buf = AudioCtx.createBuffer(1, bufSize, AudioCtx.sampleRate);
+      const data = buf.getChannelData(0);
+      let last = 0;
+      for(let i=0; i<bufSize; i++){
+        const w = Math.random()*2-1;
+        data[i] = (last + 0.02*w)/1.02;
+        last = data[i];
         data[i] *= 3.5;
       }
-
-      const noiseSource = audioCtx.createBufferSource();
-      noiseSource.buffer = buffer;
-      noiseSource.loop = true;
-      noiseGain = audioCtx.createGain();
+      noiseNode = AudioCtx.createBufferSource();
+      noiseNode.buffer = buf;
+      noiseNode.loop = true;
+      noiseGain = AudioCtx.createGain();
       noiseGain.gain.value = 0; // start muted
-      noiseSource.connect(noiseGain).connect(audioCtx.destination);
-      noiseSource.start();
+      noiseNode.connect(noiseGain).connect(AudioCtx.destination);
+      noiseNode.start();
 
-      // 2. AMBIENT TONE (60Hz hum)
-      const osc = audioCtx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = 60;
-      oscGain = audioCtx.createGain();
-      oscGain.gain.value = 0; // start muted
-      osc.connect(oscGain).connect(audioCtx.destination);
-      osc.start();
-
-      isSoundInitialized = true;
+      // Low 60Hz hum
+      oscNode = AudioCtx.createOscillator();
+      oscNode.type = 'sine';
+      oscNode.frequency.value = 60;
+      oscGain = AudioCtx.createGain();
+      oscGain.gain.value = 0;
+      oscNode.connect(oscGain).connect(AudioCtx.destination);
+      oscNode.start();
     }
 
-    // Initialize on first user interaction anywhere
-    document.body.addEventListener('click', () => {
-      initSound();
-    }, { once: true, capture: true });
+    function toggleSound(){
+      if(!audioInitialized) initAudio();
+
+      if (AudioCtx.state === 'suspended') {
+        AudioCtx.resume();
+      }
+
+      soundEnabled = !soundEnabled;
+      if(noiseGain) noiseGain.gain.setTargetAtTime(soundEnabled ? 0.028 : 0, AudioCtx.currentTime, 0.5);
+      if(oscGain)   oscGain.gain.setTargetAtTime(soundEnabled ? 0.007 : 0, AudioCtx.currentTime, 0.5);
+      soundBtn.textContent = soundEnabled ? '🔊' : '🔇';
+      soundBtn.title = soundEnabled ? 'Mute ambient sound' : 'Enable ambient sound';
+    }
+
+    window.playClick = function(){
+      if(!audioInitialized || !AudioCtx) return;
+      if (AudioCtx.state === 'suspended') {
+        AudioCtx.resume();
+      }
+      const o = AudioCtx.createOscillator();
+      const g = AudioCtx.createGain();
+      o.connect(g).connect(AudioCtx.destination);
+      o.frequency.value = 900; o.type = 'sine';
+      g.gain.setValueAtTime(0.08, AudioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, AudioCtx.currentTime + 0.05);
+      o.start(); o.stop(AudioCtx.currentTime + 0.05);
+    }
+
+    // Initialize on first interaction (capture phase to catch earlier events)
+    document.addEventListener('click', () => { if(!audioInitialized) initAudio(); }, { once: true, capture: true });
+
+    // Sound button (fixed bottom-right)
+    const soundBtn = document.createElement('button');
+    soundBtn.textContent = '🔇';
+    soundBtn.title = 'Enable ambient sound';
+    soundBtn.style.cssText = `
+      position:fixed; bottom:24px; right:24px; z-index:999;
+      width:48px; height:48px; border-radius:50%;
+      background:rgba(28,28,25,0.85); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+      border:1px solid rgba(255,186,63,0.2);
+      color:#ffba3f; font-size:20px; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      transition:all 0.2s; box-shadow:0 4px 16px rgba(0,0,0,0.4);
+    `;
+    soundBtn.addEventListener('click', toggleSound);
+    document.body.appendChild(soundBtn);
 
     // Show tooltip on load
-    setTimeout(() => {
-      soundTooltip.classList.remove('opacity-0');
-      setTimeout(() => {
-        soundTooltip.classList.add('opacity-0');
-      }, 4000);
-    }, 1000);
+    const tooltip = document.createElement('div');
+    tooltip.textContent = 'Click for ambient sound ☕';
+    tooltip.style.cssText = `
+      position:fixed; bottom:80px; right:16px; z-index:999;
+      background:rgba(28,22,14,0.9); border:1px solid rgba(255,186,63,0.2);
+      color:#c4a882; font-size:13px; padding:8px 14px; border-radius:10px;
+      pointer-events:none; opacity:1; transition:opacity 0.5s;
+      font-family:'Inter',sans-serif;
+    `;
+    document.body.appendChild(tooltip);
+    setTimeout(() => tooltip.style.opacity = '0', 4000);
+    setTimeout(() => tooltip.remove(), 4600);
 
-    // Toggle Sound Button
-    soundToggle.addEventListener('click', (e) => {
-      e.stopPropagation(); // prevent body click handler if it hasn't fired yet
-      initSound(); // ensure initialized
-
-      // Resume context if suspended (browser policy)
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      isMuted = !isMuted;
-
-      if (isMuted) {
-        noiseGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
-        oscGain.gain.setTargetAtTime(0, audioCtx.currentTime, 0.1);
-        soundToggle.textContent = '🔇';
-      } else {
-        noiseGain.gain.setTargetAtTime(0.03, audioCtx.currentTime, 0.1);
-        oscGain.gain.setTargetAtTime(0.008, audioCtx.currentTime, 0.1);
-        soundToggle.textContent = '🔊';
-      }
-      playClickSound();
-    });
-
-    // Global Click Sound Function
-    window.playClickSound = function() {
-      if (!isSoundInitialized || !audioCtx || isMuted) return;
-
-      // Resume context if suspended
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-
-      const o = audioCtx.createOscillator();
-      const g = audioCtx.createGain();
-      o.connect(g).connect(audioCtx.destination);
-      o.frequency.value = 800;
-      g.gain.setValueAtTime(0.1, audioCtx.currentTime);
-      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.06);
-      o.start();
-      o.stop(audioCtx.currentTime + 0.06);
-    };
-
-    // Attach click sound to all buttons
-    document.querySelectorAll('button, a').forEach(el => {
-      if(el !== soundToggle && !el.hasAttribute('onclick')) {
-        el.addEventListener('click', () => {
-          if (!el.getAttribute('href') || el.getAttribute('href').startsWith('#')) {
-            playClickSound();
-          }
-        });
+    // Call playClick() on every button click (except our manually handled ones like menu filter where it's called inline)
+    document.addEventListener('click', e => {
+      if(e.target.closest('button, .tab, .btn-primary, .btn-secondary') && e.target.closest('button') !== soundBtn) {
+         // only fire if not already firing manually to avoid double click sound
+         if (!e.target.closest('.tab') && !e.target.closest('[onclick]')) {
+             playClick();
+         }
       }
     });
 
-    // --- Three.js Logic ---
-    // Check WebGL support
+    // ==========================================
+    // THREE.JS IMPLEMENTATION (Cinematic Dark Kiosk)
+    // ==========================================
     function isWebGLAvailable() {
       try {
         const canvas = document.createElement('canvas');
@@ -989,365 +1191,323 @@
     }
 
     if (!isWebGLAvailable()) {
-      console.warn("WebGL not supported. Displaying fallbacks.");
-      // The map has a built-in fallback. We could add basic text fallbacks to hero and about here if needed.
+      document.getElementById('hero-fallback').classList.remove('hidden');
+      document.getElementById('about-fallback').classList.remove('hidden');
+      document.getElementById('map-fallback').classList.remove('hidden');
     } else {
 
-      // Shared Kiosk Builder Function
-      function buildKiosk(scene) {
-        const group = new THREE.Group();
+      // Material Palette
+      const MAT = {
+        wood_dark:  new THREE.MeshStandardMaterial({ color: 0x1a0c06, roughness: 0.85, metalness: 0.05 }),
+        wood_med:   new THREE.MeshStandardMaterial({ color: 0x2d1509, roughness: 0.8,  metalness: 0.0  }),
+        wood_warm:  new THREE.MeshStandardMaterial({ color: 0x3d200e, roughness: 0.75, metalness: 0.0  }),
+        roof_dark:  new THREE.MeshStandardMaterial({ color: 0x111109, roughness: 0.9,  metalness: 0.1  }),
+        sign_bg:    new THREE.MeshStandardMaterial({ color: 0x1a1207, roughness: 0.6,  metalness: 0.2, emissive: 0xffa040, emissiveIntensity: 0.15 }),
+        glass_win:  new THREE.MeshStandardMaterial({ color: 0xffd090, transparent: true, opacity: 0.25, roughness: 0.0, metalness: 0.1, emissive: 0xffa030, emissiveIntensity: 0.6 }),
+        floor_tile: new THREE.MeshStandardMaterial({ color: 0x1c1510, roughness: 0.9,  metalness: 0.05 }),
+        counter:    new THREE.MeshStandardMaterial({ color: 0x251408, roughness: 0.7,  metalness: 0.0  }),
+        plant_pot:  new THREE.MeshStandardMaterial({ color: 0x5c2f1a, roughness: 0.8,  metalness: 0.0  }),
+        plant_leaf: new THREE.MeshStandardMaterial({ color: 0x1a3d15, roughness: 0.9,  metalness: 0.0  }),
+        chalk:      new THREE.MeshStandardMaterial({ color: 0x0d0d0b, roughness: 0.95, metalness: 0.0  }),
+        machine:    new THREE.MeshStandardMaterial({ color: 0x2a1f14, roughness: 0.5,  metalness: 0.6  }),
+        bulb:       new THREE.MeshStandardMaterial({ color: 0xffda80, emissive: 0xffaa30, emissiveIntensity: 2.0, roughness:0.3 }),
+        pillar:     new THREE.MeshStandardMaterial({ color: 0x160d05, roughness: 0.8,  metalness: 0.15 }),
+      };
 
-        // Kiosk Body
-        const bodyGeo = new THREE.BoxGeometry(2, 2.5, 2);
-        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x3a2418 });
-        const body = new THREE.Mesh(bodyGeo, bodyMat);
-        group.add(body);
-
-        // Counter
-        const counterGeo = new THREE.BoxGeometry(2.4, 0.2, 0.8);
-        const counterMat = new THREE.MeshStandardMaterial({ color: 0x5c3d2e });
-        const counter = new THREE.Mesh(counterGeo, counterMat);
-        counter.position.set(0, -0.45, 1.1); // Adjusted relative to body
-        group.add(counter);
-
-        // Roof
-        const roofGeo = new THREE.BoxGeometry(2.6, 0.15, 2.6);
-        const roofMat = new THREE.MeshStandardMaterial({ color: 0xdc743e });
-        const roof = new THREE.Mesh(roofGeo, roofMat);
-        roof.position.set(0, 1.325, 0);
-        group.add(roof);
-
-        // Roof Overhang
-        const overhangGeo = new THREE.BoxGeometry(2.6, 0.08, 0.6);
-        const overhang = new THREE.Mesh(overhangGeo, roofMat);
-        overhang.position.set(0, 1.3, 1.3);
-        group.add(overhang);
-
-        // Sign Board
-        const signGeo = new THREE.BoxGeometry(1.8, 0.5, 0.05);
-        const signMat = new THREE.MeshStandardMaterial({ color: 0xffb693 });
-        const sign = new THREE.Mesh(signGeo, signMat);
-        sign.position.set(0, 1.0, 1.025);
-
-        // Sign Text using CanvasTexture
-        const textCanvas = document.createElement('canvas');
-        textCanvas.width = 512;
-        textCanvas.height = 128;
-        const textCtx = textCanvas.getContext('2d');
-        textCtx.fillStyle = '#ffb693'; // match sign board color to blend if needed, but we'll cover the front
-        textCtx.fillRect(0, 0, textCanvas.width, textCanvas.height);
-        textCtx.fillStyle = '#1c1c19'; // dark text
-        textCtx.font = 'bold 80px "Sora", sans-serif';
-        textCtx.textAlign = 'center';
-        textCtx.textBaseline = 'middle';
-        textCtx.fillText('MINDKICK', textCanvas.width / 2, textCanvas.height / 2 + 5);
-
-        const textTexture = new THREE.CanvasTexture(textCanvas);
-        const textPlaneGeo = new THREE.PlaneGeometry(1.7, 0.4);
-        const textPlaneMat = new THREE.MeshBasicMaterial({ map: textTexture });
-        const textPlane = new THREE.Mesh(textPlaneGeo, textPlaneMat);
-        textPlane.position.set(0, 1.0, 1.051); // slightly in front of the sign board
-        group.add(sign);
-        group.add(textPlane);
-
-        // Windows
-        const winGeo = new THREE.BoxGeometry(0.6, 0.8, 0.05);
-        const winMat = new THREE.MeshStandardMaterial({ color: 0xa0c8e0, transparent: true, opacity: 0.4 });
-        const winL = new THREE.Mesh(winGeo, winMat);
-        winL.position.set(-0.5, 0.2, 1.01);
-        const winR = new THREE.Mesh(winGeo, winMat);
-        winR.position.set(0.5, 0.2, 1.01);
-        group.add(winL);
-        group.add(winR);
-
-        // Door (Back)
-        const doorGeo = new THREE.BoxGeometry(0.8, 1.8, 0.05);
-        const doorMat = new THREE.MeshStandardMaterial({ color: 0x2a1a0f });
-        const door = new THREE.Mesh(doorGeo, doorMat);
-        door.position.set(0, -0.35, -1.01);
-        group.add(door);
-
-        // Ground/Base
-        const groundGeo = new THREE.CircleGeometry(3, 32);
-        const groundMat = new THREE.MeshStandardMaterial({ color: 0x1c1c19 });
-        const ground = new THREE.Mesh(groundGeo, groundMat);
-        ground.rotation.x = -Math.PI / 2;
-        ground.position.y = -1.25;
-        group.add(ground);
-
-        // Stools
-        const stoolGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.6);
-        const stoolMat = new THREE.MeshStandardMaterial({ color: 0x5c3d2e });
-        [-0.6, 0, 0.6].forEach(x => {
-          const stool = new THREE.Mesh(stoolGeo, stoolMat);
-          stool.position.set(x, -0.95, 1.8);
-          group.add(stool);
-        });
-
-        // Menu Board
-        const menuBoardGeo = new THREE.BoxGeometry(0.8, 0.6, 0.04);
-        const menuBoardMat = new THREE.MeshStandardMaterial({ color: 0x2a1a0f });
-        const menuBoard = new THREE.Mesh(menuBoardGeo, menuBoardMat);
-        menuBoard.position.set(-0.8, 0.5, 1.02);
-        group.add(menuBoard);
-
-        // Plant Pot
-        const potGeo = new THREE.CylinderGeometry(0.15, 0.12, 0.3);
-        const potMat = new THREE.MeshStandardMaterial({ color: 0xdc743e });
-        const pot = new THREE.Mesh(potGeo, potMat);
-        pot.position.set(1.1, -1.1, 0.9);
-        const plantGeo = new THREE.SphereGeometry(0.2);
-        const plantMat = new THREE.MeshStandardMaterial({ color: 0x2d5a1b });
-        const plant = new THREE.Mesh(plantGeo, plantMat);
-        plant.position.set(1.1, -0.85, 0.9);
-        group.add(pot);
-        group.add(plant);
-
-        // String Lights
-        for(let i=0; i<8; i++) {
-          const t = i / 7;
-          const x = -1.5 + (t * 3);
-          const y = 1.6 - Math.pow(x, 2) * 0.1; // cosine curve approx
-          const z = 1.4;
-
-          const bulbGeo = new THREE.SphereGeometry(0.04);
-          const bulbMat = new THREE.MeshBasicMaterial({ color: 0xffba3f });
-          const bulb = new THREE.Mesh(bulbGeo, bulbMat);
-          bulb.position.set(x, y, z);
-          group.add(bulb);
-
-          if (i % 2 === 0) {
-            const light = new THREE.PointLight(0xffba3f, 0.3, 2);
-            light.position.set(x, y, z);
-            group.add(light);
-          }
-        }
-
-        scene.add(group);
-        return group;
+      function addBox(group, size, pos, mat){
+        const m = new THREE.Mesh(new THREE.BoxGeometry(...size), mat);
+        m.position.set(...pos);
+        m.castShadow = true;
+        m.receiveShadow = true;
+        group.add(m);
+        return m;
       }
 
-      function setupLighting(scene) {
-        scene.add(new THREE.AmbientLight(0xffe4c4, 0.4));
-        const keyLight = new THREE.PointLight(0xffba3f, 2.5, 8);
-        keyLight.position.set(2, 3, 3);
+      function buildKiosk(scene) {
+        const kioskGroup = new THREE.Group();
+
+        // BASE PLATFORM
+        addBox(kioskGroup, [4.4, 0.12, 4.4], [0, -1.56, 0], MAT.floor_tile);
+        addBox(kioskGroup, [4.8, 0.06, 4.8], [0, -1.62, 0], MAT.wood_dark);
+
+        // MAIN KIOSK BODY
+        addBox(kioskGroup, [3.2, 2.6, 0.14], [0, -0.15, -1.45], MAT.wood_dark); // Back
+        addBox(kioskGroup, [0.14, 2.6, 2.9], [-1.6, -0.15, 0], MAT.wood_dark);  // Left
+        addBox(kioskGroup, [0.14, 2.6, 2.9], [1.6, -0.15, 0], MAT.wood_dark);   // Right
+
+        // Interior warm glow plane
+        const interiorGlow = new THREE.Mesh(
+          new THREE.PlaneGeometry(2.8, 2.2),
+          new THREE.MeshStandardMaterial({ color: 0xff8820, emissive: 0xff6010, emissiveIntensity: 0.4, side: THREE.DoubleSide })
+        );
+        interiorGlow.position.set(0, -0.15, -1.3);
+        kioskGroup.add(interiorGlow);
+
+        // FRONT COUNTER
+        addBox(kioskGroup, [3.0, 0.14, 0.65], [0, -0.55, 1.0], MAT.counter);
+        addBox(kioskGroup, [3.0, 0.7, 0.12], [0, -0.95, 1.28], MAT.wood_med);
+        addBox(kioskGroup, [0.12, 0.7, 0.65], [-1.44, -0.95, 1.0], MAT.wood_med);
+        addBox(kioskGroup, [0.12, 0.7, 0.65], [1.44, -0.95, 1.0], MAT.wood_med);
+
+        // FRONT PILLARS
+        addBox(kioskGroup, [0.18, 2.6, 0.18], [-1.5, -0.15, 1.4], MAT.pillar);
+        addBox(kioskGroup, [0.18, 2.6, 0.18], [1.5, -0.15, 1.4], MAT.pillar);
+
+        // ROOF STRUCTURE
+        addBox(kioskGroup, [3.8, 0.18, 3.8], [0, 1.22, 0], MAT.roof_dark);
+        addBox(kioskGroup, [3.8, 0.08, 0.3], [0, 1.13, 2.05], MAT.roof_dark);
+        addBox(kioskGroup, [0.5, 0.3, 0.5], [0.6, 1.48, -0.5], MAT.wood_dark);
+        addBox(kioskGroup, [0.5, 0.3, 0.5], [-0.6, 1.48, -0.5], MAT.wood_dark);
+
+        // AWNING
+        addBox(kioskGroup, [3.5, 0.06, 0.6], [0, 0.9, 1.7], MAT.roof_dark);
+
+        // SIGN BOARD "MINDKICK"
+        addBox(kioskGroup, [2.0, 0.5, 0.08], [0, 0.7, 1.44], MAT.sign_bg);
+        const signCanvas = document.createElement('canvas');
+        signCanvas.width = 512; signCanvas.height = 128;
+        const sCtx = signCanvas.getContext('2d');
+        sCtx.fillStyle = '#1a1207';
+        sCtx.fillRect(0,0,512,128);
+        sCtx.font = 'bold 80px "Sora", sans-serif';
+        sCtx.fillStyle = '#ffffff';
+        sCtx.textAlign = 'center';
+        sCtx.textBaseline = 'middle';
+        sCtx.fillText('MINDKICK', 256, 64);
+        const signTex = new THREE.CanvasTexture(signCanvas);
+        const signPlane = new THREE.Mesh(
+          new THREE.PlaneGeometry(1.9, 0.44),
+          new THREE.MeshStandardMaterial({ map: signTex, emissive: 0xffffff, emissiveIntensity: 0.6, transparent: true })
+        );
+        signPlane.position.set(0, 0.7, 1.49);
+        kioskGroup.add(signPlane);
+
+        // COFFEE EQUIPMENT
+        addBox(kioskGroup, [0.45, 0.45, 0.35], [-0.5, -0.28, 0.3], MAT.machine);
+        addBox(kioskGroup, [0.45, 0.08, 0.35], [-0.5, 0.0, 0.3], MAT.machine);
+        addBox(kioskGroup, [0.25, 0.5, 0.25], [0.2, -0.3, 0.4], MAT.machine);
+        const cup = new THREE.Mesh(new THREE.CylinderGeometry(0.07, 0.055, 0.12, 12), MAT.counter);
+        cup.position.set(0.7, -0.47, 0.7);
+        kioskGroup.add(cup);
+
+        // CHALKBOARD SIGN
+        addBox(kioskGroup, [0.06, 0.7, 0.5], [-2.0, -1.05, 0.8], MAT.wood_med);
+        addBox(kioskGroup, [0.04, 0.55, 0.4], [-2.0, -0.65, 0.8], MAT.chalk);
+
+        // DECORATIVE PLANT
+        const pot = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.14, 0.32, 16), MAT.plant_pot);
+        pot.position.set(1.95, -1.4, 1.1);
+        kioskGroup.add(pot);
+        for(let i=0; i<5; i++){
+          const leaf = new THREE.Mesh(new THREE.SphereGeometry(0.1 + Math.random()*0.08, 8, 8), MAT.plant_leaf);
+          leaf.position.set(1.95 + (Math.random()-0.5)*0.25, -1.05 + Math.random()*0.35, 1.1 + (Math.random()-0.5)*0.25);
+          kioskGroup.add(leaf);
+        }
+        addBox(kioskGroup, [0.04, 0.55, 0.04], [1.95, -0.95, 1.1], MAT.plant_leaf);
+
+        // STRING LIGHTS
+        const stringLightPositions = [];
+        for(let i=0; i<10; i++){
+          const t = i / 9;
+          const x = -1.4 + t * 2.8;
+          const y = 1.05 + Math.sin(t * Math.PI) * (-0.12);
+          const z = 1.42;
+          stringLightPositions.push([x, y, z]);
+          const bulb = new THREE.Mesh(new THREE.SphereGeometry(0.04, 8, 8), MAT.bulb);
+          bulb.position.set(x, y, z);
+          kioskGroup.add(bulb);
+          if(i % 2 === 0){
+            const pl = new THREE.PointLight(0xffaa30, 0.6, 1.2);
+            pl.position.set(x, y, z);
+            kioskGroup.add(pl);
+          }
+        }
+        for(let i=0; i<stringLightPositions.length-1; i++){
+          const [x1,y1,z1] = stringLightPositions[i];
+          const [x2,y2,z2] = stringLightPositions[i+1];
+          const mid = new THREE.Vector3((x1+x2)/2, (y1+y2)/2, (z1+z2)/2);
+          const len = Math.sqrt((x2-x1)**2+(y2-y1)**2);
+          const wire = new THREE.Mesh(new THREE.BoxGeometry(len, 0.01, 0.01), new THREE.MeshBasicMaterial({color: 0x2a1f14}));
+          wire.position.set(mid.x, mid.y, mid.z);
+          wire.rotation.z = Math.atan2(y2-y1, x2-x1);
+          kioskGroup.add(wire);
+        }
+
+        scene.add(kioskGroup);
+        return kioskGroup;
+      }
+
+      function setupCinematicLighting(scene) {
+        scene.add(new THREE.AmbientLight(0x1a0e05, 1.2));
+
+        const keyLight = new THREE.PointLight(0xffb060, 4.5, 12);
+        keyLight.position.set(3, 4, 4);
+        keyLight.castShadow = true;
         scene.add(keyLight);
 
-        const fillLight = new THREE.PointLight(0xff6b35, 1.5, 6);
-        fillLight.position.set(-2, 1, 2);
+        const fillLight = new THREE.PointLight(0xff6820, 1.8, 10);
+        fillLight.position.set(-3, 1.5, 3);
         scene.add(fillLight);
 
-        const rimLight = new THREE.PointLight(0x4488ff, 0.3, 10);
-        rimLight.position.set(0, -2, -3);
+        const rimLight = new THREE.PointLight(0x2040a0, 0.5, 14);
+        rimLight.position.set(0, 3, -5);
         scene.add(rimLight);
+
+        const interiorLight = new THREE.PointLight(0xff8820, 3.5, 4);
+        interiorLight.position.set(0, -0.2, 0.4);
+        scene.add(interiorLight);
+
+        const signLight = new THREE.PointLight(0xffd080, 1.2, 2);
+        signLight.position.set(0, 0.7, 1.8);
+        scene.add(signLight);
       }
 
-      // --- Canvas 1: Hero Section (Auto-rotating) ---
-      const heroContainer = document.getElementById('hero-canvas-container');
+      function initRenderer(canvasElement) {
+        const renderer = new THREE.WebGLRenderer({ canvas: canvasElement, antialias: true, alpha: true });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.setSize(canvasElement.clientWidth, canvasElement.clientHeight);
+        renderer.outputEncoding = THREE.sRGBEncoding;
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.2;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+        return renderer;
+      }
+
+      // --- HERO CANVAS ---
+      const heroCanvas = document.getElementById('hero-canvas');
       const heroScene = new THREE.Scene();
-      const heroCamera = new THREE.PerspectiveCamera(45, heroContainer.clientWidth / heroContainer.clientHeight, 0.1, 100);
-      heroCamera.position.set(0, 1.5, 6);
-
-      const heroRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      heroRenderer.setSize(heroContainer.clientWidth, heroContainer.clientHeight);
-      heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      heroContainer.appendChild(heroRenderer.domElement);
-
-      setupLighting(heroScene);
+      const heroCamera = new THREE.PerspectiveCamera(38, heroCanvas.clientWidth / heroCanvas.clientHeight, 0.1, 100);
+      heroCamera.position.set(2.5, 1.8, 5.5);
+      heroCamera.lookAt(0, 0.2, 0);
+      const heroRenderer = initRenderer(heroCanvas);
+      setupCinematicLighting(heroScene);
       const heroKiosk = buildKiosk(heroScene);
 
-      // Initial angle to show it nicely
-      heroKiosk.rotation.y = -Math.PI / 8;
-
-      // --- Canvas 2: About Section (Drag-to-Rotate) ---
-      const aboutContainer = document.getElementById('about-canvas-container');
+      // --- ABOUT CANVAS ---
+      const aboutCanvas = document.getElementById('about-canvas');
       const aboutScene = new THREE.Scene();
-      const aboutCamera = new THREE.PerspectiveCamera(45, aboutContainer.clientWidth / aboutContainer.clientHeight, 0.1, 100);
-      aboutCamera.position.set(0, 1.2, 5);
-
-      const aboutRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      aboutRenderer.setSize(aboutContainer.clientWidth, aboutContainer.clientHeight);
-      aboutRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      aboutContainer.appendChild(aboutRenderer.domElement);
-
-      setupLighting(aboutScene);
+      const aboutCamera = new THREE.PerspectiveCamera(38, aboutCanvas.clientWidth / aboutCanvas.clientHeight, 0.1, 100);
+      aboutCamera.position.set(-1.5, 2.0, 5.5);
+      aboutCamera.lookAt(0, 0.0, 0);
+      const aboutRenderer = initRenderer(aboutCanvas);
+      setupCinematicLighting(aboutScene);
       const aboutKiosk = buildKiosk(aboutScene);
 
-      // Interaction Variables
-      let isDragging = false;
-      let previousMousePosition = { x: 0 };
-      let targetRotationY = -Math.PI / 6;
-      let lastInteractionTime = Date.now();
-      aboutKiosk.rotation.y = targetRotationY;
+      let isDragging = false, prevX = 0, targetRotY = 0;
+      const dragHint = document.querySelector('.drag-hint');
 
-      const dragHint = document.getElementById('drag-hint');
+      aboutCanvas.addEventListener('mousedown', e => { isDragging = true; prevX = e.clientX; if(dragHint) dragHint.style.opacity='0'; });
+      window.addEventListener('mousemove', e => {
+        if(!isDragging) return;
+        targetRotY += (e.clientX - prevX) * 0.006;
+        prevX = e.clientX;
+      });
+      window.addEventListener('mouseup', () => { isDragging = false; });
 
-      function handleDragStart(e) {
-        isDragging = true;
-        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-        previousMousePosition = { x: clientX };
-        lastInteractionTime = Date.now();
-        aboutContainer.style.cursor = 'grabbing';
-        dragHint.style.opacity = '0'; // Hide hint on interact
-      }
+      aboutCanvas.addEventListener('touchstart', e => { isDragging = true; prevX = e.touches[0].clientX; if(dragHint) dragHint.style.opacity='0'; }, {passive:true});
+      window.addEventListener('touchmove', e => {
+        if(!isDragging) return;
+        targetRotY += (e.touches[0].clientX - prevX) * 0.006;
+        prevX = e.touches[0].clientX;
+      }, {passive:true});
+      window.addEventListener('touchend', () => { isDragging = false; });
 
-      function handleDragMove(e) {
-        if (!isDragging) return;
-        const clientX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-        const deltaX = clientX - previousMousePosition.x;
-        targetRotationY += deltaX * 0.005;
-        previousMousePosition = { x: clientX };
-        lastInteractionTime = Date.now();
-      }
+      let autoRotate = true, dragTimer;
 
-      function handleDragEnd() {
-        isDragging = false;
-        aboutContainer.style.cursor = 'grab';
-      }
-
-      aboutContainer.addEventListener('mousedown', handleDragStart);
-      aboutContainer.addEventListener('mousemove', handleDragMove);
-      window.addEventListener('mouseup', handleDragEnd);
-
-      aboutContainer.addEventListener('touchstart', handleDragStart, {passive: true});
-      aboutContainer.addEventListener('touchmove', handleDragMove, {passive: true});
-      window.addEventListener('touchend', handleDragEnd);
-
-
-      // --- Canvas 3: Map Section (Isometric City Diorama) ---
-      const mapContainer = document.getElementById('map-canvas-container');
+      // --- MAP CANVAS ---
+      const mapCanvas = document.getElementById('map-canvas');
       const mapScene = new THREE.Scene();
-
-      // Isometric-ish Camera
-      const aspect = mapContainer.clientWidth / mapContainer.clientHeight;
-      const d = 5;
-      const mapCamera = new THREE.OrthographicCamera(-d * aspect, d * aspect, d, -d, 1, 100);
-      mapCamera.position.set(5, 7, 5);
+      const mapCamera = new THREE.PerspectiveCamera(32, mapCanvas.clientWidth / mapCanvas.clientHeight, 0.1, 100);
+      mapCamera.position.set(7, 10, 7);
       mapCamera.lookAt(0, 0, 0);
+      const mapRenderer = initRenderer(mapCanvas);
 
-      const mapRenderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-      mapRenderer.setSize(mapContainer.clientWidth, mapContainer.clientHeight);
-      mapRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      mapContainer.appendChild(mapRenderer.domElement);
+      // Map Elements
+      addBox(mapScene, [14, 0.1, 14], [0, -0.05, 0], new THREE.MeshStandardMaterial({color:0x151210,roughness:0.95}));
+      addBox(mapScene, [14, 0.12, 1.4], [0, 0.01, 0], new THREE.MeshStandardMaterial({color:0x1f1c18,roughness:0.9}));
+      addBox(mapScene, [1.4, 0.12, 14], [0, 0.01, 0], new THREE.MeshStandardMaterial({color:0x1f1c18,roughness:0.9}));
+      for(let i=-3; i<=3; i++){
+        addBox(mapScene, [0.06, 0.13, 0.6], [0, 0.02, i*1.4], new THREE.MeshStandardMaterial({color:0x3a3020,roughness:0.9}));
+        addBox(mapScene, [0.6, 0.13, 0.06], [i*1.4, 0.02, 0], new THREE.MeshStandardMaterial({color:0x3a3020,roughness:0.9}));
+      }
 
-      mapScene.add(new THREE.AmbientLight(0xffe4c4, 0.4));
-
-      const cityGroup = new THREE.Group();
-
-      // Ground & Roads
-      const mapGroundGeo = new THREE.PlaneGeometry(12, 12);
-      const mapGroundMat = new THREE.MeshBasicMaterial({ color: 0x1a1a17 });
-      const mapGround = new THREE.Mesh(mapGroundGeo, mapGroundMat);
-      mapGround.rotation.x = -Math.PI / 2;
-      cityGroup.add(mapGround);
-
-      const roadMat = new THREE.MeshBasicMaterial({ color: 0x2a2a27 });
-      const roadH = new THREE.Mesh(new THREE.BoxGeometry(12, 0.02, 1.2), roadMat);
-      roadH.position.y = 0.01;
-      const roadV = new THREE.Mesh(new THREE.BoxGeometry(1.2, 0.02, 12), roadMat);
-      roadV.position.y = 0.01;
-      cityGroup.add(roadH);
-      cityGroup.add(roadV);
-
-      // Buildings
-      const buildingColors = [0x2a2a27, 0x353532, 0x20201d];
-      const positions = [
-        [-3, -3], [3, -3], [-3, 3], [3, 3], [-4, 0], [4, 0], [0, -4], [0, 4]
+      const buildingDefs = [
+        {pos:[-3.5,0,-3.5], size:[1.8, 2.8, 1.8]}, {pos:[3.5,0,-3.5],  size:[1.6, 3.8, 1.6]},
+        {pos:[-3.5,0,3.5],  size:[2.0, 2.2, 2.0]}, {pos:[3.5,0,3.5],   size:[1.7, 4.2, 1.7]},
+        {pos:[-3.8,0,0.2],  size:[1.4, 3.0, 1.4]}, {pos:[3.8,0,-0.5],  size:[1.5, 2.5, 1.5]},
+        {pos:[0.3,0,-3.8],  size:[1.6, 3.5, 1.4]},
       ];
-
-      positions.forEach(pos => {
-        const w = 1 + Math.random();
-        const d = 1 + Math.random();
-        const h = 1 + Math.random() * 2;
-        const color = buildingColors[Math.floor(Math.random() * buildingColors.length)];
-        const geo = new THREE.BoxGeometry(w, h, d);
-        const mat = new THREE.MeshStandardMaterial({ color: color });
-        const mesh = new THREE.Mesh(geo, mat);
-        mesh.position.set(pos[0], h/2, pos[1]);
-        cityGroup.add(mesh);
+      buildingDefs.forEach(({pos, size}) => {
+        const mat = new THREE.MeshStandardMaterial({color:0x16130f, roughness:0.92, metalness:0.08});
+        const b = new THREE.Mesh(new THREE.BoxGeometry(...size), mat);
+        b.position.set(pos[0], size[1]/2, pos[2]);
+        mapScene.add(b);
+        for(let w=0; w<3; w++){
+          const wm = new THREE.Mesh(new THREE.PlaneGeometry(0.12,0.12), new THREE.MeshStandardMaterial({color:0xffd080, emissive:0xffc040, emissiveIntensity:0.5}));
+          wm.position.set(pos[0]+(Math.random()-0.5)*size[0]*0.6, size[1]/2+(Math.random()-0.5)*size[1]*0.5, pos[2]+size[2]/2+0.01);
+          mapScene.add(wm);
+        }
       });
 
-      // Mini Kiosk in Center
-      const miniKiosk = buildKiosk(mapScene); // Build to get group, don't add to mapScene directly
-      mapScene.remove(miniKiosk); // Remove from main scene
-      miniKiosk.scale.set(0.3, 0.3, 0.3);
-      miniKiosk.position.y = 0.3; // lift up slightly
-      cityGroup.add(miniKiosk);
+      const kioskBase = new THREE.Mesh(new THREE.BoxGeometry(1.0, 0.6, 1.0), new THREE.MeshStandardMaterial({color:0x2d1509, roughness:0.7, emissive:0xff8820, emissiveIntensity:0.2}));
+      kioskBase.position.set(0, 0.3, 0);
+      mapScene.add(kioskBase);
+      const kioskRoof = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.12, 1.3), new THREE.MeshStandardMaterial({color:0x0d0d0b, roughness:0.9}));
+      kioskRoof.position.set(0, 0.66, 0);
+      mapScene.add(kioskRoof);
 
-      const glowLight = new THREE.PointLight(0xffba3f, 3, 5);
-      glowLight.position.set(0, 2, 0);
-      cityGroup.add(glowLight);
+      const kioskGlow = new THREE.PointLight(0xffaa30, 4.0, 5.0);
+      kioskGlow.position.set(0, 1.2, 0);
+      mapScene.add(kioskGlow);
 
-      // Location Pin
-      const pinGroup = new THREE.Group();
-      const pinCone = new THREE.Mesh(new THREE.CylinderGeometry(0, 0.2, 0.4, 16), new THREE.MeshBasicMaterial({ color: 0xffba3f }));
-      pinCone.position.y = 0.2;
-      const pinSphere = new THREE.Mesh(new THREE.SphereGeometry(0.22, 16, 16), new THREE.MeshBasicMaterial({ color: 0xffba3f }));
-      pinSphere.position.y = 0.5;
-      pinGroup.add(pinCone);
-      pinGroup.add(pinSphere);
-      pinGroup.position.set(0, 1.2, 0);
-      cityGroup.add(pinGroup);
+      const pinStem = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.12, 0.5, 8), new THREE.MeshStandardMaterial({color:0xffba3f, emissive:0xffba3f, emissiveIntensity:0.8}));
+      pinStem.position.set(0, 1.25, 0);
+      mapScene.add(pinStem);
+      const pinHead = new THREE.Mesh(new THREE.SphereGeometry(0.18, 12, 12), new THREE.MeshStandardMaterial({color:0xffba3f, emissive:0xffba3f, emissiveIntensity:1.2}));
+      pinHead.position.set(0, 1.6, 0);
+      mapScene.add(pinHead);
 
-      mapScene.add(cityGroup);
+      mapScene.add(new THREE.AmbientLight(0x150f08, 2.0));
+      const mapKey = new THREE.DirectionalLight(0xffd090, 1.5);
+      mapKey.position.set(4, 8, 4);
+      mapScene.add(mapKey);
 
-      // --- Animation Loop ---
-      const clock = new THREE.Clock();
-
-      function animate() {
+      // --- ANIMATION LOOP ---
+      function animate(){
         requestAnimationFrame(animate);
-        const delta = clock.getDelta();
-        const time = clock.getElapsedTime();
 
-        // Canvas 1: Hero
-        heroKiosk.rotation.y += 0.004;
-        heroKiosk.position.y = Math.sin(Date.now() * 0.001) * 0.05;
+        // Hero
+        heroKiosk.rotation.y += 0.003;
+        heroKiosk.position.y = Math.sin(Date.now() * 0.0008) * 0.04;
         heroRenderer.render(heroScene, heroCamera);
 
-        // Canvas 2: About
-        if (!isDragging) {
-          // Resume auto rotation if 2 seconds passed since last interaction
-          if (Date.now() - lastInteractionTime > 2000) {
-            targetRotationY += 0.002;
-          }
-        }
-        // Smooth rotation easing
-        aboutKiosk.rotation.y += (targetRotationY - aboutKiosk.rotation.y) * 0.08;
-        aboutKiosk.position.y = Math.sin(Date.now() * 0.001) * 0.05;
+        // About
+        if(isDragging){ autoRotate = false; clearTimeout(dragTimer); dragTimer = setTimeout(()=>autoRotate=true, 2000); }
+        if(autoRotate) targetRotY += 0.003;
+        aboutKiosk.rotation.y += (targetRotY - aboutKiosk.rotation.y) * 0.06;
+        aboutKiosk.position.y = Math.sin(Date.now() * 0.0008) * 0.04; // match hero float
         aboutRenderer.render(aboutScene, aboutCamera);
 
-        // Canvas 3: Map
-        cityGroup.rotation.y += 0.002;
-        pinGroup.position.y = 1.2 + Math.sin(time * 3) * 0.15; // Bobbing
+        // Map
+        mapScene.rotation.y += 0.0015;
+        pinStem.position.y = 1.25 + Math.sin(Date.now()*0.002)*0.08;
+        pinHead.position.y = 1.6 + Math.sin(Date.now()*0.002)*0.08;
         mapRenderer.render(mapScene, mapCamera);
       }
-
       animate();
 
-      // --- Window Resize Handling ---
+      // Handle Resizing
       window.addEventListener('resize', () => {
-        // Hero
-        heroCamera.aspect = heroContainer.clientWidth / heroContainer.clientHeight;
-        heroCamera.updateProjectionMatrix();
-        heroRenderer.setSize(heroContainer.clientWidth, heroContainer.clientHeight);
+        heroCamera.aspect = heroCanvas.clientWidth / heroCanvas.clientHeight; heroCamera.updateProjectionMatrix();
+        heroRenderer.setSize(heroCanvas.clientWidth, heroCanvas.clientHeight);
 
-        // About
-        aboutCamera.aspect = aboutContainer.clientWidth / aboutContainer.clientHeight;
-        aboutCamera.updateProjectionMatrix();
-        aboutRenderer.setSize(aboutContainer.clientWidth, aboutContainer.clientHeight);
+        aboutCamera.aspect = aboutCanvas.clientWidth / aboutCanvas.clientHeight; aboutCamera.updateProjectionMatrix();
+        aboutRenderer.setSize(aboutCanvas.clientWidth, aboutCanvas.clientHeight);
 
-        // Map (Orthographic needs slightly different update)
-        const newAspect = mapContainer.clientWidth / mapContainer.clientHeight;
-        mapCamera.left = -d * newAspect;
-        mapCamera.right = d * newAspect;
-        mapCamera.top = d;
-        mapCamera.bottom = -d;
-        mapCamera.updateProjectionMatrix();
-        mapRenderer.setSize(mapContainer.clientWidth, mapContainer.clientHeight);
+        mapCamera.aspect = mapCanvas.clientWidth / mapCanvas.clientHeight; mapCamera.updateProjectionMatrix();
+        mapRenderer.setSize(mapCanvas.clientWidth, mapCanvas.clientHeight);
       });
-
-      // Hide map fallback since WebGL is working
-      document.getElementById('map-fallback').style.display = 'none';
     }
   </script>
 </body>
